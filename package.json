@@ -1,11 +1,11 @@
 {
-  "name": "betting_app",
+  "name": "veikkaus-app",
   "version": "1.0.0",
   "display": "standalone",
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "start" : "node ./backend/server.js"
+    "start" : "node ./server/server.js"
   },
   "author": "Jens Österberg",
   "license": "MIT",
