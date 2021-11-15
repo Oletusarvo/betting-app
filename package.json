@@ -5,7 +5,8 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "server" : "node ./server/server.js"
+    "build" : "babel js/ -d frontend/js/",
+    "start" : "node ./backend/server.js"
   },
   "author": "Jens Österberg",
   "license": "MIT",
