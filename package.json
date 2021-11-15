@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "display": "standalone",
   "description": "",
-  "main": "public/index.html",
+  "main": "./frontend/index.html",
   "scripts": {
-    "start" : "node ./server/server.js"
+    
   },
   "author": "Jens Österberg",
   "license": "MIT",
