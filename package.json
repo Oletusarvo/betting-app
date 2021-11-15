@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "display": "standalone",
   "description": "",
-  "main": "server/server.js",
+  "main": "public/js/index.js",
   "scripts": {
     "server" : "node server/server.js"
   },
