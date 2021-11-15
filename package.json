@@ -5,7 +5,6 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "build" : "babel js/ -d public/js/",
     "server" : "node server/server.js"
   },
   "author": "Jens Österberg",
