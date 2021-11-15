@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "display": "standalone",
   "description": "",
-  "main": "public/js/index.js",
+  "main": "public/index.html",
   "scripts": {
+    "build" : "babel js/ -d public/js/",
     "server" : "node server/server.js"
   },
   "author": "Jens Österberg",
