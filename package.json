@@ -5,7 +5,6 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "build" : "babel js/ -d frontend/js/",
     "start" : "node ./backend/server.js"
   },
   "author": "Jens Österberg",
