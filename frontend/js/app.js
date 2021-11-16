@@ -101,10 +101,13 @@ var App = /*#__PURE__*/function (_React$Component) {
         return;
       }
 
-      var answer = confirm("You are about to place a bet for " + amount + " " + this.state.bank.currencySymbol + ". Are you sure?");
-      if (answer == false) return;
       var sideSelector = document.querySelector("#input-game-bool");
       var side = sideSelector.value === "True";
+      /*
+      const answer = confirm("You are about to bet " + side + " for " + amount + " " + this.state.bank.currencySymbol + ". Are you sure?");
+        if(answer == false) return;
+      */
+
       var bet = {
         id: this.socket.id,
         amount: amount,
