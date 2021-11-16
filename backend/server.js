@@ -10,7 +10,7 @@ const reactDom = require('react-dom');
 
 const io = socketio(server);
 
-app.use(express.static('public'));
+app.use(express.static('frontend'));
 app.use(express.static('node_modules'));
 
 const Bank = require('./js/bank');
@@ -104,7 +104,7 @@ io.on('connection', socket =>{
         const acc = bank.accounts.get(socket.id);
 
         if(acc){
-            socket.emit('account_update', accountUpdate());
+            accountUpdate(socket);
         }
         else{
             console.log("Account " + socket.id + " does not exist!");

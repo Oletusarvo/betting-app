@@ -25,7 +25,7 @@ class Bank{
         const acc = this.accounts.get(accountId);
         acc.deposit(-amount);
         acc.debt -= amount;
-        acc.circulation -= amount;
+        this.circulation -= amount;
     }
 
     deposit(accountId, amount){

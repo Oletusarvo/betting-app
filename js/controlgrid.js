@@ -11,6 +11,7 @@ class ControlGrid extends React.Component{
                 <button 
                     className="control-button"
                     id="button-place-bet" 
+
                     onClick={this.props.placeBetFunction}>Place Bet</button><br/>
 
                 <select className="control-button" id="input-game-bool">

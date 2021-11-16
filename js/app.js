@@ -25,7 +25,11 @@ class App extends React.Component{
             const data = JSON.parse(msg);
 
             env.state.game.pool = data.pool;
+
+            const previousMinBet = env.state.game.minBet;
             env.state.game.minBet = data.minBet;
+
+            if(previousMinBet < env.state.game.minBet) this.state.game.hasToCall = true;
 
             env.updateState();
         });
@@ -101,7 +105,16 @@ class App extends React.Component{
     }
 
     call(){
+        const amount = this.state.game.minBet;
+        const answer = confirm("Calling " + amount + ". Are you sure?");
+        
+        if(answer == false) return;
 
+        this.socket.emit('place_bet', JSON.stringify({
+            amount : amount,
+            side : -1, //Bet side cannot be changed when there is already a bet out.
+            id : this.socket.id
+        }));
     }
 
     payDebt(){
@@ -182,6 +195,7 @@ class App extends React.Component{
                     foldFunction={this.fold}
                     callFunction={this.call}
                     minBet={this.state.game.minBet}
+                    hasToCall={this.state.game.hasToCall}
                 />
             </div>
         );

@@ -50,7 +50,9 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.socket.on('game_update', function (msg) {
       var data = JSON.parse(msg);
       env.state.game.pool = data.pool;
+      var previousMinBet = env.state.game.minBet;
       env.state.game.minBet = data.minBet;
+      if (previousMinBet < env.state.game.minBet) _this.state.game.hasToCall = true;
       env.updateState();
     });
 
@@ -120,7 +122,17 @@ var App = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "call",
-    value: function call() {}
+    value: function call() {
+      var amount = this.state.game.minBet;
+      var answer = confirm("Calling " + amount + ". Are you sure?");
+      if (answer == false) return;
+      this.socket.emit('place_bet', JSON.stringify({
+        amount: amount,
+        side: -1,
+        //Bet side cannot be changed when there is already a bet out.
+        id: this.socket.id
+      }));
+    }
   }, {
     key: "payDebt",
     value: function payDebt() {
@@ -188,7 +200,8 @@ var App = /*#__PURE__*/function (_React$Component) {
         createGameFunction: this.createGame,
         foldFunction: this.fold,
         callFunction: this.call,
-        minBet: this.state.game.minBet
+        minBet: this.state.game.minBet,
+        hasToCall: this.state.game.hasToCall
       }));
     }
   }]);
