@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "display": "standalone",
   "description": "",
-  "main": "./frontend/index.html",
+  "main": "./frontend/js/index.js",
   "scripts": {
-    
+    "build" : "babel js/ -d frontend/js/"
   },
   "author": "Jens Österberg",
   "license": "MIT",
