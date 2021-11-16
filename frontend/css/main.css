@@ -98,8 +98,8 @@ fieldset{
     display: grid;
     grid-template-areas: 'input-game input-game input-bank input-bank'
     'button-place-bet select-side button-pay-debt button-loan'
-    'button-call button-call button-fold button-fold'
-    'button-create-game button-create-game button-end-game button-end-game';
+    'button-fold button-fold button-fold button-fold'
+    'button-end-game button-end-game button-end-game button-end-game';
 }
 
 #input-game-bool{

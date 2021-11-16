@@ -21,18 +21,8 @@ class ControlGrid extends React.Component{
 
                 <button 
                     className="control-button"
-                    id="button-call"
-                    onClick={this.props.callFunction}>Call</button>
-
-                <button 
-                    className="control-button"
                     id="button-fold"
                     onClick={this.props.foldFunction}>Fold</button>
-
-                <button
-                    className="control-button"
-                    id="button-create-game"
-                    onClick={this.props.createGameFunction}>Create Game</button>
 
                 <button 
                     className="control-button"
