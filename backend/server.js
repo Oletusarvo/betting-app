@@ -4,7 +4,7 @@ const app = express();
 const server = http.createServer(app);
 const socketio = require('socket.io');
 
-//Not used in this file, but required so react works on the front-end.
+//Required so react works on the front-end.
 const react = require('react');
 const reactDom = require('react-dom');
 
@@ -164,7 +164,7 @@ io.on('connection', socket =>{
     
 });
 
-const PORT = 29910 || process.env.PORT;
+const PORT = process.env.PORT;
 
 server.listen(PORT, () => console.log('Server running on port '  + PORT));
 
