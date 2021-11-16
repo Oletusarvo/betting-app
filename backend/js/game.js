@@ -18,7 +18,7 @@ class Game{
         const existingBet = this.placedBets.get(bet.id);
 
         if(existingBet){
-            existingBet.amount = bet.amount;
+            existingBet.amount += bet.amount;
         }
         else{
             this.placedBets.set(bet.id, bet);

@@ -84,6 +84,7 @@ io.on('connection', socket =>{
         const data = JSON.parse(msg);
         const bet = new Bet(data.amount, data.side, data.id);
 
+
         game.placeBet(bet);
         bank.deposit(socket.id, -bet.amount);
         accountUpdate(socket);
