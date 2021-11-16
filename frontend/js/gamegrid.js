@@ -40,10 +40,12 @@ var GameGrid = /*#__PURE__*/function (_React$Component) {
         id: "grid-game",
         className: "grid-item"
       }, /*#__PURE__*/React.createElement("div", {
-        id: "game-pool"
-      }, /*#__PURE__*/React.createElement("div", {
+        className: "grid-item",
         id: "game-name"
-      }, this.props.gameName), /*#__PURE__*/React.createElement("span", {
+      }, this.props.gameName), /*#__PURE__*/React.createElement("div", {
+        className: "grid-item",
+        id: "game-pool"
+      }, /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-game-pool"
       }, this.props.pool), /*#__PURE__*/React.createElement("span", {

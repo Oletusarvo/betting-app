@@ -1,3 +1,7 @@
+*{
+    box-sizing : border-box;
+}
+
 body{  
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;  
@@ -48,12 +52,26 @@ fieldset{
 
 #grid-game{
     grid-area: game;
+    display: grid;
+    grid-template-areas: 'game-name'
+    'game-pool';
+
+    background: rgba(0, 0, 128, 0.3);
+    padding: 2px;
+    gap: 2px;
+}
+
+#game-name{
     display: flex;
-    flex-flow: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 128, 0.3);
-    padding: 0;
+}
+
+#game-pool{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: game-pool; 
 }
 
 #game-pool-border-circle{
@@ -89,8 +107,13 @@ fieldset{
 }
 
 #grid-bank{
+    font-size: 50px;
     grid-area: bank;
-    
+}
+
+#grid-account{
+    font-size: 50px;
+    grid-area: account;
 }
 
 #grid-controls{
@@ -142,13 +165,7 @@ fieldset{
     grid-area: button-create-game;
 }
 
-#grid-account{
-    grid-area: account;
-}
 
-#game-pool{
-    grid-area: game-pool;
-}
 
 #output-game-pool{
     font-size: 60px;

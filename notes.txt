@@ -1,0 +1,6 @@
+TODO:
+-Add login page so account data is persistent.
+
+Problems:
+-Folding when no bet is out causes server to crash.
+-Game name is not centered. --Fixed.

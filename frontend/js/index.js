@@ -4,7 +4,7 @@ var vars = {
   game: {
     pool: 0,
     minBet: 0,
-    name: "default",
+    name: "game name",
     hasToCall: false
   },
   bank: {
