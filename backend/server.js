@@ -161,7 +161,7 @@ io.on('connection', socket =>{
             const acc = bank.accounts.get(id);
             if(gameResult.winners.length == 0){
                 bank.circulation -= bet.amount;
-                acc.debt -= bet.amount;
+                acc.debt -= acc.debt > 0 ? bet.amount : 0;
             }
             else{
                 //Profit is not affected when paying debt.
