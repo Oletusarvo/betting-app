@@ -153,7 +153,7 @@ io.on('connection', socket =>{
 
             if(!socket) {
                 console.log("Bad socket ID! (" + id + ')');
-                return;
+                continue;
             }
 
             
@@ -175,6 +175,7 @@ io.on('connection', socket =>{
         //Game bets can now be cleared.
         game.placedBets.clear();
 
+        bankUpdate(io);
         gameUpdate(io);
     });
 

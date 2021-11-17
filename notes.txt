@@ -8,3 +8,4 @@ Problems:
 -It is possible to bet NaN amounts.
 -Folding when no bet is out causes server to crash.
 -Game name is not centered. --Fixed.
+-Bank circulation does not decrease when account debt is automatically shortened when nobody wins. --Fixed.
