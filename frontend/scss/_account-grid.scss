@@ -1,0 +1,12 @@
+#grid-account{
+    font-size: 25px;
+    grid-area: account;
+}
+
+#output-account-balance{
+    transition: color 0.3s ease-out;
+}
+
+#output-account-balance.flash{
+    color: red;
+}

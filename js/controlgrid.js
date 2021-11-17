@@ -31,6 +31,7 @@ class ControlGrid extends React.Component{
                     onClick={this.props.endGameFunction}>End Game</button>
 
                 <input className="input-field" id="input-bank" type="number" step="0.01" min="1"/>
+                
                 <button 
                     className="control-button"
                     id="button-pay-debt" 

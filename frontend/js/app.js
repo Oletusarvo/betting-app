@@ -182,11 +182,12 @@ var App = /*#__PURE__*/function (_React$Component) {
       var poolRenderAmount = pool >= 1000000 ? (pool / 1000000).toFixed(2) + "m" : pool >= 1000 ? (pool / 1000).toFixed(2) + "k" : pool.toFixed(2);
       return /*#__PURE__*/React.createElement("div", {
         id: "app-content"
-      }, /*#__PURE__*/React.createElement(GameGrid, {
+      }, /*#__PURE__*/React.createElement(GameName, {
+        gameName: this.state.game.name
+      }), /*#__PURE__*/React.createElement(GamePool, {
         pool: poolRenderAmount,
         minBet: this.state.game.minBet,
-        gameName: this.state.game.name,
-        currencySymbol: "mk"
+        currencySymbol: this.state.bank.currencySymbol
       }), /*#__PURE__*/React.createElement(BankGrid, {
         circulation: this.state.bank.circulation,
         currencySymbol: this.state.bank.currencySymbol

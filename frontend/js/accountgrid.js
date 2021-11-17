@@ -40,8 +40,6 @@ var AccountGrid = /*#__PURE__*/function (_React$Component) {
         id: "grid-account",
         className: "grid-item"
       }, /*#__PURE__*/React.createElement("span", {
-        className: "module-title"
-      }, "Account:"), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-account-balance"
       }, "Balance: ", this.props.balance.toFixed(2), this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
@@ -51,9 +49,9 @@ var AccountGrid = /*#__PURE__*/function (_React$Component) {
         className: "data-output",
         id: "output-account-profit",
         style: this.props.profit >= 0 ? {
-          color: "lime"
+          color: "green"
         } : {
-          color: "red"
+          color: "brown"
         }
       }, this.props.profit.toFixed(2), this.props.currencySymbol));
     }

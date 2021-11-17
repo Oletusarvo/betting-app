@@ -1,0 +1,57 @@
+.input-field{
+    font-size: 20px;
+}
+
+.control-button{
+    font-weight: bold;
+ }
+
+#grid-controls{
+    min-height: 500px;
+    grid-area: controls;
+    display: grid;
+    grid-template-areas: 'input-game input-game input-bank input-bank'
+    'button-place-bet select-side button-pay-debt button-loan'
+    'button-fold button-fold button-fold button-fold'
+    'button-end-game button-end-game button-end-game button-end-game';
+}
+
+#button-end-game{
+    grid-area: button-end-game;
+}
+
+#button-create-game{
+    grid-area: button-create-game;
+}
+
+#button-fold{
+    grid-area: button-fold;
+}
+
+#button-call{
+    grid-area: button-call;
+}
+
+#button-create-game{
+    grid-area: button-create-game;
+}
+
+#button-loan{
+    grid-area: button-loan;
+}
+
+#button-pay-debt{
+    grid-area: button-pay-debt;
+}
+
+#input-game-bool{
+    grid-area: select-side;
+}
+
+#input-bet-amount{
+    grid-area: input-game;
+}
+
+#input-bank{
+    grid-area: input-bank;
+}

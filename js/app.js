@@ -169,11 +169,13 @@ class App extends React.Component{
 
         return(
             <div id="app-content">
-                <GameGrid 
-                    pool={poolRenderAmount} 
+
+                <GameName gameName={this.state.game.name}/>
+
+                <GamePool 
+                    pool={poolRenderAmount}
                     minBet={this.state.game.minBet}
-                    gameName={this.state.game.name}
-                    currencySymbol="mk"
+                    currencySymbol={this.state.bank.currencySymbol}
                 />
 
                 <BankGrid 
@@ -186,7 +188,7 @@ class App extends React.Component{
                     debt={this.state.account.debt}
                     currencySymbol="mk"
                     profit={this.state.account.profit}
-                    />
+                />
 
                 <ControlGrid 
                     payDebtFunction={this.payDebt} 

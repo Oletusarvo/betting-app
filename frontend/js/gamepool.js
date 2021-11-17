@@ -22,29 +22,32 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var BankGrid = /*#__PURE__*/function (_React$Component) {
-  _inherits(BankGrid, _React$Component);
+var GamePool = /*#__PURE__*/function (_React$Component) {
+  _inherits(GamePool, _React$Component);
 
-  var _super = _createSuper(BankGrid);
+  var _super = _createSuper(GamePool);
 
-  function BankGrid(props) {
-    _classCallCheck(this, BankGrid);
+  function GamePool(props) {
+    _classCallCheck(this, GamePool);
 
     return _super.call(this, props);
   }
 
-  _createClass(BankGrid, [{
+  _createClass(GamePool, [{
     key: "render",
     value: function render() {
       return /*#__PURE__*/React.createElement("div", {
-        id: "grid-bank",
-        className: "grid-item"
+        className: "grid-item",
+        id: "game-pool"
       }, /*#__PURE__*/React.createElement("span", {
         className: "data-output",
-        id: "output-bank-circulation"
-      }, "Circulation: ", this.props.circulation.toFixed(2), this.props.currencySymbol));
+        id: "output-game-pool"
+      }, this.props.pool), /*#__PURE__*/React.createElement("span", {
+        className: "data-output",
+        id: "output-game-pool-currencySymbol"
+      }, this.props.currencySymbol));
     }
   }]);
 
-  return BankGrid;
+  return GamePool;
 }(React.Component);

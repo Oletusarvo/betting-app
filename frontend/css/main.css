@@ -1,176 +1,117 @@
-*{
-    box-sizing : border-box;
-}
+* {
+  box-sizing: border-box; }
 
-body{  
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: white;  
-    
-}
-
-fieldset{
-    border-bottom: 0;
-    border-left: 0;
-    border-right: 0;
-    border-color: gray;
-}
-
-#app-content{
+@media screen and (max-width: 1000px) {
+  /*Mobile phone*/
+  #app-content {
     width: 100%;
-    height: 1520px;
+    height: 820px;
     display: grid;
-    grid-template-areas: 'game bank'
-    'game account'
-    'controls controls';
+    grid-template-areas: 'game-name game-name' 'game-pool controls' 'account controls' 'bank controls';
+    background: #2e2b00;
+    gap: 3px;
+    padding: 2px; } }
 
-    background: black;
-    gap : 3px;
-    padding: 2px;
-}
-
-.grid-item{
-    border: 1px solid white;
-    border-radius: 5px;
-    padding: 4px;
-
-    font-size: 20px;
-    overflow: hidden;
-}
-
-.module-title{
-    font-weight: bold;
-    border-bottom: 1px solid white;
-}
-
-.control-button{
-   font-weight: bold;
-}
-
-.input-field{
-    font-size: 20px;
-}
-
-#grid-game{
-    grid-area: game;
+@media screen and (min-width: 1001px) {
+  #app-content {
+    width: 720px;
+    height: 820px;
     display: grid;
-    grid-template-areas: 'game-name'
-    'game-pool';
+    grid-template-areas: 'game-name game-name' 'game-pool controls' 'account controls' 'bank controls';
+    background: #2e2b00;
+    gap: 3px;
+    padding: 2px; } }
 
-    background: rgba(0, 0, 128, 0.3);
-    padding: 2px;
-    gap: 2px;
-}
+#game-name {
+  grid-area: game-name;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
-#game-name{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+#game-pool {
+  grid-area: game-pool;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
-#game-pool{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    grid-area: game-pool; 
-}
+#game-pool-border-circle {
+  border: 2px solid white;
+  border-radius: 50%;
+  height: 400px;
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: border-color 0.5s ease-out; }
 
-#game-pool-border-circle{
-    border: 2px solid white;
-    border-radius: 50%;
-    height: 400px;
-    width: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#output-game-pool {
+  font-size: 60px; }
 
-    transition: border-color 0.5s ease-out;
-}
+#output-game-min-bet {
+  font-size: 15px; }
 
-#game-pool-border-circle.flash{
-    border-color: red;
-}
+.input-field {
+  font-size: 20px; }
 
-#output-account-balance{
-    transition: color 0.3s ease-out;
-}
+.control-button {
+  font-weight: bold; }
 
-#output-account-balance.flash{
-    color: red;
-}
+#grid-controls {
+  min-height: 500px;
+  grid-area: controls;
+  display: grid;
+  grid-template-areas: 'input-game input-game input-bank input-bank' 'button-place-bet select-side button-pay-debt button-loan' 'button-fold button-fold button-fold button-fold' 'button-end-game button-end-game button-end-game button-end-game'; }
 
-#grid-bank, #grid-account{
-    background: rgba(0, 128, 0, 0.3);
-}
+#button-end-game {
+  grid-area: button-end-game; }
 
-#grid-controls{
-    background: rgba(0, 64, 64, 0.3);
-}
+#button-create-game {
+  grid-area: button-create-game; }
 
-#grid-bank{
-    font-size: 50px;
-    grid-area: bank;
-}
+#button-fold {
+  grid-area: button-fold; }
 
-#grid-account{
-    font-size: 50px;
-    grid-area: account;
-}
+#button-call {
+  grid-area: button-call; }
 
-#grid-controls{
-    grid-area: controls;
-    display: grid;
-    grid-template-areas: 'input-game input-game input-bank input-bank'
-    'button-place-bet select-side button-pay-debt button-loan'
-    'button-fold button-fold button-fold button-fold'
-    'button-end-game button-end-game button-end-game button-end-game';
-}
+#button-create-game {
+  grid-area: button-create-game; }
 
-#input-game-bool{
-    grid-area: select-side;
-}
+#button-loan {
+  grid-area: button-loan; }
 
-#input-bet-amount{
-    grid-area: input-game;
-}
+#button-pay-debt {
+  grid-area: button-pay-debt; }
 
-#input-bank{
-    grid-area: input-bank;
-}
+#input-game-bool {
+  grid-area: select-side; }
 
-#button-loan{
-    grid-area: button-loan;
-}
+#input-bet-amount {
+  grid-area: input-game; }
 
-#button-pay-debt{
-    grid-area: button-pay-debt;
-}
+#input-bank {
+  grid-area: input-bank; }
 
-#button-end-game{
-    grid-area: button-end-game;
-}
+#grid-bank {
+  font-size: 25px;
+  grid-area: bank; }
 
-#button-create-game{
-    grid-area: button-create-game;
-}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: black; }
 
-#button-fold{
-    grid-area: button-fold;
-}
+.grid-item {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 4px;
+  font-size: 25px;
+  font-weight: bold;
+  background: #ffd900; }
 
-#button-call{
-    grid-area: button-call;
-}
+input {
+  font-weight: bold;
+  font-size: 50px; }
 
-#button-create-game{
-    grid-area: button-create-game;
-}
-
-
-
-#output-game-pool{
-    font-size: 60px;
-}
-
-#output-game-min-bet{
-    font-size: 15px;
-}
+button, select {
+  font-weight: bold;
+  font-size: 25px; }

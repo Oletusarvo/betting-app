@@ -1,0 +1,34 @@
+@media screen and (max-width : 1000px){
+    /*Mobile phone*/
+    #app-content{
+        width: 100%;
+        height: 820px;
+        display: grid;
+        grid-template-areas: 'game-name game-name'
+        'game-pool controls'
+        'account controls'
+        'bank controls';
+    
+        background: $secondary-color;
+        
+        gap : 3px;
+        padding: 2px;
+    }
+}
+
+@media screen and (min-width : 1001px){
+    
+    #app-content{
+        width: 720px;
+        height: 820px;
+        display: grid;
+        grid-template-areas: 'game-name game-name'
+        'game-pool controls'
+        'account controls'
+        'bank controls';
+    
+        background: $secondary-color;
+        gap : 3px;
+        padding: 2px;
+    }
+}

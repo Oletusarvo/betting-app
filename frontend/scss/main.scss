@@ -1,0 +1,31 @@
+@import 'config';
+@import 'app-content';
+@import 'game-grid';
+@import 'control-grid';
+@import 'bank-grid';
+
+body{  
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;  
+    
+}
+
+.grid-item{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+
+    font-size: 25px;
+    font-weight: bold;
+
+    background: $primary-color;
+}
+
+input{
+    font-weight: bold;
+    font-size: 50px;
+}
+button, select{
+    font-weight: bold;
+    font-size: 25px;
+}
