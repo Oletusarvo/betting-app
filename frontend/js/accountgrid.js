@@ -42,10 +42,10 @@ var AccountGrid = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-account-balance"
-      }, "Balance: ", this.props.balance.toFixed(2), this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+      }, "Balance: ", this.props.balance, this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-account-debt"
-      }, "Debt: ", this.props.debt.toFixed(2), this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, "Profit: "), /*#__PURE__*/React.createElement("span", {
+      }, "Debt: ", this.props.debt, this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, "Profit: "), /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-account-profit",
         style: this.props.profit >= 0 ? {
@@ -53,7 +53,7 @@ var AccountGrid = /*#__PURE__*/function (_React$Component) {
         } : {
           color: "brown"
         }
-      }, this.props.profit.toFixed(2), this.props.currencySymbol));
+      }, this.props.profit, this.props.currencySymbol));
     }
   }]);
 

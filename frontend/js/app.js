@@ -176,10 +176,30 @@ var App = /*#__PURE__*/function (_React$Component) {
       this.socket.emit('create-game', name);
     }
   }, {
+    key: "numberFormat",
+    value: function numberFormat(number) {
+      /*Compresses big numbers, adds a letter postfix representation of the number and returns it as a string */
+      var thousand = 1000;
+      var million = 1000000;
+      var billion = 1000000000;
+      var trillion = 1000000000000;
+      var postfix = number >= trillion ? 'T' : number >= billion ? 'B' : number >= million ? 'M' : number >= thousand ? 'K' : "";
+      var compressed = number >= trillion ? number / trillion : number >= billion ? number / billion : number >= million ? number / million : number >= thousand ? number / thousand : number;
+      return compressed.toFixed(2) + postfix;
+    }
+  }, {
     key: "render",
     value: function render() {
       var pool = this.state.game.pool;
-      var poolRenderAmount = pool >= 1000000 ? (pool / 1000000).toFixed(2) + "m" : pool >= 1000 ? (pool / 1000).toFixed(2) + "k" : pool.toFixed(2);
+      var balance = this.state.account.balance;
+      var profit = this.state.account.profit;
+      var debt = this.state.account.debt;
+      var circulation = this.state.bank.circulation;
+      var poolRenderAmount = this.numberFormat(pool);
+      var accountBalanceRenderAmount = this.numberFormat(balance);
+      var profitRenderAmount = this.numberFormat(profit);
+      var debtRenderAmount = this.numberFormat(debt);
+      var circulationRenderAmount = this.numberFormat(circulation);
       return /*#__PURE__*/React.createElement("div", {
         id: "app-content"
       }, /*#__PURE__*/React.createElement(GameName, {
@@ -189,13 +209,13 @@ var App = /*#__PURE__*/function (_React$Component) {
         minBet: this.state.game.minBet,
         currencySymbol: this.state.bank.currencySymbol
       }), /*#__PURE__*/React.createElement(BankGrid, {
-        circulation: this.state.bank.circulation,
+        circulation: circulationRenderAmount,
         currencySymbol: this.state.bank.currencySymbol
       }), /*#__PURE__*/React.createElement(AccountGrid, {
-        balance: this.state.account.balance,
-        debt: this.state.account.debt,
+        balance: accountBalanceRenderAmount,
+        debt: debtRenderAmount,
         currencySymbol: "mk",
-        profit: this.state.account.profit
+        profit: profitRenderAmount
       }), /*#__PURE__*/React.createElement(ControlGrid, {
         payDebtFunction: this.payDebt,
         loanFunction: this.loan,

@@ -162,10 +162,37 @@ class App extends React.Component{
         this.socket.emit('create-game', name);
     }
 
+    numberFormat(number){
+        /*Compresses big numbers, adds a letter postfix representation of the number and returns it as a string */
+        const thousand = 1000;
+        const million = 1000000;
+        const billion = 1000000000;
+        const trillion = 1000000000000;
+
+        const postfix = number >= trillion ? 'T' : number >= billion ? 'B' : number >= million ? 'M' : number >= thousand ? 'K' : "";
+        const compressed = 
+            number >= trillion ? number / trillion :
+            number >= billion ? number / billion : 
+            number >= million ? number / million : 
+            number >= thousand ? number / thousand : 
+            number;
+
+        return compressed.toFixed(2) + postfix;
+
+    }
     render(){
 
         const pool = this.state.game.pool;
-        const poolRenderAmount = pool >= 1000000 ? (pool / 1000000).toFixed(2) + "m" : pool >= 1000 ? (pool / 1000).toFixed(2) + "k" : pool.toFixed(2);
+        const balance = this.state.account.balance;
+        const profit = this.state.account.profit;
+        const debt = this.state.account.debt;
+        const circulation = this.state.bank.circulation;
+
+        const poolRenderAmount = this.numberFormat(pool);
+        const accountBalanceRenderAmount = this.numberFormat(balance);
+        const profitRenderAmount = this.numberFormat(profit);
+        const debtRenderAmount = this.numberFormat(debt);
+        const circulationRenderAmount = this.numberFormat(circulation);
 
         return(
             <div id="app-content">
@@ -179,15 +206,15 @@ class App extends React.Component{
                 />
 
                 <BankGrid 
-                    circulation={this.state.bank.circulation} 
+                    circulation={circulationRenderAmount} 
                     currencySymbol={this.state.bank.currencySymbol}
                 />
 
                 <AccountGrid 
-                    balance={this.state.account.balance} 
-                    debt={this.state.account.debt}
+                    balance={accountBalanceRenderAmount} 
+                    debt={debtRenderAmount}
                     currencySymbol="mk"
-                    profit={this.state.account.profit}
+                    profit={profitRenderAmount}
                 />
 
                 <ControlGrid 
