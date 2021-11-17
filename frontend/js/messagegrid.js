@@ -22,29 +22,21 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var BankGrid = /*#__PURE__*/function (_React$Component) {
-  _inherits(BankGrid, _React$Component);
+var MessageGrid = /*#__PURE__*/function (_React$Component) {
+  _inherits(MessageGrid, _React$Component);
 
-  var _super = _createSuper(BankGrid);
+  var _super = _createSuper(MessageGrid);
 
-  function BankGrid(props) {
-    _classCallCheck(this, BankGrid);
+  function MessageGrid(props) {
+    _classCallCheck(this, MessageGrid);
 
     return _super.call(this, props);
   }
 
-  _createClass(BankGrid, [{
+  _createClass(MessageGrid, [{
     key: "render",
-    value: function render() {
-      return /*#__PURE__*/React.createElement("div", {
-        id: "grid-bank",
-        className: "grid-item"
-      }, /*#__PURE__*/React.createElement("span", {
-        className: "data-output",
-        id: "output-bank-circulation"
-      }, "Circulation: ", this.props.circulation, this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null));
-    }
+    value: function render() {}
   }]);
 
-  return BankGrid;
+  return MessageGrid;
 }(React.Component);

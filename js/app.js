@@ -9,14 +9,23 @@ class App extends React.Component{
 
         const env = this;
 
+        this.socket.on('end_game_request', (id) =>{
+            //Cast your vote on wheter you think the game should end or not.
+            const vote = confirm("Someone requested to end the game. Do you agree?");
+
+            env.socket.emit('end_game_vote', vote);
+        });
+
         this.socket.on('bank_update', msg =>{
             const data = JSON.parse(msg);
 
             const circ = data.circulation;
             const cs = data.currencySymbol;
+            const supply = data.supply;
 
             env.state.bank.circulation = circ;
             env.state.bank.currencySymbol = cs;
+            env.state.bank.supply = supply;
 
             env.updateState();
         });
@@ -149,7 +158,7 @@ class App extends React.Component{
         const sideSelector = document.querySelector("#input-game-bool");
         const result = sideSelector.value === "True";
         
-        this.socket.emit('end_game', result);
+        this.socket.emit('end_game_accepted', result);
     }
 
     createGame(){
@@ -163,7 +172,9 @@ class App extends React.Component{
     }
 
     numberFormat(number){
-        /*Compresses big numbers, adds a letter postfix representation of the number and returns it as a string */
+        if(typeof number !== "number") return NaN;
+        
+        /*Compresses big numbers, adds a letter postfix representation of the quantity of the number and returns it as a string */
         const thousand = 1000;
         const million = 1000000;
         const billion = 1000000000;
@@ -182,17 +193,19 @@ class App extends React.Component{
     }
     render(){
 
-        const pool = this.state.game.pool;
-        const balance = this.state.account.balance;
-        const profit = this.state.account.profit;
-        const debt = this.state.account.debt;
-        const circulation = this.state.bank.circulation;
+        const pool          = this.state.game.pool;
+        const balance       = this.state.account.balance;
+        const profit        = this.state.account.profit;
+        const debt          = this.state.account.debt;
+        const circulation   = this.state.bank.circulation;
+        const supply        = this.state.bank.supply;
 
         const poolRenderAmount = this.numberFormat(pool);
         const accountBalanceRenderAmount = this.numberFormat(balance);
         const profitRenderAmount = this.numberFormat(profit);
         const debtRenderAmount = this.numberFormat(debt);
         const circulationRenderAmount = this.numberFormat(circulation);
+        const supplyRenderAmount = this.numberFormat(supply);
 
         return(
             <div id="app-content">
@@ -208,6 +221,7 @@ class App extends React.Component{
                 <BankGrid 
                     circulation={circulationRenderAmount} 
                     currencySymbol={this.state.bank.currencySymbol}
+                    supply={supplyRenderAmount}
                 />
 
                 <AccountGrid 

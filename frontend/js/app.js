@@ -38,12 +38,20 @@ var App = /*#__PURE__*/function (_React$Component) {
 
     var env = _assertThisInitialized(_this);
 
+    _this.socket.on('end_game_request', function (id) {
+      //Cast your vote on wheter you think the game should end or not.
+      var vote = confirm("Someone requested to end the game. Do you agree?");
+      env.socket.emit('end_game_vote', vote);
+    });
+
     _this.socket.on('bank_update', function (msg) {
       var data = JSON.parse(msg);
       var circ = data.circulation;
       var cs = data.currencySymbol;
+      var supply = data.supply;
       env.state.bank.circulation = circ;
       env.state.bank.currencySymbol = cs;
+      env.state.bank.supply = supply;
       env.updateState();
     });
 
@@ -165,7 +173,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     value: function endGame() {
       var sideSelector = document.querySelector("#input-game-bool");
       var result = sideSelector.value === "True";
-      this.socket.emit('end_game', result);
+      this.socket.emit('end_game_accepted', result);
     }
   }, {
     key: "createGame",
@@ -178,7 +186,9 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "numberFormat",
     value: function numberFormat(number) {
-      /*Compresses big numbers, adds a letter postfix representation of the number and returns it as a string */
+      if (typeof number !== "number") return NaN;
+      /*Compresses big numbers, adds a letter postfix representation of the quantity of the number and returns it as a string */
+
       var thousand = 1000;
       var million = 1000000;
       var billion = 1000000000;
@@ -195,11 +205,13 @@ var App = /*#__PURE__*/function (_React$Component) {
       var profit = this.state.account.profit;
       var debt = this.state.account.debt;
       var circulation = this.state.bank.circulation;
+      var supply = this.state.bank.supply;
       var poolRenderAmount = this.numberFormat(pool);
       var accountBalanceRenderAmount = this.numberFormat(balance);
       var profitRenderAmount = this.numberFormat(profit);
       var debtRenderAmount = this.numberFormat(debt);
       var circulationRenderAmount = this.numberFormat(circulation);
+      var supplyRenderAmount = this.numberFormat(supply);
       return /*#__PURE__*/React.createElement("div", {
         id: "app-content"
       }, /*#__PURE__*/React.createElement(GameName, {
@@ -210,7 +222,8 @@ var App = /*#__PURE__*/function (_React$Component) {
         currencySymbol: this.state.bank.currencySymbol
       }), /*#__PURE__*/React.createElement(BankGrid, {
         circulation: circulationRenderAmount,
-        currencySymbol: this.state.bank.currencySymbol
+        currencySymbol: this.state.bank.currencySymbol,
+        supply: supplyRenderAmount
       }), /*#__PURE__*/React.createElement(AccountGrid, {
         balance: accountBalanceRenderAmount,
         debt: debtRenderAmount,

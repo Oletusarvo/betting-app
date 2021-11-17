@@ -27,7 +27,8 @@ bank.currencySymbol = "mk";
 function bankUpdate(socket){
     socket.emit('bank_update', JSON.stringify({
         circulation : bank.circulation,
-        currencySymbol : bank.currencySymbol
+        currencySymbol : bank.currencySymbol,
+        supply : bank.supply
     }));
 }
 
@@ -98,14 +99,17 @@ io.on('connection', socket =>{
     })
 
     socket.on('loan', amount => {
-        bank.loan(socket.id, amount);
-
-        bankUpdate(io);
-
         const acc = bank.accounts.get(socket.id);
 
         if(acc){
+
+            if(acc.debt >= bank.defaultIssueAmount) {
+                return;
+            }
+
+            bank.loan(socket.id, amount);
             accountUpdate(socket);
+            bankUpdate(io);
         }
         else{
             console.log("Account " + socket.id + " does not exist!");
@@ -120,7 +124,19 @@ io.on('connection', socket =>{
         accountUpdate(socket);
     });
 
-    socket.on('end_game', result => {
+    socket.on('end_game', () =>{
+        //When someone presses the end game button, all participants have to vote for the game to end.
+        io.emit('end_game_request', socket.id);
+    });
+
+    socket.on('end_game_vote', data =>{
+        const id = data.id;
+        const vote = data.vote;
+
+        console.log("Received vote to end the game (vote: " + vote + ", id: " + id);
+    });
+
+    socket.on('end_game_accepted', result => {
         let gameResult = game.end(result);
 
         //Deposit winning share to all winners.

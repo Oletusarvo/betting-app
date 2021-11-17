@@ -9,6 +9,7 @@ var vars = {
   },
   bank: {
     circulation: 0,
+    supply: 0,
     currencySymbol: "def"
   },
   account: {
