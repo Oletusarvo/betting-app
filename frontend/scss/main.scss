@@ -1,6 +1,7 @@
 @import 'config';
 @import 'app-content';
 @import 'game-grid';
+@import 'account-grid';
 @import 'control-grid';
 @import 'bank-grid';
 
@@ -22,9 +23,21 @@ button, select, input{
     font-size: 25px;
 }
 
-.grid-item{
-    border: 1px solid black;
+button, select{
+    background: lighten($primary-color, 30);
+    color: white;
     border-radius: $borderRadius;
+    border: 1px solid white;
+    border-color: lighten($primary-color, $border-lighten-amount);
+}
+
+.grid-item{
+    border: 1px solid white;
+    border-radius: $borderRadius;
+
+    background: $primary-color;
+    border-color: lighten($primary-color, $border-lighten-amount);
+
     padding: 4px;
 
     font-size: 25px;

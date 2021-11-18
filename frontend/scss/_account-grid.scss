@@ -1,6 +1,7 @@
 #grid-account{
-    font-size: 25px;
+    font-size: $data-font-size;
     grid-area: account;
+    color: white;
 }
 
 #output-account-balance{

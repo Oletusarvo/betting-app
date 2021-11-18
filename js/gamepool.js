@@ -6,8 +6,10 @@ class GamePool extends React.Component{
     render(){
         return(
             <div className="grid-item" id="game-pool">
-                <span className="data-output" id="output-game-pool">{this.props.pool}</span>
-                <span className="data-output" id="output-game-pool-currencySymbol">{this.props.currencySymbol}</span>
+                <div id="game-pool-border-circle">
+                    <span className="data-output" id="output-game-pool">{this.props.pool}</span>
+                    <span className="data-output" id="output-game-pool-currencySymbol">{this.props.currencySymbol}</span>
+                </div>
             </div>
         )
     }

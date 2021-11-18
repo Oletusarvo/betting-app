@@ -1,8 +1,18 @@
-$primary-color : rgb(255, 217, 0);
+
+
+$bank-color : rgb(0, 47, 0);
+$pool-color : rgb(0, 0, 47);
+
+$primary-color : lighten($pool-color, 15);
 $secondary-color : rgb(46, 43, 0);
+
+$account-color : $bank-color;
+$border-lighten-amount : 15;
 
 $gapSize : 3px;
 $borderRadius : 5px;
+
+$data-font-size: 35px;
 
 *{
     box-sizing : border-box;

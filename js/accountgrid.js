@@ -13,7 +13,7 @@ class AccountGrid extends React.Component{
                 <span 
                     className="data-output" 
                     id="output-account-profit"
-                    style={this.props.profit >= 0 ? {color : "green"} : {color : "brown"}}
+                    style={this.props.profit >= 0 ? {color : "lime"} : {color : "red"}}
                     >{this.props.profit}{this.props.currencySymbol}</span>
             </div>
         );

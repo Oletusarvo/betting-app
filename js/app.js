@@ -50,6 +50,10 @@ class App extends React.Component{
             env.state.account.profit = data.profit;
 
             env.updateState();
+        });
+
+        this.socket.on('loan_rejected', amount =>{
+            alert("Your loan request of " + amount + " was rejected!");
         })
 
        
@@ -68,23 +72,23 @@ class App extends React.Component{
     }
 
     placeBet(){
+
+        if(this.state.game.folded){
+            alert("You cannot bet in this game as you have folded.");
+            return;
+        } 
+
         const input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
         const amount = parseFloat(input);
 
         if(typeof amount !== "number") return;
 
         if(amount < this.state.game.minBet){
-            //Flash the game pool ring as red.
-            //const gamePoolRingElement = document.querySelector("#game-pool-border-circle");
-            //gamePoolRingElement.classList.add("flash");
+            alert("You must bet more or equal to the minimum bet of " + this.state.game.minBet || 0.1);
             return;
         }
         if(amount > this.state.account.balance){
-            //Flash the account balance output as red.
-            //const accountBalanceOutput = document.querySelector("#output-account-balance");
-            //accountBalanceOutput.classList.add("flash");
-
-            //Use timer to turn the color back to white.
+            alert("You are trying to bet more than your balance!");
             return;
         }
 
@@ -134,15 +138,21 @@ class App extends React.Component{
 
         if(typeof amount !== "number") return;
 
-        if(amount > this.state.account.balance) return;
-        if(amount > this.state.account.debt) return;
+        if(amount > this.state.account.balance){
+            alert("Amount exceedes balance!");
+            return;
+        }
+        if(amount > this.state.account.debt){
+            alert("Amount exceedes debt!");
+            return;
+        }
 
         this.socket.emit('pay_debt', amount);
     }
 
     loan(){
-        const input = document.querySelector("#input-bank");
-        const amount = parseFloat(input.value);
+        const input = prompt("Enter amount you want to loan:");
+        const amount = parseFloat(input);
 
         if(typeof amount !== "number") return;
 

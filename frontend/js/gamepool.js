@@ -39,13 +39,15 @@ var GamePool = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         className: "grid-item",
         id: "game-pool"
+      }, /*#__PURE__*/React.createElement("div", {
+        id: "game-pool-border-circle"
       }, /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-game-pool"
       }, this.props.pool), /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-game-pool-currencySymbol"
-      }, this.props.currencySymbol));
+      }, this.props.currencySymbol)));
     }
   }]);
 

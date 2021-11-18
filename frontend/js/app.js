@@ -72,6 +72,10 @@ var App = /*#__PURE__*/function (_React$Component) {
       env.updateState();
     });
 
+    _this.socket.on('loan_rejected', function (amount) {
+      alert("Your loan request of " + amount + " was rejected!");
+    });
+
     _this.updateState = _this.updateState.bind(_assertThisInitialized(_this));
     _this.placeBet = _this.placeBet.bind(_assertThisInitialized(_this));
     _this.loan = _this.loan.bind(_assertThisInitialized(_this));
@@ -90,22 +94,22 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "placeBet",
     value: function placeBet() {
+      if (this.state.game.folded) {
+        alert("You cannot bet in this game as you have folded.");
+        return;
+      }
+
       var input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
       var amount = parseFloat(input);
       if (typeof amount !== "number") return;
 
       if (amount < this.state.game.minBet) {
-        //Flash the game pool ring as red.
-        //const gamePoolRingElement = document.querySelector("#game-pool-border-circle");
-        //gamePoolRingElement.classList.add("flash");
+        alert("You must bet more or equal to the minimum bet of " + this.state.game.minBet || 0.1);
         return;
       }
 
       if (amount > this.state.account.balance) {
-        //Flash the account balance output as red.
-        //const accountBalanceOutput = document.querySelector("#output-account-balance");
-        //accountBalanceOutput.classList.add("flash");
-        //Use timer to turn the color back to white.
+        alert("You are trying to bet more than your balance!");
         return;
       }
 
@@ -150,15 +154,24 @@ var App = /*#__PURE__*/function (_React$Component) {
       var input = prompt("Enter amount to pay:", 1);
       var amount = parseFloat(input);
       if (typeof amount !== "number") return;
-      if (amount > this.state.account.balance) return;
-      if (amount > this.state.account.debt) return;
+
+      if (amount > this.state.account.balance) {
+        alert("Amount exceedes balance!");
+        return;
+      }
+
+      if (amount > this.state.account.debt) {
+        alert("Amount exceedes debt!");
+        return;
+      }
+
       this.socket.emit('pay_debt', amount);
     }
   }, {
     key: "loan",
     value: function loan() {
-      var input = document.querySelector("#input-bank");
-      var amount = parseFloat(input.value);
+      var input = prompt("Enter amount you want to loan:");
+      var amount = parseFloat(input);
       if (typeof amount !== "number") return;
       this.socket.emit('loan', amount);
     }

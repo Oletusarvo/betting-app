@@ -3,21 +3,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+
+    
 }
 
 #game-pool{
     grid-area: game-pool; 
+    height: 500px;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    
+    background: $pool-color;
+    border-color: lighten($pool-color, $border-lighten-amount);
 }
 
 #game-pool-border-circle{
     border: 2px solid white;
     border-radius: 50%;
-    height: 400px;
     width: 400px;
+    height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;

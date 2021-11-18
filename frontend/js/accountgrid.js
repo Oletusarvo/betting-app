@@ -49,9 +49,9 @@ var AccountGrid = /*#__PURE__*/function (_React$Component) {
         className: "data-output",
         id: "output-account-profit",
         style: this.props.profit >= 0 ? {
-          color: "green"
+          color: "lime"
         } : {
-          color: "brown"
+          color: "red"
         }
       }, this.props.profit, this.props.currencySymbol));
     }

@@ -53,9 +53,6 @@ var ControlGrid = /*#__PURE__*/function (_React$Component) {
       }, "Fold"), /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-end-game",
-        style: {
-          background: "red"
-        },
         onClick: this.props.endGameFunction
       }, "End Game"), /*#__PURE__*/React.createElement("button", {
         className: "control-button",

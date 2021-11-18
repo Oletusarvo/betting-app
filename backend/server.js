@@ -50,6 +50,10 @@ function accountUpdate(socket){
     }));
 }
 
+function rejectLoan(amount, socket){
+    socket.emit('loan_rejected', amount);
+}
+
 io.on('connection', socket =>{
     clients.set(socket.id, socket);
 
@@ -104,6 +108,7 @@ io.on('connection', socket =>{
         if(acc){
 
             if(acc.debt >= bank.defaultIssueAmount) {
+                rejectLoan(amount, socket);
                 return;
             }
 

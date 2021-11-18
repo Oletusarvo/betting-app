@@ -27,7 +27,6 @@ class ControlGrid extends React.Component{
                 <button 
                     className="control-button"
                     id="button-end-game" 
-                    style={{background : "red"}}
                     onClick={this.props.endGameFunction}>End Game</button>
 
                 <button 
