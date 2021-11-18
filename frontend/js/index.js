@@ -15,7 +15,8 @@ var vars = {
   account: {
     debt: 0,
     balance: 0,
-    profit: 0
+    profit: 0,
+    username: undefined
   }
 };
 ReactDOM.render( /*#__PURE__*/React.createElement(App, {

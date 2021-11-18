@@ -38,6 +38,13 @@ var App = /*#__PURE__*/function (_React$Component) {
 
     var env = _assertThisInitialized(_this);
 
+    _this.socket.on('login_success', function (username) {
+      _this.state.account.username = username;
+      alert("Logged in as " + username);
+
+      _this.updateState();
+    });
+
     _this.socket.on('end_game_request', function (id) {
       //Cast your vote on wheter you think the game should end or not.
       var vote = confirm("Someone requested to end the game. Do you agree?");
@@ -83,6 +90,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.endGame = _this.endGame.bind(_assertThisInitialized(_this));
     _this.createGame = _this.createGame.bind(_assertThisInitialized(_this));
     _this.fold = _this.fold.bind(_assertThisInitialized(_this));
+    _this.connect = _this.connect.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -101,7 +109,11 @@ var App = /*#__PURE__*/function (_React$Component) {
 
       var input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
       var amount = parseFloat(input);
-      if (typeof amount !== "number") return;
+
+      if (isNaN(amount)) {
+        alert("Amount has to be a number!");
+        return;
+      }
 
       if (amount < this.state.game.minBet) {
         alert("You must bet more or equal to the minimum bet of " + this.state.game.minBet || 0.1);
@@ -153,7 +165,13 @@ var App = /*#__PURE__*/function (_React$Component) {
     value: function payDebt() {
       var input = prompt("Enter amount to pay:", 1);
       var amount = parseFloat(input);
-      if (typeof amount !== "number") return;
+
+      if (isNaN(amount)) {
+        alert("Amount has to be a number!");
+        return;
+      }
+
+      ;
 
       if (amount > this.state.account.balance) {
         alert("Amount exceedes balance!");
@@ -172,7 +190,13 @@ var App = /*#__PURE__*/function (_React$Component) {
     value: function loan() {
       var input = prompt("Enter amount you want to loan:");
       var amount = parseFloat(input);
-      if (typeof amount !== "number") return;
+
+      if (isNaN(amount)) {
+        alert("Amount has to be a number!");
+        return;
+      }
+
+      ;
       this.socket.emit('loan', amount);
     }
   }, {
@@ -199,7 +223,7 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "numberFormat",
     value: function numberFormat(number) {
-      if (typeof number !== "number") return NaN;
+      if (isNaN(number)) return NaN;
       /*Compresses big numbers, adds a letter postfix representation of the quantity of the number and returns it as a string */
 
       var thousand = 1000;
@@ -209,6 +233,17 @@ var App = /*#__PURE__*/function (_React$Component) {
       var postfix = number >= trillion ? 'T' : number >= billion ? 'B' : number >= million ? 'M' : number >= thousand ? 'K' : "";
       var compressed = number >= trillion ? number / trillion : number >= billion ? number / billion : number >= million ? number / million : number >= thousand ? number / thousand : number;
       return compressed.toFixed(2) + postfix;
+    }
+  }, {
+    key: "connect",
+    value: function connect() {
+      if (this.state.account.username != undefined) return; //Stop user from sending login requests when they already are logged in.
+
+      var input = document.querySelector("#input-username");
+      var username = input.value;
+      var answer = confirm("Are you sure you want to connect as \'" + username + "\'");
+      if (answer == false) return;
+      this.socket.emit('login', username);
     }
   }, {
     key: "render",
@@ -252,6 +287,8 @@ var App = /*#__PURE__*/function (_React$Component) {
         callFunction: this.call,
         minBet: this.state.game.minBet,
         hasToCall: this.state.game.hasToCall
+      }), /*#__PURE__*/React.createElement(LoginGrid, {
+        connectFunction: this.connect
       }));
     }
   }]);

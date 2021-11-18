@@ -3,7 +3,7 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const socketio = require('socket.io');
-
+const FS = require('fs');
 //Required so react works on the front-end.
 const react = require('react');
 const reactDom = require('react-dom');
@@ -20,7 +20,9 @@ const Game = require('./js/game');
 const bank = new Bank();
 const game = new Game();
 
+//Store socket ids of connected usernames.
 let clients = new Map();
+let sockets = new Map(); //Temporarily map usernames to sockets until I figure out a better way to do things.
 
 bank.currencySymbol = "mk";
 
@@ -38,10 +40,13 @@ function gameUpdate(socket){
         minBet : game.minBet,
         name : game.name
     }));
+
+    FS.writeFile("data/data.json", JSON.stringify(game), (err) => {if(err != null)console.log(err)});
 }
 
 function accountUpdate(socket){
-    const acc = bank.accounts.get(socket.id);
+    const username = clients.get(socket.id);
+    const acc = bank.accounts.get(username);
 
     socket.emit('account_update', JSON.stringify({
         balance : acc.balance,
@@ -55,55 +60,70 @@ function rejectLoan(amount, socket){
 }
 
 io.on('connection', socket =>{
-    clients.set(socket.id, socket);
-
     console.log("New connection! ID: " + socket.id);
     //Send current game state to new connection.
 
-    gameUpdate(socket);
-    bank.addAccount(socket.id);
+    socket.on('login', username => {
 
-    accountUpdate(socket);
-    bankUpdate(io);
+        const isLoggedIn = clients.get(socket.id);
+
+        if(isLoggedIn){
+            socket.emit('login_failure');
+        }
+        else{
+            clients.set(socket.id, username);
+            sockets.set(username, socket);
+
+            const acc = bank.accounts.get(username);
+
+            if(!acc){
+                bank.addAccount(username);
+            }
+        
+            accountUpdate(socket);
+            bankUpdate(io);
+            gameUpdate(socket);
+
+            socket.emit('login_success', username);
+        }
+        
+    });
 
     socket.on('disconnect', () => {
         //Delete account associated with this socket. Leave game pool intact.
-        const acc = bank.accounts.get(socket.id);
-        
-        bank.circulation -= acc.balance;
-        const bet = game.placedBets.get(socket.id);
-
-        if(bet){
-            game.placedBets.delete(bet.id);
-        }
-        
-        bank.accounts.delete(socket.id);
-
-        bankUpdate(io);
-
-        gameUpdate(io);
-
+        clients.delete(socket.id);
     });
 
     socket.on('place_bet', msg => {
         const data = JSON.parse(msg);
-        const bet = new Bet(data.amount, data.side, data.id);
+        const username = clients.get(socket.id);
 
+        if(username == undefined) return;
+
+        const bet = new Bet(data.amount, data.side, username);
 
         game.placeBet(bet);
-        bank.deposit(socket.id, -bet.amount);
+        bank.deposit(username, -bet.amount);
         accountUpdate(socket);
 
         gameUpdate(io);
     });
 
     socket.on('fold', id => {
-        let bet = game.placedBets.get(id);
+        const username = clients.get(socket.id);
+
+        if(username == undefined) return;
+
+        let bet = game.placedBets.get(username);
         bet.folded = true;
-    })
+    });
 
     socket.on('loan', amount => {
-        const acc = bank.accounts.get(socket.id);
+        const username = clients.get(socket.id);
+
+        if(username == undefined) return;
+
+        const acc = bank.accounts.get(username);
 
         if(acc){
 
@@ -112,7 +132,7 @@ io.on('connection', socket =>{
                 return;
             }
 
-            bank.loan(socket.id, amount);
+            bank.loan(username, amount);
             accountUpdate(socket);
             bankUpdate(io);
         }
@@ -123,7 +143,11 @@ io.on('connection', socket =>{
     });
 
     socket.on('pay_debt', amount => {
-        bank.payDebt(socket.id, amount);
+        const username = clients.get(socket.id);
+
+        if(username == undefined) return;
+
+        bank.payDebt(username, amount);
 
         bankUpdate(io);
         accountUpdate(socket);
@@ -142,6 +166,11 @@ io.on('connection', socket =>{
     });
 
     socket.on('end_game_accepted', result => {
+
+        const username = clients.get(socket.id);
+
+        if(username == undefined) return;
+        
         let gameResult = game.end(result);
 
         //Deposit winning share to all winners.
@@ -153,17 +182,17 @@ io.on('connection', socket =>{
         //Update all accounts participating in the game.
         const participants = game.placedBets;
         for(let bet of participants.values()){
-            const id = bet.id
-            const socket = clients.get(id);
+            const username = bet.id
+            const socket = sockets.get(username);
 
             if(!socket) {
-                console.log("Bad socket ID! (" + id + ')');
+                console.log("Non-existent socket!");
                 continue;
             }
 
             
             //Shorten debt of all accounts instead if no one won.
-            const acc = bank.accounts.get(id);
+            const acc = bank.accounts.get(username);
             if(gameResult.winners.length == 0){
                 bank.circulation -= bet.amount;
                 acc.debt -= acc.debt > 0 ? bet.amount : 0;

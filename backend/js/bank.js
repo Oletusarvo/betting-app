@@ -9,8 +9,8 @@ class Bank{
         this.accounts = new Map();
     }
 
-    addAccount(id){
-        const acc = new Account(id);
+    addAccount(username){
+        const acc = new Account(username);
         this.accounts.set(acc.id, acc);
         this.loan(acc.id, this.defaultIssueAmount);
         acc.initBalance = acc.balance;
