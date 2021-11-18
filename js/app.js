@@ -68,8 +68,8 @@ class App extends React.Component{
     }
 
     placeBet(){
-        const input = document.querySelector("#input-bet-amount");
-        const amount = parseFloat(input.value);
+        const input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
+        const amount = parseFloat(input);
 
         if(typeof amount !== "number") return;
 
@@ -129,8 +129,8 @@ class App extends React.Component{
     }
 
     payDebt(){
-        const input = document.querySelector("#input-bank");
-        const amount = parseFloat(input.value);
+        const input =  prompt("Enter amount to pay:", 1);
+        const amount = parseFloat(input);
 
         if(typeof amount !== "number") return;
 
@@ -209,7 +209,6 @@ class App extends React.Component{
 
         return(
             <div id="app-content">
-
                 <GameName gameName={this.state.game.name}/>
 
                 <GamePool 

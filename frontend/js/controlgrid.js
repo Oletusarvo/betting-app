@@ -39,17 +39,11 @@ var ControlGrid = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         id: "grid-controls",
         className: "grid-item"
-      }, /*#__PURE__*/React.createElement("input", {
-        className: "input-field",
-        id: "input-bet-amount",
-        type: "number",
-        step: "0.1",
-        min: this.props.minBet
-      }), /*#__PURE__*/React.createElement("button", {
+      }, /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-place-bet",
         onClick: this.props.placeBetFunction
-      }, "Place Bet"), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("select", {
+      }, "Place Bet"), /*#__PURE__*/React.createElement("select", {
         className: "control-button",
         id: "input-game-bool"
       }, /*#__PURE__*/React.createElement("option", null, "True"), /*#__PURE__*/React.createElement("option", null, "False")), /*#__PURE__*/React.createElement("button", {
@@ -63,13 +57,7 @@ var ControlGrid = /*#__PURE__*/function (_React$Component) {
           background: "red"
         },
         onClick: this.props.endGameFunction
-      }, "End Game"), /*#__PURE__*/React.createElement("input", {
-        className: "input-field",
-        id: "input-bank",
-        type: "number",
-        step: "0.01",
-        min: "1"
-      }), /*#__PURE__*/React.createElement("button", {
+      }, "End Game"), /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-pay-debt",
         onClick: this.props.payDebtFunction

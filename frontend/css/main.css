@@ -1,13 +1,16 @@
 * {
   box-sizing: border-box; }
 
+#app-content {
+  border-radius: 5px; }
+
 @media screen and (max-width: 1000px) {
   /*Mobile phone*/
   #app-content {
     width: 100%;
-    height: 820px;
+    height: 1200px;
     display: grid;
-    grid-template-areas: 'game-name game-name' 'game-pool controls' 'account controls' 'bank controls';
+    grid-template-areas: 'game-name game-name' 'game-pool game-pool' 'account bank' 'controls controls';
     background: #2e2b00;
     gap: 3px;
     padding: 2px; } }
@@ -20,7 +23,8 @@
     grid-template-areas: 'game-name game-name' 'game-pool controls' 'account controls' 'bank controls';
     background: #2e2b00;
     gap: 3px;
-    padding: 2px; } }
+    padding: 2px;
+    align-items: center; } }
 
 #game-name {
   grid-area: game-name;
@@ -60,7 +64,7 @@
   min-height: 500px;
   grid-area: controls;
   display: grid;
-  grid-template-areas: 'input-game input-game input-bank input-bank' 'button-place-bet select-side button-pay-debt button-loan' 'button-fold button-fold button-fold button-fold' 'button-end-game button-end-game button-end-game button-end-game'; }
+  grid-template-areas: 'button-place-bet select-side button-pay-debt button-loan' 'button-fold button-fold button-fold button-fold' 'button-end-game button-end-game button-end-game button-end-game'; }
 
 #button-end-game {
   grid-area: button-end-game; }
@@ -97,8 +101,18 @@
   grid-area: bank; }
 
 body {
+  display: flex;
+  flex-flow: column;
+  gap: 3px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: black; }
+
+input {
+  font-size: 50px; }
+
+button, select, input {
+  font-weight: bold;
+  font-size: 25px; }
 
 .grid-item {
   border: 1px solid black;
@@ -108,10 +122,7 @@ body {
   font-weight: bold;
   background: #ffd900; }
 
-input {
-  font-weight: bold;
-  font-size: 50px; }
-
-button, select {
-  font-weight: bold;
-  font-size: 25px; }
+#nav-header {
+  height: 50px;
+  width: 100%;
+  background: #ffd900; }

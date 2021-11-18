@@ -90,8 +90,8 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "placeBet",
     value: function placeBet() {
-      var input = document.querySelector("#input-bet-amount");
-      var amount = parseFloat(input.value);
+      var input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
+      var amount = parseFloat(input);
       if (typeof amount !== "number") return;
 
       if (amount < this.state.game.minBet) {
@@ -147,8 +147,8 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "payDebt",
     value: function payDebt() {
-      var input = document.querySelector("#input-bank");
-      var amount = parseFloat(input.value);
+      var input = prompt("Enter amount to pay:", 1);
+      var amount = parseFloat(input);
       if (typeof amount !== "number") return;
       if (amount > this.state.account.balance) return;
       if (amount > this.state.account.debt) return;

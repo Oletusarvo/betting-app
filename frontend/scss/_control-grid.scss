@@ -10,8 +10,7 @@
     min-height: 500px;
     grid-area: controls;
     display: grid;
-    grid-template-areas: 'input-game input-game input-bank input-bank'
-    'button-place-bet select-side button-pay-debt button-loan'
+    grid-template-areas: 'button-place-bet select-side button-pay-debt button-loan'
     'button-fold button-fold button-fold button-fold'
     'button-end-game button-end-game button-end-game button-end-game';
 }

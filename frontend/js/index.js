@@ -3,7 +3,7 @@
 var vars = {
   game: {
     pool: 0,
-    minBet: 0,
+    minBet: undefined,
     name: "game name",
     hasToCall: false
   },

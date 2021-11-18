@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "display": "standalone",
   "description": "",
-  "main": "./frontend/js/game.js",
+  "main": "./frontend/js/index.js",
   "scripts": {},
   "author": "Jens Österberg",
   "license": "MIT",

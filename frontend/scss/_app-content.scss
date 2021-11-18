@@ -1,23 +1,26 @@
+#app-content{
+    border-radius: $borderRadius;
+}
+
 @media screen and (max-width : 1000px){
     /*Mobile phone*/
     #app-content{
         width: 100%;
-        height: 820px;
+        height: 1200px;
         display: grid;
         grid-template-areas: 'game-name game-name'
-        'game-pool controls'
-        'account controls'
-        'bank controls';
+        'game-pool game-pool'
+        'account bank'
+        'controls controls';
     
         background: $secondary-color;
         
-        gap : 3px;
+        gap : $gapSize;
         padding: 2px;
     }
 }
 
 @media screen and (min-width : 1001px){
-    
     #app-content{
         width: 820px;
         height: 820px;
@@ -28,7 +31,9 @@
         'bank controls';
     
         background: $secondary-color;
-        gap : 3px;
+        gap : $gapSize;
         padding: 2px;
+
+        align-items: center;
     }
 }

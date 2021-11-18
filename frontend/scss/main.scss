@@ -5,14 +5,26 @@
 @import 'bank-grid';
 
 body{  
+    display: flex;
+    flex-flow : column;
+    gap : $gapSize;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: black;  
     
 }
 
+input{
+    font-size: 50px;
+}
+
+button, select, input{
+    font-weight: bold;
+    font-size: 25px;
+}
+
 .grid-item{
     border: 1px solid black;
-    border-radius: 5px;
+    border-radius: $borderRadius;
     padding: 4px;
 
     font-size: 25px;
@@ -21,11 +33,10 @@ body{
     background: $primary-color;
 }
 
-input{
-    font-weight: bold;
-    font-size: 50px;
+#nav-header{
+    height: 50px;
+    width: 100%;
+    background : $primary-color;
 }
-button, select{
-    font-weight: bold;
-    font-size: 25px;
-}
+
+
