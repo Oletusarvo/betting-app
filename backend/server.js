@@ -1,30 +1,81 @@
 const express = require('express');
 const http = require('http');
-const app = express();
-const server = http.createServer(app);
+
+
 const socketio = require('socket.io');
 const FS = require('fs');
+const JSONutil = require('./js/jsonutil');
+
 //Required so react works on the front-end.
 const react = require('react');
 const reactDom = require('react-dom');
 
-const io = socketio(server);
 
-app.use(express.static('frontend'));
-app.use(express.static('node_modules'));
 
 const Bank = require('./js/bank');
 const Bet = require('./js/bet');
 const Game = require('./js/game');
+const ServerState = require('./js/serverstate');
 
-const bank = new Bank();
-const game = new Game();
+let serverState = new ServerState();
+
+//Load server state data from file, if one exists.
+//const serverStateFile = FS.open("data/data.json", "r", (err) => { console.log(err); });
+
+
+const jsonUtil = new JSONutil();
 
 //Store socket ids of connected usernames.
 let clients = new Map();
 let sockets = new Map(); //Temporarily map usernames to sockets until I figure out a better way to do things.
 
+let bank = new Bank();
+let game = new Game();
+
 bank.currencySymbol = "mk";
+
+function loadState(){
+    FS.readFile("backend/data/bankState.json", 'utf8', (err, data) => {
+        if(!err){
+            
+            obj = JSON.parse(data, jsonUtil.reviver);
+            bank.accounts = obj.accounts;
+            bank.circulation = obj.circulation;
+            bank.supply = obj.supply;
+            bank.defaultIssueAmount = obj.defaultIssueAmount;
+            bank.currencySymbol = obj.currencySymbol;
+
+            console.log("Previous bank state loaded.");
+            //console.log(bank);
+        }
+        else{
+            console.log(err);
+        }
+    }); 
+
+    FS.readFile("backend/data/gameState.json", 'utf8', (err, data) => {
+        if(!err){
+            
+            obj = JSON.parse(data, jsonUtil.reviver);
+            game.pool = obj.pool;
+            game.minBet = obj.minBet;
+            game.name = obj.name;
+            game.placedBets = obj.placedBets;
+
+            console.log("Previous game state loaded.");
+            //console.log(game);
+        }
+        else{
+            console.log(err);
+        }
+    });
+}
+
+function saveState(){
+
+    FS.writeFile("backend/data/bankState.json", JSON.stringify(bank, jsonUtil.replacer), {encoding : "utf8"}, (err) => {console.log(err)});
+    FS.writeFile("backend/data/gameState.json", JSON.stringify(game, jsonUtil.replacer), {encoding : "utf8"}, (err) => {console.log(err)});
+}
 
 function bankUpdate(socket){
     socket.emit('bank_update', JSON.stringify({
@@ -40,8 +91,6 @@ function gameUpdate(socket){
         minBet : game.minBet,
         name : game.name
     }));
-
-    FS.writeFile("data/data.json", JSON.stringify(game), (err) => {if(err != null)console.log(err)});
 }
 
 function accountUpdate(socket){
@@ -59,10 +108,20 @@ function rejectLoan(amount, socket){
     socket.emit('loan_rejected', amount);
 }
 
+loadState(serverState);
+
+//console.log(serverState);
+
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
+
+app.use(express.static('frontend'));
+app.use(express.static('node_modules'));
+
 io.on('connection', socket =>{
     console.log("New connection! ID: " + socket.id);
     //Send current game state to new connection.
-
     socket.on('login', username => {
 
         const isLoggedIn = clients.get(socket.id);
@@ -77,6 +136,7 @@ io.on('connection', socket =>{
             const acc = bank.accounts.get(username);
 
             if(!acc){
+                console.log("Account " + username + " does not exist. Creating...");
                 bank.addAccount(username);
             }
         
@@ -86,6 +146,8 @@ io.on('connection', socket =>{
 
             socket.emit('login_success', username);
         }
+
+        saveState();
         
     });
 
@@ -107,6 +169,8 @@ io.on('connection', socket =>{
         accountUpdate(socket);
 
         gameUpdate(io);
+
+        saveState();
     });
 
     socket.on('fold', id => {
@@ -116,6 +180,8 @@ io.on('connection', socket =>{
 
         let bet = game.placedBets.get(username);
         bet.folded = true;
+
+        saveState();
     });
 
     socket.on('loan', amount => {
@@ -135,10 +201,14 @@ io.on('connection', socket =>{
             bank.loan(username, amount);
             accountUpdate(socket);
             bankUpdate(io);
+
+            saveState();
         }
         else{
             console.log("Account " + socket.id + " does not exist!");
         }
+
+        
         
     });
 
@@ -151,6 +221,8 @@ io.on('connection', socket =>{
 
         bankUpdate(io);
         accountUpdate(socket);
+
+        saveState();
     });
 
     socket.on('end_game', () =>{
@@ -204,6 +276,8 @@ io.on('connection', socket =>{
             
             
            accountUpdate(socket);
+
+           
         }
 
         //Game bets can now be cleared.
@@ -211,6 +285,8 @@ io.on('connection', socket =>{
 
         bankUpdate(io);
         gameUpdate(io);
+
+        saveState();
     });
 
     
