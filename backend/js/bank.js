@@ -27,8 +27,11 @@ class Bank{
     }
 
     payDebt(accountId, amount){
+
+        if(typeof amount !== 'number') return;
+
         const acc = this.accounts.get(accountId);
-        acc.deposit(acc, -amount);
+        acc.deposit(-amount);
         acc.debt -= amount;
         this.circulation -= amount; 
     }

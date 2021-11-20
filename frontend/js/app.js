@@ -223,7 +223,7 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "numberFormat",
     value: function numberFormat(number) {
-      if (isNaN(number)) return NaN;
+      if (isNaN(number)) return number;
       /*Compresses big numbers, adds a letter postfix representation of the quantity of the number and returns it as a string */
 
       var thousand = 1000;

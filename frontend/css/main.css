@@ -34,7 +34,7 @@
 
 #game-pool {
   grid-area: game-pool;
-  height: 500px;
+  height: 800px;
   color: white;
   display: flex;
   align-items: center;
@@ -45,15 +45,15 @@
 #game-pool-border-circle {
   border: 2px solid white;
   border-radius: 50%;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: border-color 0.5s ease-out; }
 
 #output-game-pool {
-  font-size: 60px; }
+  font-size: 80px; }
 
 #output-game-min-bet {
   font-size: 15px; }
@@ -121,9 +121,11 @@
 #login-grid {
   grid-area: login;
   display: flex;
+  flex-flow: row;
   align-items: center;
   justify-content: center;
-  color: white; }
+  color: white;
+  gap: 3px; }
 
 body {
   display: flex;

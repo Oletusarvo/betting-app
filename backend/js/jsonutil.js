@@ -28,8 +28,8 @@ class JSONutil{
             return{
                 dataType : 'Account',
                 value : {
-                    balance : value.balance.toString(),
-                    debt : value.debt.toString(),
+                    balance : value.balance,
+                    debt : value.debt,
                     profit : value.profit,
                     id : value.id,
                     initBalance : value.initBalance
@@ -97,7 +97,7 @@ class JSONutil{
             }
             
             if(value.dataType === 'Bet'){
-                const bet = new Bet(value.value.amount, value.side, value.id);
+                const bet = new Bet(parseFloat(value.value.amount), value.value.side, value.value.id);
                 bet.folded = value.value.folded;
                 bet.hasToCall = value.value.hasToCall;
                 return bet;

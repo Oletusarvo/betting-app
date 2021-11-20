@@ -4,6 +4,7 @@ const http = require('http');
 
 const socketio = require('socket.io');
 const FS = require('fs');
+const path = require('path');
 const JSONutil = require('./js/jsonutil');
 
 //Required so react works on the front-end.
@@ -22,7 +23,6 @@ let serverState = new ServerState();
 //Load server state data from file, if one exists.
 //const serverStateFile = FS.open("data/data.json", "r", (err) => { console.log(err); });
 
-
 const jsonUtil = new JSONutil();
 
 //Store socket ids of connected usernames.
@@ -34,8 +34,13 @@ let game = new Game();
 
 bank.currencySymbol = "mk";
 
+const bankDataLoc = path.join(__dirname, 'data', 'bankState.json');
+const gameDataLoc = path.join(__dirname, 'data', 'gameState.json');
+
 function loadState(){
-    FS.readFile("backend/data/bankState.json", 'utf8', (err, data) => {
+    
+
+    FS.readFile(bankDataLoc, 'utf8', (err, data) => {
         if(!err){
             
             bank = JSON.parse(data, jsonUtil.reviver);
@@ -46,7 +51,8 @@ function loadState(){
         }
     }); 
 
-    FS.readFile("backend/data/gameState.json", 'utf8', (err, data) => {
+   
+    FS.readFile(gameDataLoc, 'utf8', (err, data) => {
         if(!err){
             
             game = JSON.parse(data, jsonUtil.reviver);
@@ -60,8 +66,8 @@ function loadState(){
 
 function saveState(){
 
-    FS.writeFile("backend/data/bankState.json", JSON.stringify(bank, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
-    FS.writeFile("backend/data/gameState.json", JSON.stringify(game, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
+    FS.writeFile(bankDataLoc, JSON.stringify(bank, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
+    FS.writeFile(gameDataLoc, JSON.stringify(game, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
 }
 
 function bankUpdate(socket){

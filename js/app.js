@@ -199,7 +199,7 @@ class App extends React.Component{
     }
 
     numberFormat(number){
-        if(isNaN(number)) return NaN;
+        if(isNaN(number)) return number;
         
         /*Compresses big numbers, adds a letter postfix representation of the quantity of the number and returns it as a string */
         const thousand = 1000;
@@ -240,7 +240,7 @@ class App extends React.Component{
         const debt          = this.state.account.debt;
         const circulation   = this.state.bank.circulation;
         const supply        = this.state.bank.supply;
-
+        
         const poolRenderAmount = this.numberFormat(pool);
         const accountBalanceRenderAmount = this.numberFormat(balance);
         const profitRenderAmount = this.numberFormat(profit);
