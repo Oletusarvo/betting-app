@@ -1,0 +1,1 @@
+The server will save game state into this folder.
