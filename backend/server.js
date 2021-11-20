@@ -38,15 +38,8 @@ function loadState(){
     FS.readFile("backend/data/bankState.json", 'utf8', (err, data) => {
         if(!err){
             
-            obj = JSON.parse(data, jsonUtil.reviver);
-            bank.accounts = obj.accounts;
-            bank.circulation = obj.circulation;
-            bank.supply = obj.supply;
-            bank.defaultIssueAmount = obj.defaultIssueAmount;
-            bank.currencySymbol = obj.currencySymbol;
-
+            bank = JSON.parse(data, jsonUtil.reviver);
             console.log("Previous bank state loaded.");
-            //console.log(bank);
         }
         else{
             console.log(err);
@@ -56,14 +49,8 @@ function loadState(){
     FS.readFile("backend/data/gameState.json", 'utf8', (err, data) => {
         if(!err){
             
-            obj = JSON.parse(data, jsonUtil.reviver);
-            game.pool = obj.pool;
-            game.minBet = obj.minBet;
-            game.name = obj.name;
-            game.placedBets = obj.placedBets;
-
+            game = JSON.parse(data, jsonUtil.reviver);
             console.log("Previous game state loaded.");
-            //console.log(game);
         }
         else{
             console.log(err);
@@ -73,8 +60,8 @@ function loadState(){
 
 function saveState(){
 
-    FS.writeFile("backend/data/bankState.json", JSON.stringify(bank, jsonUtil.replacer), {encoding : "utf8"}, (err) => {console.log(err)});
-    FS.writeFile("backend/data/gameState.json", JSON.stringify(game, jsonUtil.replacer), {encoding : "utf8"}, (err) => {console.log(err)});
+    FS.writeFile("backend/data/bankState.json", JSON.stringify(bank, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
+    FS.writeFile("backend/data/gameState.json", JSON.stringify(game, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
 }
 
 function bankUpdate(socket){
@@ -108,7 +95,7 @@ function rejectLoan(amount, socket){
     socket.emit('loan_rejected', amount);
 }
 
-loadState(serverState);
+loadState();
 
 //console.log(serverState);
 
@@ -153,7 +140,9 @@ io.on('connection', socket =>{
 
     socket.on('disconnect', () => {
         //Delete account associated with this socket. Leave game pool intact.
+        const username = clients.get(socket.id);
         clients.delete(socket.id);
+        sockets.delete(username);
     });
 
     socket.on('place_bet', msg => {
@@ -179,8 +168,9 @@ io.on('connection', socket =>{
         if(username == undefined) return;
 
         let bet = game.placedBets.get(username);
-        bet.folded = true;
 
+        if(bet)
+            bet.folded = true;
         saveState();
     });
 
@@ -259,6 +249,7 @@ io.on('connection', socket =>{
 
             if(!socket) {
                 console.log("Non-existent socket!");
+                bank.circulation -= bet.amount;
                 continue;
             }
 
@@ -268,16 +259,14 @@ io.on('connection', socket =>{
             if(gameResult.winners.length == 0){
                 bank.circulation -= bet.amount;
                 acc.debt -= acc.debt > 0 ? bet.amount : 0;
+
+                if(acc.debt == 0) acc.profit -= bet.amount;
             }
             else{
                 //Profit is not affected when paying debt.
                 acc.setProfit();
             }
-            
-            
-           accountUpdate(socket);
-
-           
+            accountUpdate(socket);
         }
 
         //Game bets can now be cleared.

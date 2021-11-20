@@ -12,8 +12,9 @@ class Bank{
     addAccount(username){
         const acc = new Account(username);
         this.accounts.set(acc.id, acc);
-        this.loan(acc.id, this.defaultIssueAmount);
-        acc.initBalance = acc.balance;
+        //this.loan(acc.id, this.defaultIssueAmount);
+        acc.initBalance = acc.balance = this.defaultIssueAmount;
+        this.circulation += this.defaultIssueAmount;
     }
     
     loan(accountId, amount){
@@ -27,9 +28,9 @@ class Bank{
 
     payDebt(accountId, amount){
         const acc = this.accounts.get(accountId);
-        acc.deposit(-amount);
+        acc.deposit(acc, -amount);
         acc.debt -= amount;
-        this.circulation -= amount;
+        this.circulation -= amount; 
     }
 
     deposit(accountId, amount){

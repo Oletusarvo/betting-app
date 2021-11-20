@@ -1,15 +1,15 @@
 const Error = require('./error.js');
 
 class Game{
-    constructor(){
+    constructor(copy = null){
         this.pool = 0;
         this.minBet = 0;
-        this.name = "name";
+        this.gameName = "name";
         this.placedBets = new Map();
     }
 
-    setName(name){
-        this.name = name;
+    setName(gameName){
+        this.gameName = gameName;
     }
     
     placeBet(bet){
