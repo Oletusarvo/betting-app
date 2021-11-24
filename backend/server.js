@@ -65,7 +65,7 @@ let bank = null;
 let game = null;
 
 db.get().then(data => {
-    if(data.length == 0){
+    if(!data){
         //Database is empty, add initial data in.
         db.add({game_data: JSON.stringify(game, replacer), bank_data: JSON.stringify(bank, replacer)}).then();
         bank = new Bank();
