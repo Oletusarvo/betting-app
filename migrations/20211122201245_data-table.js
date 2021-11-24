@@ -31,8 +31,8 @@ exports.up = function(knex) {
   */
   createTable('data_table', tbl => {
     tbl.increments('id');
-    tbl.string('bank_data', 5000);
-    tbl.string('game_data', 5000);
+    tbl.string('bank_data', 5000).notNullable();
+    tbl.string('game_data', 5000).notNullable();
   })
 };
 
