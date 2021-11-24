@@ -1,6 +1,6 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable('games', tbl => {
+  return knex.schema./*createTable('games', tbl => {
       tbl.increments('id');
       tbl.string('name');
       tbl.string('bets'); //Json rep of all bets.
@@ -27,7 +27,9 @@ exports.up = function(knex) {
     tbl.string('bank_name');
     tbl.timestamps(true, true);
   })
-  .createTable('data_table', tbl => {
+
+  */
+  createTable('data_table', tbl => {
     tbl.increments('id');
     tbl.string('bank_data', 5000);
     tbl.string('game_data', 5000);
@@ -36,9 +38,11 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return (
-    knex.schema.dropTableIfExists('data_table'),
+    knex.schema.dropTableIfExists('data_table')
+    /*
     knex.schema.dropTableIfExists('games'),
     knex.schema.dropTableIfExists('accounts'),
     knex.schema.dropTableIfExists('banks')
+    */
   );
 };
