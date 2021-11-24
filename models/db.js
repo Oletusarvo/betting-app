@@ -5,6 +5,7 @@ module.exports = {
     add,
     get,
     findById,
+    update,
     updateGameData,
     updateBankData,
     getGameData,
@@ -12,11 +13,22 @@ module.exports = {
     addBank,
     addAccount,
     getAccount,
+    getAllAccounts,
+    updateAccount,
     getBank,
+    updateBank,
     addGame,
     getGame,
+    updateGame,
     database
 };
+
+async function update(gameData, bankData){
+    return await db('data_table').where({id : 1}).update({
+        game_data : JSON.stringify(gameData, replacer),
+        bank_data : JSON.stringify(bankData, replacer)
+    });
+}
 
 async function add(data){
    return await db('data_table').insert(data, ['id']); //Data must be an object containing both the game and bank json strings.
@@ -36,7 +48,21 @@ async function addAccount(account){
 }
 
 async function getAccount(username){
-    return await db('accounts').where({username});
+    return await db('accounts').where({username}).first();
+}
+
+function getAllAccounts(){
+    return db('accounts');
+}
+
+async function updateAccount(data){
+    return await db('accounts').where({username : data.username}).update({
+        balance : data.balance,
+        profit : data.profit,
+        debt : data.debt,
+        init_balance : data.initBalance,
+        username : data.username
+    });
 }
 
 async function addBank(bank){
@@ -45,12 +71,20 @@ async function addBank(bank){
         circulation : circulation,
         currencySymbol : currencySymbol,
         defaultIssueAmount : defaultIssueAmount,
-        accounts : JSON.stringify(bank.accounts, replacer)
-    }, ['id']);
+        accounts : JSON.stringify(bank.accounts, replacer),
+        bank_name : bank.bankName
+    }, ['bank_name']);
 }
 
 function getBank(id){
-    return db('banks').where({id});
+    return db('banks').where({id}).first();
+}
+
+async function updateBank(data){
+    return db('banks').where({bank_name : data.bank_name}).update({
+        circulation : data.circulation,
+        default_issue_amount : data.defaultIssueAmount
+    });
 }
 
 async function addGame(game){
@@ -63,7 +97,15 @@ async function addGame(game){
 }
 
 function getGame(gameName){
-    return db('games').where({game_name : gameName});
+    return db('games').where({game_name : gameName}).first();
+}
+
+async function updateGame(gameData){
+    return db('games').where({game_name : game_name}).update({
+        pool : gameData.pool,
+        min_bet: gameData.minBet,
+        placed_bets : JSON.stringify(gameData.placedBets, replacer)
+    });
 }
 
 function findById(id){
@@ -71,7 +113,7 @@ function findById(id){
 }
 
 function get(){
-    return db('data_table');
+    return db('data_table').first();
 }
 
 async function getBankData(){

@@ -1,6 +1,5 @@
-backend/data/bankState.json
-backend/data/gameState.json
-backend/test.js
+backend/data/database.db3
 node_modules
 /notes.txt
 test.*
+.env

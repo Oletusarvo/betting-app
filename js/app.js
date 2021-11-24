@@ -48,7 +48,7 @@ class App extends React.Component{
             const previousMinBet = env.state.game.minBet;
             env.state.game.minBet = data.minBet;
 
-            if(previousMinBet < env.state.game.minBet) this.state.game.hasToCall = true;
+            if(previousMinBet < env.state.game.minBet) env.state.game.hasToCall = true;
 
             env.updateState();
         });
@@ -72,12 +72,23 @@ class App extends React.Component{
 
         this.socket.on('logout_success', () => {
             this.state = this.props.initState;
+            this.state.accounts.username = undefined;
             this.updateState();
+            alert("Logged out successfully.");
         });
 
-        this.socket.on('game_ended', () => {
-            this.state.game.folded = false;
+        this.socket.on('fold_rejected', msg => {
+            alert(`Cannot fold! Reason: ${msg}`);
         });
+
+        this.socket.on('bet_rejected', msg => {
+            alert(`Cannot place bet! Reason: ${msg}`);
+        });
+
+        this.socket.on('call_rejected', msg => {
+            alert(`Cannot call! Reason: ${msg}`);
+        });
+        
 
        
         this.updateState = this.updateState.bind(this);
@@ -89,6 +100,7 @@ class App extends React.Component{
         this.fold = this.fold.bind(this);
         this.connect = this.connect.bind(this);
         this.disconnect = this.disconnect.bind(this);
+        this.call = this.call.bind(this);
     }
 
 
@@ -97,12 +109,6 @@ class App extends React.Component{
     }
 
     placeBet(){
-
-        if(this.state.game.folded){
-            alert("You cannot bet in this game as you have folded.");
-            return;
-        } 
-
         const input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
         const amount = parseFloat(input);
 
@@ -146,12 +152,11 @@ class App extends React.Component{
 
         const msg = {from: this.state.account.username, to: "server", data: null}
         this.sendMessage('fold', msg);
-        this.state.game.folded = true;
     }
 
     call(){
         const amount = this.state.game.minBet;
-        const answer = confirm("Calling " + amount + ". Are you sure?");
+        const answer = confirm(`Calling ${amount}, are you sure?`);
         
         if(answer == false) return;
 
@@ -162,7 +167,7 @@ class App extends React.Component{
         }
 
         const msg = {from: this.state.account.username, to: "server", data: bet}
-        this.sendMessage('place_bet', msg);
+        this.sendMessage('call', msg);
     }
 
     payDebt(){
@@ -322,7 +327,7 @@ class App extends React.Component{
                     foldFunction={this.fold}
                     callFunction={this.call}
                     minBet={this.state.game.minBet}
-                    hasToCall={this.state.game.hasToCall}
+                    hasToCall={false}
                 />
 
                 <LoginGrid

@@ -23,7 +23,8 @@ class Account{
 
     payDebt(amount){
         this.deposit(-amount);
-        this.debt -= amount;
+        this.profit += amount > this.debt ? -(amount - this.debt) : 0;
+        this.debt -= amount >= this.debt ? this.debt : amount;
     }
 }
 

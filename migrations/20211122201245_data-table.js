@@ -24,12 +24,13 @@ exports.up = function(knex) {
     tbl.float('default_issue_amount');
     tbl.string('currency_symbol');
     tbl.string('accounts'); //JSON rep of accounts.
+    tbl.string('bank_name');
     tbl.timestamps(true, true);
   })
   .createTable('data_table', tbl => {
     tbl.increments('id');
-    tbl.string('bank_data');
-    tbl.string('game_data');
+    tbl.string('bank_data', 5000);
+    tbl.string('game_data', 5000);
   })
 };
 

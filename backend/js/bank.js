@@ -2,11 +2,12 @@ const Account = require('./account');
 const error = require('./error');
 
 class Bank{
-    constructor(){
+    constructor(bankName = "default"){
         this.circulation = 0;
         this.defaultIssueAmount = 100;
-        this.currencySymbol = "$";
+        this.currencySymbol = "mk";
         this.accounts = new Map();
+        this.bankName = bankName;
     }
 
     /**@private */

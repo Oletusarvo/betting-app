@@ -11,8 +11,6 @@ class Game{
     }
     
     placeBet(bet){
-        if(bet.amount < this.minBet) return false;
-
         const existingBet = this.placedBets.get(bet.id);
 
         if(existingBet){
@@ -23,7 +21,7 @@ class Game{
         }
 
         this.pool = this.calculatePool();
-        this.minBet = bet.amount;
+        this.minBet = bet.amount > this.minBet ? bet.amount : this.minBet;
 
         return true;
     }

@@ -42,8 +42,8 @@ var ControlGrid = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-place-bet",
-        onClick: this.props.placeBetFunction
-      }, "Place Bet"), /*#__PURE__*/React.createElement("select", {
+        onClick: this.props.hasToCall ? this.props.callFunction : this.props.placeBetFunction
+      }, this.props.hasToCall ? "Call" : "Place Bet"), /*#__PURE__*/React.createElement("select", {
         className: "control-button",
         id: "input-game-bool"
       }, /*#__PURE__*/React.createElement("option", null, "True"), /*#__PURE__*/React.createElement("option", null, "False")), /*#__PURE__*/React.createElement("button", {

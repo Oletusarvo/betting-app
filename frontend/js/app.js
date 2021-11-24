@@ -68,7 +68,7 @@ var App = /*#__PURE__*/function (_React$Component) {
       env.state.game.pool = data.pool;
       var previousMinBet = env.state.game.minBet;
       env.state.game.minBet = data.minBet;
-      if (previousMinBet < env.state.game.minBet) _this.state.game.hasToCall = true;
+      if (previousMinBet < env.state.game.minBet) env.state.game.hasToCall = true;
       env.updateState();
     });
 
@@ -90,11 +90,24 @@ var App = /*#__PURE__*/function (_React$Component) {
 
     _this.socket.on('logout_success', function () {
       _this.state = _this.props.initState;
+      _this.state.accounts.username = undefined;
 
       _this.updateState();
+
+      alert("Logged out successfully.");
     });
 
-    _this.socket.on('game_ended', function () {});
+    _this.socket.on('fold_rejected', function (msg) {
+      alert("Cannot fold! Reason: ".concat(msg));
+    });
+
+    _this.socket.on('bet_rejected', function (msg) {
+      alert("Cannot place bet! Reason: ".concat(msg));
+    });
+
+    _this.socket.on('call_rejected', function (msg) {
+      alert("Cannot call! Reason: ".concat(msg));
+    });
 
     _this.updateState = _this.updateState.bind(_assertThisInitialized(_this));
     _this.placeBet = _this.placeBet.bind(_assertThisInitialized(_this));
@@ -105,6 +118,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.fold = _this.fold.bind(_assertThisInitialized(_this));
     _this.connect = _this.connect.bind(_assertThisInitialized(_this));
     _this.disconnect = _this.disconnect.bind(_assertThisInitialized(_this));
+    _this.call = _this.call.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -116,11 +130,6 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "placeBet",
     value: function placeBet() {
-      if (this.state.game.folded) {
-        alert("You cannot bet in this game as you have folded.");
-        return;
-      }
-
       var input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
       var amount = parseFloat(input);
 
@@ -169,13 +178,12 @@ var App = /*#__PURE__*/function (_React$Component) {
         data: null
       };
       this.sendMessage('fold', msg);
-      this.state.game.folded = true;
     }
   }, {
     key: "call",
     value: function call() {
       var amount = this.state.game.minBet;
-      var answer = confirm("Calling " + amount + ". Are you sure?");
+      var answer = confirm("Calling ".concat(amount, ", are you sure?"));
       if (answer == false) return;
       var bet = {
         amount: amount,
@@ -187,7 +195,7 @@ var App = /*#__PURE__*/function (_React$Component) {
         to: "server",
         data: bet
       };
-      this.sendMessage('place_bet', msg);
+      this.sendMessage('call', msg);
     }
   }, {
     key: "payDebt",
@@ -361,7 +369,7 @@ var App = /*#__PURE__*/function (_React$Component) {
         foldFunction: this.fold,
         callFunction: this.call,
         minBet: this.state.game.minBet,
-        hasToCall: this.state.game.hasToCall
+        hasToCall: false
       }), /*#__PURE__*/React.createElement(LoginGrid, {
         connectFunction: this.connect,
         disconnectFunction: this.disconnect,

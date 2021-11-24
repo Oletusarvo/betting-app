@@ -3,7 +3,6 @@ class ControlGrid extends React.Component{
         super(props);
     }
 
-
     render(){
         return(
             <div id="grid-controls" className="grid-item">
@@ -12,7 +11,12 @@ class ControlGrid extends React.Component{
                     className="control-button"
                     id="button-place-bet" 
 
-                    onClick={this.props.placeBetFunction}>Place Bet</button>
+                    onClick={
+                        this.props.hasToCall ?
+                        this.props.callFunction :
+                        this.props.placeBetFunction}>
+                            
+                            { this.props.hasToCall ? "Call" : "Place Bet" }</button>
 
                 <select className="control-button" id="input-game-bool">
                     <option>True</option>

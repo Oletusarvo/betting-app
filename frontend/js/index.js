@@ -5,8 +5,7 @@ var initState = {
     pool: 0,
     minBet: undefined,
     name: "game name",
-    hasToCall: false,
-    folded: false
+    hasToCall: false
   },
   bank: {
     circulation: 0,
