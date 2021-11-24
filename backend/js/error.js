@@ -1,5 +1,5 @@
-class Error{}
+function error(type, what){
+    throw {type: type, what: what};
+}
 
-Error.BetAmount = 0;
-
-module.exports = Error;
+module.exports = error;

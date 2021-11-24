@@ -38,6 +38,9 @@ class App extends React.Component{
         });
 
         this.socket.on('game_update', msg =>{
+
+            if(this.state.account.username == undefined) return;
+            
             const data = JSON.parse(msg);
 
             env.state.game.pool = data.pool;
@@ -61,7 +64,20 @@ class App extends React.Component{
 
         this.socket.on('loan_rejected', amount =>{
             alert("Your loan request of " + amount + " was rejected!");
-        })
+        });
+
+        this.socket.on('game_contested', () => {
+            alert("Contested game cannot be ended!");
+        });
+
+        this.socket.on('logout_success', () => {
+            this.state = this.props.initState;
+            this.updateState();
+        });
+
+        this.socket.on('game_ended', () => {
+            this.state.game.folded = false;
+        });
 
        
         this.updateState = this.updateState.bind(this);
@@ -72,6 +88,7 @@ class App extends React.Component{
         this.createGame = this.createGame.bind(this);
         this.fold = this.fold.bind(this);
         this.connect = this.connect.bind(this);
+        this.disconnect = this.disconnect.bind(this);
     }
 
 
@@ -118,7 +135,8 @@ class App extends React.Component{
             side : side
         }
 
-        this.socket.emit('place_bet', JSON.stringify(bet));
+        const msg = {from: this.state.account.username, to: "server", data: bet}
+        this.sendMessage('place_bet', msg);
     }
 
     fold(){
@@ -126,7 +144,8 @@ class App extends React.Component{
 
         if(answer == false) return;
 
-        this.socket.emit('fold', this.socket.id);
+        const msg = {from: this.state.account.username, to: "server", data: null}
+        this.sendMessage('fold', msg);
         this.state.game.folded = true;
     }
 
@@ -136,11 +155,14 @@ class App extends React.Component{
         
         if(answer == false) return;
 
-        this.socket.emit('place_bet', JSON.stringify({
+        const bet = {
             amount : amount,
-            side : -1, //Bet side cannot be changed when there is already a bet out.
-            id : this.socket.id
-        }));
+            side : -1,
+            id : this.state.account.username
+        }
+
+        const msg = {from: this.state.account.username, to: "server", data: bet}
+        this.sendMessage('place_bet', msg);
     }
 
     payDebt(){
@@ -161,7 +183,9 @@ class App extends React.Component{
             return;
         }
 
-        this.socket.emit('pay_debt', amount);
+        //this.socket.emit('pay_debt', amount);
+        const msg = {from: this.state.account.username, to: "server", data: amount}
+        this.sendMessage('pay_debt', msg);
     }
 
     loan(){
@@ -173,7 +197,9 @@ class App extends React.Component{
             return;
         };
 
-        this.socket.emit('loan', amount);
+        const msg = {from: this.state.account.username, to: "server", data: amount}
+        this.sendMessage('loan', msg);
+        
     }
     
     resetGame(){
@@ -185,7 +211,8 @@ class App extends React.Component{
         const sideSelector = document.querySelector("#input-game-bool");
         const result = sideSelector.value === "True";
         
-        this.socket.emit('end_game_accepted', result);
+        const msg = {from: this.state.account.username, to: "server", data: result}
+        this.sendMessage('end_game_accepted', msg);
     }
 
     createGame(){
@@ -195,7 +222,8 @@ class App extends React.Component{
 
         if(answer == false) return;
 
-        this.socket.emit('create-game', name);
+        const msg = {from: this.state.account.username, to: "server", data: name}
+        this.sendMessage('create-game', msg);
     }
 
     numberFormat(number){
@@ -219,17 +247,31 @@ class App extends React.Component{
 
     }
 
+    sendMessage(type, msg){
+        this.socket.emit(type, JSON.stringify(msg));
+    }
+
     connect(){
         if(this.state.account.username != undefined) return; //Stop user from sending login requests when they already are logged in.
 
         const input = document.querySelector("#input-username");
         const username = input.value;
 
+        /*
         const answer = confirm("Are you sure you want to connect as \'" + username + "\'");
 
         if(answer == false) return;
+        */
 
-        this.socket.emit('login', username);
+        //this.sendMessage('login', msg);
+        const msg = {from: username, to: "server", data: null}
+        this.sendMessage('login', msg);
+    }
+
+    disconnect(){
+        const username = this.state.account.username;
+        const msg = {from: username, to: "server", data: null}
+        this.sendMessage('logout', msg);
     }
 
     render(){
@@ -241,12 +283,12 @@ class App extends React.Component{
         const circulation   = this.state.bank.circulation;
         const supply        = this.state.bank.supply;
         
-        const poolRenderAmount = this.numberFormat(pool);
-        const accountBalanceRenderAmount = this.numberFormat(balance);
-        const profitRenderAmount = this.numberFormat(profit);
-        const debtRenderAmount = this.numberFormat(debt);
-        const circulationRenderAmount = this.numberFormat(circulation);
-        const supplyRenderAmount = this.numberFormat(supply);
+        const poolRenderAmount              = this.numberFormat(pool);
+        const accountBalanceRenderAmount    = this.numberFormat(balance);
+        const profitRenderAmount            = this.numberFormat(profit);
+        const debtRenderAmount              = this.numberFormat(debt);
+        const circulationRenderAmount       = this.numberFormat(circulation);
+        const supplyRenderAmount            = this.numberFormat(supply);
 
         return(
             <div id="app-content">
@@ -284,7 +326,9 @@ class App extends React.Component{
                 />
 
                 <LoginGrid
-                    connectFunction={this.connect}
+                    connectFunction={this.connect} 
+                    disconnectFunction={this.disconnect}
+                    username={this.state.account.username}
                 />
             </div>
         );

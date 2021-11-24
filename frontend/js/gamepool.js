@@ -44,10 +44,9 @@ var GamePool = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-game-pool"
-      }, this.props.pool), /*#__PURE__*/React.createElement("span", {
-        className: "data-output",
+      }, this.props.pool, /*#__PURE__*/React.createElement("span", {
         id: "output-game-pool-currencySymbol"
-      }, this.props.currencySymbol)));
+      }, this.props.currencySymbol))));
     }
   }]);
 

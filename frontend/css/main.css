@@ -17,9 +17,8 @@
 @media screen and (min-width: 1001px) {
   #app-content {
     width: 820px;
-    height: 820px;
     display: grid;
-    grid-template-areas: 'game-name game-name' 'game-pool controls' 'account controls' 'bank controls' 'login login';
+    grid-template-areas: 'game-name game-name' 'game-pool game-pool' 'account controls' 'bank controls' 'login login';
     background: #2e2b00;
     gap: 3px;
     padding: 2px;
@@ -57,6 +56,9 @@
 
 #output-game-min-bet {
   font-size: 15px; }
+
+#output-game-pool-currencySymbol {
+  font-size: 30px; }
 
 #grid-account {
   font-size: 35px;

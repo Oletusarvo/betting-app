@@ -1,7 +1,5 @@
-const Error = require('./error.js');
-
 class Game{
-    constructor(copy = null){
+    constructor(){
         this.pool = 0;
         this.minBet = 0;
         this.gameName = "name";
@@ -13,7 +11,7 @@ class Game{
     }
     
     placeBet(bet){
-        if(bet.amount < this.minBet) return Error.BetAmount;
+        if(bet.amount < this.minBet) return false;
 
         const existingBet = this.placedBets.get(bet.id);
 
@@ -26,23 +24,32 @@ class Game{
 
         this.pool = this.calculatePool();
         this.minBet = bet.amount;
+
+        return true;
     }
 
     end(result){
-
         const winners = Array.from(this.placedBets.values()).filter(item => !item.folded && item.side == result);
-
         const poolShare = this.pool / winners.length;
 
         this.pool = 0;
         this.minBet = 0;
-
+        //this.placedBets.clear();
+        
         return {
             winners : winners,
             poolShare : poolShare
         }
+    }
 
-        
+    isContested(){
+        for(let item of this.placedBets.values()){
+            if(item.amount < this.minBet && !item.folded){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**@private */

@@ -63,6 +63,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     });
 
     _this.socket.on('game_update', function (msg) {
+      if (_this.state.account.username == undefined) return;
       var data = JSON.parse(msg);
       env.state.game.pool = data.pool;
       var previousMinBet = env.state.game.minBet;
@@ -83,6 +84,18 @@ var App = /*#__PURE__*/function (_React$Component) {
       alert("Your loan request of " + amount + " was rejected!");
     });
 
+    _this.socket.on('game_contested', function () {
+      alert("Contested game cannot be ended!");
+    });
+
+    _this.socket.on('logout_success', function () {
+      _this.state = _this.props.initState;
+
+      _this.updateState();
+    });
+
+    _this.socket.on('game_ended', function () {});
+
     _this.updateState = _this.updateState.bind(_assertThisInitialized(_this));
     _this.placeBet = _this.placeBet.bind(_assertThisInitialized(_this));
     _this.loan = _this.loan.bind(_assertThisInitialized(_this));
@@ -91,6 +104,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.createGame = _this.createGame.bind(_assertThisInitialized(_this));
     _this.fold = _this.fold.bind(_assertThisInitialized(_this));
     _this.connect = _this.connect.bind(_assertThisInitialized(_this));
+    _this.disconnect = _this.disconnect.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -137,14 +151,24 @@ var App = /*#__PURE__*/function (_React$Component) {
         amount: amount,
         side: side
       };
-      this.socket.emit('place_bet', JSON.stringify(bet));
+      var msg = {
+        from: this.state.account.username,
+        to: "server",
+        data: bet
+      };
+      this.sendMessage('place_bet', msg);
     }
   }, {
     key: "fold",
     value: function fold() {
       var answer = confirm("Do you really want to fold?");
       if (answer == false) return;
-      this.socket.emit('fold', this.socket.id);
+      var msg = {
+        from: this.state.account.username,
+        to: "server",
+        data: null
+      };
+      this.sendMessage('fold', msg);
       this.state.game.folded = true;
     }
   }, {
@@ -153,12 +177,17 @@ var App = /*#__PURE__*/function (_React$Component) {
       var amount = this.state.game.minBet;
       var answer = confirm("Calling " + amount + ". Are you sure?");
       if (answer == false) return;
-      this.socket.emit('place_bet', JSON.stringify({
+      var bet = {
         amount: amount,
         side: -1,
-        //Bet side cannot be changed when there is already a bet out.
-        id: this.socket.id
-      }));
+        id: this.state.account.username
+      };
+      var msg = {
+        from: this.state.account.username,
+        to: "server",
+        data: bet
+      };
+      this.sendMessage('place_bet', msg);
     }
   }, {
     key: "payDebt",
@@ -181,9 +210,15 @@ var App = /*#__PURE__*/function (_React$Component) {
       if (amount > this.state.account.debt) {
         alert("Amount exceedes debt!");
         return;
-      }
+      } //this.socket.emit('pay_debt', amount);
 
-      this.socket.emit('pay_debt', amount);
+
+      var msg = {
+        from: this.state.account.username,
+        to: "server",
+        data: amount
+      };
+      this.sendMessage('pay_debt', msg);
     }
   }, {
     key: "loan",
@@ -197,7 +232,12 @@ var App = /*#__PURE__*/function (_React$Component) {
       }
 
       ;
-      this.socket.emit('loan', amount);
+      var msg = {
+        from: this.state.account.username,
+        to: "server",
+        data: amount
+      };
+      this.sendMessage('loan', msg);
     }
   }, {
     key: "resetGame",
@@ -210,7 +250,12 @@ var App = /*#__PURE__*/function (_React$Component) {
     value: function endGame() {
       var sideSelector = document.querySelector("#input-game-bool");
       var result = sideSelector.value === "True";
-      this.socket.emit('end_game_accepted', result);
+      var msg = {
+        from: this.state.account.username,
+        to: "server",
+        data: result
+      };
+      this.sendMessage('end_game_accepted', msg);
     }
   }, {
     key: "createGame",
@@ -218,7 +263,12 @@ var App = /*#__PURE__*/function (_React$Component) {
       var name = prompt("Enter game name");
       var answer = confirm("Is this name ok?: \"" + name + '\"');
       if (answer == false) return;
-      this.socket.emit('create-game', name);
+      var msg = {
+        from: this.state.account.username,
+        to: "server",
+        data: name
+      };
+      this.sendMessage('create-game', msg);
     }
   }, {
     key: "numberFormat",
@@ -235,15 +285,40 @@ var App = /*#__PURE__*/function (_React$Component) {
       return compressed.toFixed(2) + postfix;
     }
   }, {
+    key: "sendMessage",
+    value: function sendMessage(type, msg) {
+      this.socket.emit(type, JSON.stringify(msg));
+    }
+  }, {
     key: "connect",
     value: function connect() {
       if (this.state.account.username != undefined) return; //Stop user from sending login requests when they already are logged in.
 
       var input = document.querySelector("#input-username");
       var username = input.value;
-      var answer = confirm("Are you sure you want to connect as \'" + username + "\'");
-      if (answer == false) return;
-      this.socket.emit('login', username);
+      /*
+      const answer = confirm("Are you sure you want to connect as \'" + username + "\'");
+        if(answer == false) return;
+      */
+      //this.sendMessage('login', msg);
+
+      var msg = {
+        from: username,
+        to: "server",
+        data: null
+      };
+      this.sendMessage('login', msg);
+    }
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      var username = this.state.account.username;
+      var msg = {
+        from: username,
+        to: "server",
+        data: null
+      };
+      this.sendMessage('logout', msg);
     }
   }, {
     key: "render",
@@ -288,7 +363,9 @@ var App = /*#__PURE__*/function (_React$Component) {
         minBet: this.state.game.minBet,
         hasToCall: this.state.game.hasToCall
       }), /*#__PURE__*/React.createElement(LoginGrid, {
-        connectFunction: this.connect
+        connectFunction: this.connect,
+        disconnectFunction: this.disconnect,
+        username: this.state.account.username
       }));
     }
   }]);

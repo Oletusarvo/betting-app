@@ -1,11 +1,12 @@
 "use strict";
 
-var vars = {
+var initState = {
   game: {
     pool: 0,
     minBet: undefined,
     name: "game name",
-    hasToCall: false
+    hasToCall: false,
+    folded: false
   },
   bank: {
     circulation: 0,
@@ -19,6 +20,8 @@ var vars = {
     username: undefined
   }
 };
+var vars = initState;
 ReactDOM.render( /*#__PURE__*/React.createElement(App, {
-  state: vars
+  state: vars,
+  initState: initState
 }), document.getElementById("root"));

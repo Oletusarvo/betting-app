@@ -1,42 +1,59 @@
 const Account = require('./account');
+const error = require('./error');
 
 class Bank{
     constructor(){
         this.circulation = 0;
-        this.supply = 0;
         this.defaultIssueAmount = 100;
-        this.currencySymbol = "mk";
+        this.currencySymbol = "$";
         this.accounts = new Map();
+    }
+
+    /**@private */
+    fund(acc){
+        acc.initBalance = acc.balance = this.defaultIssueAmount;
+        
+    }
+
+    /**@private */
+    mint(amount = this.defaultIssueAmount){
+        this.circulation += amount;
     }
 
     addAccount(username){
         const acc = new Account(username);
-        this.accounts.set(acc.id, acc);
-        //this.loan(acc.id, this.defaultIssueAmount);
-        acc.initBalance = acc.balance = this.defaultIssueAmount;
-        this.circulation += this.defaultIssueAmount;
+        this.fund(acc);
+        this.mint();
+        this.accounts.set(username, acc);
     }
     
     loan(accountId, amount){
+        /*
+        if(typeof amount !== 'number') error("Bank error, Loan", "Amount has to be a number!");
+        if(typeof accountId !== 'string') error("Bank error, Loan", "ID has to be a string!");
+        */
         const acc = this.accounts.get(accountId);
-        acc.deposit(amount);
-        acc.debt += amount;
-
-        this.circulation += amount;
-        this.supply += amount;
+        this.mint(amount);
+        acc.loan(amount);
     }
 
+    
+
     payDebt(accountId, amount){
-
-        if(typeof amount !== 'number') return;
-
+        /*
+        if(typeof amount !== 'number') error("Bank error, Pay debt", "Amount has to be a number!");
+        if(typeof accountId !== 'string') error("Bank error, Pay debt", "ID has to be a string!");
+        */
         const acc = this.accounts.get(accountId);
-        acc.deposit(-amount);
-        acc.debt -= amount;
+        acc.payDebt(amount);
         this.circulation -= amount; 
     }
 
     deposit(accountId, amount){
+        /*
+        if(typeof amount !== 'number') error("Bank error, deposit", "Amount has to be a number!");
+        if(typeof accountId !== 'string') error("Bank error, deposit", "ID has to be a string!");
+        */
         const acc = this.accounts.get(accountId);
         acc.deposit(amount);
     }

@@ -1,81 +1,64 @@
-const express = require('express');
-const http = require('http');
+const express       = require('express');
+const http          = require('http');
+const path          = require('path');
+const socketio      = require('socket.io');
+const Bet           = require('./js/bet');
+const Bank          = require('./js/bank');
+const Game          = require('./js/game');
+const db            = require('../models/db');
 
+const fs            = require('fs');
 
-const socketio = require('socket.io');
-const FS = require('fs');
-const path = require('path');
-const JSONutil = require('./js/jsonutil');
-
-//Required so react works on the front-end.
-const react = require('react');
-const reactDom = require('react-dom');
-
-
-
-const Bank = require('./js/bank');
-const Bet = require('./js/bet');
-const Game = require('./js/game');
-const ServerState = require('./js/serverstate');
-
-let serverState = new ServerState();
-
-//Load server state data from file, if one exists.
-//const serverStateFile = FS.open("data/data.json", "r", (err) => { console.log(err); });
-
-const jsonUtil = new JSONutil();
-
-//Store socket ids of connected usernames.
-let clients = new Map();
-let sockets = new Map(); //Temporarily map usernames to sockets until I figure out a better way to do things.
+const reviver       = require('./js/reviver');
+const replacer      = require('./js/replacer');
 
 let bank = new Bank();
 let game = new Game();
 
-bank.currencySymbol = "mk";
 
-const bankDataLoc = path.join(__dirname, 'data', 'bankState.json');
-const gameDataLoc = path.join(__dirname, 'data', 'gameState.json');
+const clients = new Map();
+const sockets = new Map();
 
-function loadState(){
-    
 
-    FS.readFile(bankDataLoc, 'utf8', (err, data) => {
-        if(!err){
-            
-            bank = JSON.parse(data, jsonUtil.reviver);
-            console.log("Previous bank state loaded.");
-        }
-        else{
-            console.log(err);
-        }
-    }); 
+//Required so react works on the front-end.
+const react         = require('react');
+const reactDom      = require('react-dom');
 
-   
-    FS.readFile(gameDataLoc, 'utf8', (err, data) => {
-        if(!err){
-            
-            game = JSON.parse(data, jsonUtil.reviver);
-            console.log("Previous game state loaded.");
-        }
-        else{
-            console.log(err);
-        }
-    });
+const bankDataLoc   = path.join(__dirname, 'data', 'bankState.json');
+const gameDataLoc   = path.join(__dirname, 'data', 'gameState.json');
+
+function loadGameData(){
+
+    //TODO: If this returns nothing, add the records into the database.
+    return db.getGameData();
+}
+
+function loadBankData(){
+    return db.getBankData();
+}
+
+async function saveBankData(){
+    return await db.updateBankData(JSON.stringify(bank, replacer));
+}
+
+async function saveGameData(){
+    return await db.updateGameData(JSON.stringify(game, replacer));
 }
 
 function saveState(){
-
-    FS.writeFile(bankDataLoc, JSON.stringify(bank, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
-    FS.writeFile(gameDataLoc, JSON.stringify(game, jsonUtil.replacer), {encoding : "utf8"}, (err) => {if(err)console.log(err)});
+    db.updateBankData(JSON.stringify(bank, replacer)).then(console.log("bank state saved."));
+    db.updateGameData(JSON.stringify(game, replacer)).then(console.log("game state saved."));
 }
 
 function bankUpdate(socket){
     socket.emit('bank_update', JSON.stringify({
         circulation : bank.circulation,
-        currencySymbol : bank.currencySymbol,
-        supply : bank.supply
+        currencySymbol : bank.currencySymbol
     }));
+}
+
+function hasToCallUpdate(socket){
+    socket.emit('has_to_call', amount);
 }
 
 function gameUpdate(socket){
@@ -86,8 +69,7 @@ function gameUpdate(socket){
     }));
 }
 
-function accountUpdate(socket){
-    const username = clients.get(socket.id);
+function accountUpdate(username, socket){
     const acc = bank.accounts.get(username);
 
     socket.emit('account_update', JSON.stringify({
@@ -101,47 +83,81 @@ function rejectLoan(amount, socket){
     socket.emit('loan_rejected', amount);
 }
 
-loadState();
+db.get().then(data => {
+    if(data.length == 0){
+        db.add({game_data: JSON.stringify(game, replacer), bank_data: JSON.stringify(bank, replacer)});         
+    }
 
-//console.log(serverState);
+    db.getGameData().then( data => {
+        if(data.length != 0){
+            game = JSON.parse(data[0].game_data, reviver);
+            console.log("Game state loaded.")
+        }
+        else{
+            game = new Game();
+        }
+    })
+    .then(
+        db.getBankData().then( data => {
+            if(data.length != 0){
+                bank = JSON.parse(data[0].bank_data, reviver);
+                console.log("Bank state loaded.");
+            }
+            else{
+                bank = new Bank();
+            }
+    
+            bank.currencySymbol = "mk";
+        })
+    );
+});
 
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server);
+const app           = express();
+const server        = http.createServer(app);
+const io            = socketio(server);
 
 app.use(express.static('frontend'));
 app.use(express.static('node_modules'));
 
+
+
 io.on('connection', socket =>{
     console.log("New connection! ID: " + socket.id);
     //Send current game state to new connection.
-    socket.on('login', username => {
-
-        const isLoggedIn = clients.get(socket.id);
-
-        if(isLoggedIn){
-            socket.emit('login_failure');
-        }
-        else{
-            clients.set(socket.id, username);
-            sockets.set(username, socket);
-
-            const acc = bank.accounts.get(username);
-
-            if(!acc){
-                console.log("Account " + username + " does not exist. Creating...");
-                bank.addAccount(username);
-            }
+    socket.on('login', msg => {
+        const message = JSON.parse(msg);
+        const username = message.from;
         
-            accountUpdate(socket);
-            bankUpdate(io);
-            gameUpdate(socket);
+        if(username == undefined) return;
 
-            socket.emit('login_success', username);
+        clients.set(socket.id, username);
+        sockets.set(username, socket);
+
+        const acc = bank.accounts.get(username);
+
+        if(!acc){
+            bank.addAccount(username);
         }
+        
+        //acc.isLoggedIn = true;
+        socket.emit('login_success', username);
 
+        accountUpdate(username, socket);
+        bankUpdate(io);
+        gameUpdate(socket);
+        
         saveState();
-        
+    });
+
+    socket.on('logout', msg => {
+        const message = JSON.parse(msg);
+        sockets.delete(message.from);
+
+        const acc = bank.accounts.get(message.from);
+        acc.isLoggedIn = false;
+
+        socket = sockets.get(message.from);
+        socket.emit('logout_success');
     });
 
     socket.on('disconnect', () => {
@@ -152,24 +168,24 @@ io.on('connection', socket =>{
     });
 
     socket.on('place_bet', msg => {
-        const data = JSON.parse(msg);
-        const username = clients.get(socket.id);
+        const message = JSON.parse(msg);
+        const username = message.from;
 
         if(username == undefined) return;
 
-        const bet = new Bet(data.amount, data.side, username);
+        const bet = new Bet(message.data.amount, message.data.side, message.from);
 
         game.placeBet(bet);
         bank.deposit(username, -bet.amount);
-        accountUpdate(socket);
 
+        accountUpdate(username, socket);
         gameUpdate(io);
-
         saveState();
     });
 
-    socket.on('fold', id => {
-        const username = clients.get(socket.id);
+    socket.on('fold', msg => {
+        const data = JSON.parse(msg);
+        const username = data.from;
 
         if(username == undefined) return;
 
@@ -177,25 +193,27 @@ io.on('connection', socket =>{
 
         if(bet)
             bet.folded = true;
+
         saveState();
     });
 
-    socket.on('loan', amount => {
-        const username = clients.get(socket.id);
+    socket.on('loan', msg => {
+        const message = JSON.parse(msg);
+        const username = message.from;
 
         if(username == undefined) return;
 
         const acc = bank.accounts.get(username);
 
         if(acc){
-
-            if(acc.debt >= bank.defaultIssueAmount) {
-                rejectLoan(amount, socket);
+            if(acc.debt >= bank.defaultIssueAmount || message.data > bank.defaultIssueAmount) {
+                rejectLoan(message.data, socket);
                 return;
             }
 
+            const amount = message.data;
             bank.loan(username, amount);
-            accountUpdate(socket);
+            accountUpdate(username, socket);
             bankUpdate(io);
 
             saveState();
@@ -203,20 +221,18 @@ io.on('connection', socket =>{
         else{
             console.log("Account " + socket.id + " does not exist!");
         }
-
-        
-        
     });
 
-    socket.on('pay_debt', amount => {
-        const username = clients.get(socket.id);
+    socket.on('pay_debt', msg => {
+        const message = JSON.parse(msg);
+        const username = message.from;
 
         if(username == undefined) return;
 
-        bank.payDebt(username, amount);
+        bank.payDebt(username, message.data);
 
         bankUpdate(io);
-        accountUpdate(socket);
+        accountUpdate(username, socket);
 
         saveState();
     });
@@ -233,13 +249,18 @@ io.on('connection', socket =>{
         console.log("Received vote to end the game (vote: " + vote + ", id: " + id);
     });
 
-    socket.on('end_game_accepted', result => {
-
-        const username = clients.get(socket.id);
+    socket.on('end_game_accepted', msg => {
+        const message = JSON.parse(msg);
+        const username = message.from;
 
         if(username == undefined) return;
         
-        let gameResult = game.end(result);
+        if(game.isContested()){
+            socket.emit('game_contested');
+            return;
+        }
+
+        let gameResult = game.end(message.data);
 
         //Deposit winning share to all winners.
         for(let winner of gameResult.winners){
@@ -272,23 +293,22 @@ io.on('connection', socket =>{
                 //Profit is not affected when paying debt.
                 acc.setProfit();
             }
-            accountUpdate(socket);
+            accountUpdate(username, socket);
         }
 
         //Game bets can now be cleared.
         game.placedBets.clear();
 
         bankUpdate(io);
-        gameUpdate(io);
+        gameUpdate(io); 
+        io.emit('game_ended');
 
         saveState();
     });
-
-    
 });
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => console.log('Server running on port '  + PORT));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
