@@ -9,7 +9,7 @@ class LoginGrid extends React.Component{
                 <label htmlFor="username">Username:</label>
                 <input name="username" id="input-username" type="text"></input>
                 <button id="button-username-ok" 
-                onClick={this.props.username == undefined ? this.props.connectFunction : this.props.disconnectFunction}>{this.props.username == undefined ? "Connect" : "Disconnect"}</button>
+                onClick={this.props.connectFunction}>Fetch</button>
             </div>
         )
     }

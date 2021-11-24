@@ -1,8 +1,8 @@
 class Game{
-    constructor(){
+    constructor(gameName = "default"){
         this.pool = 0;
         this.minBet = 0;
-        this.gameName = "name";
+        this.gameName = gameName;
         this.placedBets = new Map();
     }
 

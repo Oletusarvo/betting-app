@@ -80,8 +80,8 @@ var App = /*#__PURE__*/function (_React$Component) {
       env.updateState();
     });
 
-    _this.socket.on('loan_rejected', function (amount) {
-      alert("Your loan request of " + amount + " was rejected!");
+    _this.socket.on('loan_rejected', function (msg) {
+      alert("Your loan request was rejected! Reason: ".concat(msg));
     });
 
     _this.socket.on('game_contested', function () {
@@ -107,6 +107,14 @@ var App = /*#__PURE__*/function (_React$Component) {
 
     _this.socket.on('call_rejected', function (msg) {
       alert("Cannot call! Reason: ".concat(msg));
+    });
+
+    _this.socket.on('general_error', function (msg) {
+      alert("".concat(msg));
+    });
+
+    _this.socket.on('login_rejected', function (msg) {
+      alert("Login was rejected! Reason ".concat(msg));
     });
 
     _this.updateState = _this.updateState.bind(_assertThisInitialized(_this));
@@ -138,23 +146,8 @@ var App = /*#__PURE__*/function (_React$Component) {
         return;
       }
 
-      if (amount < this.state.game.minBet) {
-        alert("You must bet more or equal to the minimum bet of " + this.state.game.minBet || 0.1);
-        return;
-      }
-
-      if (amount > this.state.account.balance) {
-        alert("You are trying to bet more than your balance!");
-        return;
-      }
-
       var sideSelector = document.querySelector("#input-game-bool");
       var side = sideSelector.value === "True";
-      /*
-      const answer = confirm("You are about to bet " + side + " for " + amount + " " + this.state.bank.currencySymbol + ". Are you sure?");
-        if(answer == false) return;
-      */
-
       var bet = {
         id: this.socket.id,
         amount: amount,
@@ -208,18 +201,7 @@ var App = /*#__PURE__*/function (_React$Component) {
         return;
       }
 
-      ;
-
-      if (amount > this.state.account.balance) {
-        alert("Amount exceedes balance!");
-        return;
-      }
-
-      if (amount > this.state.account.debt) {
-        alert("Amount exceedes debt!");
-        return;
-      } //this.socket.emit('pay_debt', amount);
-
+      ; //this.socket.emit('pay_debt', amount);
 
       var msg = {
         from: this.state.account.username,
@@ -300,16 +282,8 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "connect",
     value: function connect() {
-      if (this.state.account.username != undefined) return; //Stop user from sending login requests when they already are logged in.
-
       var input = document.querySelector("#input-username");
       var username = input.value;
-      /*
-      const answer = confirm("Are you sure you want to connect as \'" + username + "\'");
-        if(answer == false) return;
-      */
-      //this.sendMessage('login', msg);
-
       var msg = {
         from: username,
         to: "server",

@@ -93,7 +93,10 @@ db.get().then(data => {
             const message = JSON.parse(msg);
             const username = message.from;
             
-            if(username == undefined) return;
+            if(username == undefined){
+                socket.emit('login_rejected', 'Username is undefined!');
+                return;
+            }
     
             clients.set(socket.id, username);
             sockets.set(username, socket);
@@ -142,6 +145,19 @@ db.get().then(data => {
     
             if(bet && bet.folded == true){
                 socket.emit('bet_rejected', 'You cannot bet as you have folded!');
+                return;
+            }
+            
+            const amount = message.data.amount;
+            const account = bank.accounts.get(message.from);
+
+            if(amount < game.minBet){
+                socket.emit('bet_rejected', `Bet must be higher or equal to ${game.minBet} `);
+                return;
+            }
+
+            if(amount > account.balance){
+                socket.emit('bet_rejected', `Amount exceedes your account balance!`);
                 return;
             }
 
@@ -205,8 +221,14 @@ db.get().then(data => {
     
             let bet = game.placedBets.get(username);
     
-            if(bet)
+            if(bet){
+                if(bet.folded){
+                    socket.emit('fold_rejected', 'You have already folded!');
+                    return;
+                }
+
                 bet.folded = true;
+            }   
             else{
                 socket.emit('fold_rejected', 'There is no bet to fold!');
             }
@@ -219,12 +241,22 @@ db.get().then(data => {
             const username = message.from;
     
             if(username == undefined) return;
-    
+            
             const acc = bank.accounts.get(username);
     
             if(acc){
-                if(acc.debt >= bank.defaultIssueAmount || message.data > bank.defaultIssueAmount) {
-                    rejectLoan(message.data, socket);
+                if(acc.debt >= bank.defaultIssueAmount){
+                    socket.emit('loan_rejected', 'Your debt is maxed out!');
+                    return;
+                }
+
+                if(message.data > bank.defaultIssueAmount){
+                    socket.emit('loan_rejected', 'Amount exceedes maximum allowed loan!');
+                    return;
+                }
+
+                if(acc.balance < message.data){
+                    socket.emit('general_error', `Amount exceedes account balance!`);
                     return;
                 }
     
@@ -245,7 +277,19 @@ db.get().then(data => {
             const username = message.from;
     
             if(username == undefined) return;
-    
+            
+            const acc = bank.accounts.get(username);
+
+            if(acc.balance < message.data){
+                socket.emit('general_error', `Amount exceedes account balance!`);
+                return;
+            }
+
+            if(message.data > acc.debt){
+                socket.emit('general_error', 'Amount exceedes debt!');
+                return;
+            }
+
             bank.payDebt(username, message.data);
     
             bankUpdate(io);
@@ -320,7 +364,6 @@ db.get().then(data => {
     });
 
     const PORT = process.env.PORT || 3000;
-
     server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
 

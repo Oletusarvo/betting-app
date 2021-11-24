@@ -34,7 +34,7 @@ function get(){
 
 async function addAccount(account){
     //TODO: Prevent adding multiple accounts with the same username.
-    return await db('accounts').insert({
+    return await db('account_table').insert({
         balance : account.balance,
         debt : account.balance,
         username : account.username,
@@ -46,15 +46,15 @@ async function addAccount(account){
 }
 
 async function getAccount(username){
-    return await db('accounts').where({username}).first();
+    return await db('account_table').where({username}).first();
 }
 
 function getAllAccounts(){
-    return db('accounts');
+    return db('account_table');
 }
 
 async function updateAccount(data){
-    return await db('accounts').where({username : data.username}).update({
+    return await db('account_table').where({username : data.username}).update({
         balance : data.balance,
         profit : data.profit,
         debt : data.debt,
@@ -65,7 +65,7 @@ async function updateAccount(data){
 
 async function addBank(bank){
     const [circulation, currencySymbol, defaultIssueAmount] = bank;
-    return await db('banks').insert({
+    return await db('bank_table').insert({
         circulation : circulation,
         currencySymbol : currencySymbol,
         defaultIssueAmount : defaultIssueAmount,
@@ -75,18 +75,18 @@ async function addBank(bank){
 }
 
 function getBank(id){
-    return db('banks').where({id}).first();
+    return db('bank_table').where({id}).first();
 }
 
 async function updateBank(data){
-    return db('banks').where({bank_name : data.bank_name}).update({
+    return db('bank_table').where({bank_name : data.bank_name}).update({
         circulation : data.circulation,
         default_issue_amount : data.defaultIssueAmount
     });
 }
 
 async function addGame(game){
-    return await db('games').insert({
+    return await db('game_table').insert({
         bets : JSON.stringify(game.placedBets, replacer),
         pool : game.pool,
         min_bet : game.minBet,
@@ -95,11 +95,11 @@ async function addGame(game){
 }
 
 function getGame(gameName){
-    return db('games').where({game_name : gameName}).first();
+    return db('game_table').where({game_name : gameName}).first();
 }
 
 async function updateGame(gameData){
-    return db('games').where({game_name : game_name}).update({
+    return db('game_table').where({game_name : game_name}).update({
         pool : gameData.pool,
         min_bet: gameData.minBet,
         placed_bets : JSON.stringify(gameData.placedBets, replacer)

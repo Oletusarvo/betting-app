@@ -47,8 +47,8 @@ var LoginGrid = /*#__PURE__*/function (_React$Component) {
         type: "text"
       }), /*#__PURE__*/React.createElement("button", {
         id: "button-username-ok",
-        onClick: this.props.username == undefined ? this.props.connectFunction : this.props.disconnectFunction
-      }, this.props.username == undefined ? "Connect" : "Disconnect"));
+        onClick: this.props.connectFunction
+      }, "Fetch"));
     }
   }]);
 

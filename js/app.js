@@ -62,8 +62,8 @@ class App extends React.Component{
             env.updateState();
         });
 
-        this.socket.on('loan_rejected', amount =>{
-            alert("Your loan request of " + amount + " was rejected!");
+        this.socket.on('loan_rejected', msg =>{
+            alert(`Your loan request was rejected! Reason: ${msg}`);
         });
 
         this.socket.on('game_contested', () => {
@@ -88,9 +88,15 @@ class App extends React.Component{
         this.socket.on('call_rejected', msg => {
             alert(`Cannot call! Reason: ${msg}`);
         });
-        
 
-       
+        this.socket.on('general_error', msg => {
+            alert(`${msg}`);
+        });
+
+        this.socket.on('login_rejected', msg => {
+            alert(`Login was rejected! Reason ${msg}`)
+        })
+        
         this.updateState = this.updateState.bind(this);
         this.placeBet = this.placeBet.bind(this);
         this.loan = this.loan.bind(this);
@@ -117,24 +123,9 @@ class App extends React.Component{
             return;
         }
 
-        if(amount < this.state.game.minBet){
-            alert("You must bet more or equal to the minimum bet of " + this.state.game.minBet || 0.1);
-            return;
-        }
-        if(amount > this.state.account.balance){
-            alert("You are trying to bet more than your balance!");
-            return;
-        }
-
         const sideSelector = document.querySelector("#input-game-bool");
         const side = sideSelector.value === "True";
 
-        /*
-        const answer = confirm("You are about to bet " + side + " for " + amount + " " + this.state.bank.currencySymbol + ". Are you sure?");
-
-        if(answer == false) return;
-        */
-       
         const bet = {
             id : this.socket.id,
             amount : amount,
@@ -178,15 +169,6 @@ class App extends React.Component{
             alert("Amount has to be a number!");
             return;
         };
-
-        if(amount > this.state.account.balance){
-            alert("Amount exceedes balance!");
-            return;
-        }
-        if(amount > this.state.account.debt){
-            alert("Amount exceedes debt!");
-            return;
-        }
 
         //this.socket.emit('pay_debt', amount);
         const msg = {from: this.state.account.username, to: "server", data: amount}
@@ -257,18 +239,9 @@ class App extends React.Component{
     }
 
     connect(){
-        if(this.state.account.username != undefined) return; //Stop user from sending login requests when they already are logged in.
-
         const input = document.querySelector("#input-username");
         const username = input.value;
 
-        /*
-        const answer = confirm("Are you sure you want to connect as \'" + username + "\'");
-
-        if(answer == false) return;
-        */
-
-        //this.sendMessage('login', msg);
         const msg = {from: username, to: "server", data: null}
         this.sendMessage('login', msg);
     }

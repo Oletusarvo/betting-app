@@ -28,12 +28,12 @@ button, select{
     background: lighten($primary-color, 30);
     color: white;
     border-radius: $borderRadius;
-    border: 1px solid white;
+    border: 3px solid white;
     border-color: lighten($primary-color, $border-lighten-amount);
 }
 
 .grid-item{
-    border: 1px solid white;
+    border: 2px solid white;
     border-radius: $borderRadius;
 
     background: $primary-color;
