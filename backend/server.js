@@ -9,10 +9,14 @@ const db            = require('../models/db');
 
 const fs            = require('fs');
 
-const reviver       = require('./js/reviver');
-const replacer      = require('./js/replacer');
+const utils         = require('./js/utils');
+const functions     = require('./js/serverLogic');
+const accountUpdate = functions.accountUpdate;
+const bankUpdate    = functions.bankUpdate;
+const gameUpdate    = functions.gameUpdate;
+const endGame       = functions.endGame;
 
-const clients = new Map();
+const usernames = new Map();
 const sockets = new Map();
 
 
@@ -20,61 +24,27 @@ const sockets = new Map();
 const react         = require('react');
 const reactDom      = require('react-dom');
 
-function saveState(){
+function saveState(game, bank){
+    //db.updateGame(game).then();
+    //db.updateBank(bank).then();
+
    db.update(game, bank).then(console.log('Saved state.'));
 }
 
-function bankUpdate(socket){
-    //db.updateBank(bank.bank_name).then();
-    socket.emit('bank_update', JSON.stringify({
-        circulation : bank.circulation,
-        currencySymbol : bank.currencySymbol
-    }));
-}
-
-function hasToCallUpdate(socket){
-    socket.emit('has_to_call', amount);
-}
-
-function gameUpdate(socket){
-    //db.updateGame(game.game_name).then();
-
-    socket.emit('game_update', JSON.stringify({
-        pool : game.pool, 
-        minBet : game.minBet,
-        name : game.name
-    }));
-}
-
-function accountUpdate(username, socket){
-    const acc = bank.accounts.get(username);
-    //db.updateAccount(username).then();
-
-    socket.emit('account_update', JSON.stringify({
-        balance : acc.balance,
-        debt : acc.debt,
-        profit : acc.profit
-    }));
-}
-
-function rejectLoan(amount, socket){
-    socket.emit('loan_rejected', amount);
-}
-
-let bank = null;
-let game = null;
+let bank, game = null;
 
 db.get().then(data => {
     if(!data){
         //Database is empty, add initial data in.
         bank = new Bank();
         game = new Game();
-        db.add({game_data: JSON.stringify(game, replacer), bank_data: JSON.stringify(bank, replacer)}).then();
-        
+        db.add({game_data: JSON.stringify(game, utils.replacer), bank_data: JSON.stringify(bank, utils.replacer)}).then();
+        //db.addBank(bank).then();
+        //db.addGame(game).then();
     }
     else{
-        bank = JSON.parse(data.bank_data, reviver);
-        game = JSON.parse(data.game_data, reviver);
+        bank = JSON.parse(data.bank_data, utils.reviver);
+        game = JSON.parse(data.game_data, utils.reviver);
         console.log('Loaded state.');
     }
 })
@@ -88,6 +58,28 @@ db.get().then(data => {
     
     io.on('connection', socket =>{
         console.log("New connection! ID: " + socket.id);
+        
+        /*
+            Sockets can connect and disconnect at any point. Query for 
+            the username of a possibly reconnected user.
+        */
+        socket.emit('query_username');
+
+        socket.on('username', msg => {
+            const message = JSON.parse(msg);
+            const username = message.from;
+
+            if(username == undefined) return;
+
+            sockets.set(username, socket);
+            usernames.set(socket.id, username);
+            accountUpdate(username, bank, socket);
+            gameUpdate(game, socket);
+            bankUpdate(bank, socket);
+
+            console.log(`${username} reconnected!`);
+        });
+
         //Send current game state to new connection.
         socket.on('login', msg => {
             const message = JSON.parse(msg);
@@ -98,7 +90,7 @@ db.get().then(data => {
                 return;
             }
     
-            clients.set(socket.id, username);
+            usernames.set(socket.id, username);
             sockets.set(username, socket);
     
             const acc = bank.accounts.get(username);
@@ -111,11 +103,11 @@ db.get().then(data => {
             //acc.isLoggedIn = true;
             socket.emit('login_success', username);
     
-            accountUpdate(username, socket);
-            bankUpdate(io);
-            gameUpdate(socket);
+            accountUpdate(username, bank, socket);
+            bankUpdate(bank, io);
+            gameUpdate(game, socket);
             
-            saveState();
+            saveState(game, bank);
         });
     
         socket.on('logout', msg => {
@@ -130,8 +122,8 @@ db.get().then(data => {
     
         socket.on('disconnect', () => {
             //Delete account associated with this socket. Leave game pool intact.
-            const username = clients.get(socket.id);
-            clients.delete(socket.id);
+            const username = usernames.get(socket.id);
+            usernames.delete(socket.id);
             sockets.delete(username);
         });
     
@@ -140,78 +132,80 @@ db.get().then(data => {
             const username = message.from;
     
             if(username == undefined) return;
-    
-            const bet = game.placedBets.get(username);
-    
-            if(bet && bet.folded == true){
+
+            if(game.hasFolded(username)){
                 socket.emit('bet_rejected', 'You cannot bet as you have folded!');
                 return;
             }
             
             const amount = message.data.amount;
-            const account = bank.accounts.get(message.from);
 
             if(amount < game.minBet){
                 socket.emit('bet_rejected', `Bet must be higher or equal to ${game.minBet} `);
                 return;
             }
 
-            if(amount > account.balance){
+            if(!bank.hasFunds(message.from, amount)){
                 socket.emit('bet_rejected', `Amount exceedes your account balance!`);
                 return;
             }
 
             const newBet = new Bet(message.data.amount, message.data.side, message.from);
             game.placeBet(newBet);
+
             bank.deposit(username, -newBet.amount);
-            accountUpdate(username, socket);
-            gameUpdate(io);
-            saveState();
+            accountUpdate(username, bank, socket);
+            gameUpdate(game, io);
+
+            socket.emit('bet_accepted', newBet.amount);
+
+            if(game.isRaised){
+                socket.broadcast.emit('game_raised', game.placedBets.get(username).amount);
+            }
+            
+            saveState(game, bank);
         });
     
-        socket.on('call', msg => {
+        socket.on('call_bet', msg => {
             const message = JSON.parse(msg);
-    
             const bet = game.placedBets.get(message.from);
-    
-            if(!bet){
-                socket.emit('call_rejected', 'There is no bet to raise!');
-                return;
-            }
-            else{
-    
+            if(bet){
                 if(bet.folded){
                     socket.emit('call_rejected', 'You cannot call, as you have folded!');
+                    return;
                 }
-                //The bet can only ever be equal to or smaller than the minimum bet, because of how the game works.
-                else if(bet.amount == game.minBet){
-                    socket.emit('call_rejected', 'Your bet is already equal to the minimum bet!');
+
+                const amountToCall = game.minBet - bet.amount;
+
+                if(!bank.hasFunds(message.from, amountToCall)){
+                    socket.emit('call_rejected', 'Amount exceedes account balance!');
+                    return;
                 }
-                else{
-                    const account = bank.accounts.get(message.from);
-    
-                    if(!account){
-                        console.log(`Cannot call. Account with username ${message.from} does not exist!`);
-                    }
-                    else{
-                        //It is assumed the minimum bet is bigger than the previous bet amount if calling in the first place.
-                        const amountToRaise = game.minBet - bet.amount;
-    
-                        if(amountToRaise > account.balance){
-                            socket.emit('call_rejected', 'Amount exceedes account balance!');
-                        }
-                        else{
-                            console.log('röböls');
-                            bank.deposit(message.from, -amountToRaise);
-                            game.placeBet(new Bet(amountToRaise, bet.side, message.from));
-    
-                            accountUpdate(message.from, socket);
-                            gameUpdate(io);  
-                        }
-                    }
-                }
+
+                bank.deposit(message.from, -amountToCall);
+                game.raiseBet(message.from, amountToCall);
+                console.log(amountToCall);
             }
-        })
+            else{
+                const amount = message.data.amount;
+                const side = message.data.side;
+                const newBet = new Bet(amount, side, message.from);
+
+                if(!bank.hasFunds(message.from, amount)){
+                    socket.emit('call_rejected', 'Amount exceedes account balance!');
+                    return;
+                }
+
+                game.placeBet(newBet);
+                bank.deposit(message.from, -newBet.amount);
+            }
+
+            accountUpdate(message.from, bank, socket);
+            //bankUpdate(bank, io);
+            gameUpdate(game, io);
+            socket.emit('call_accepted');
+            saveState(game, bank);
+        });
     
         socket.on('fold', msg => {
             const data = JSON.parse(msg);
@@ -231,9 +225,11 @@ db.get().then(data => {
             }   
             else{
                 socket.emit('fold_rejected', 'There is no bet to fold!');
+                return;
             }
-    
-            saveState();
+            
+            socket.emit('fold_accepted');
+            saveState(game, bank);
         });
     
         socket.on('loan', msg => {
@@ -254,18 +250,13 @@ db.get().then(data => {
                     socket.emit('loan_rejected', 'Amount exceedes maximum allowed loan!');
                     return;
                 }
-
-                if(acc.balance < message.data){
-                    socket.emit('general_error', `Amount exceedes account balance!`);
-                    return;
-                }
     
                 const amount = message.data;
                 bank.loan(username, amount);
-                accountUpdate(username, socket);
-                bankUpdate(io);
+                accountUpdate(username, bank, socket);
+                bankUpdate(bank, io);
     
-                saveState();
+                saveState(game, bank);
             }
             else{
                 console.log("Account " + socket.id + " does not exist!");
@@ -280,7 +271,7 @@ db.get().then(data => {
             
             const acc = bank.accounts.get(username);
 
-            if(acc.balance < message.data){
+            if(message.data > acc.balance){
                 socket.emit('general_error', `Amount exceedes account balance!`);
                 return;
             }
@@ -292,74 +283,88 @@ db.get().then(data => {
 
             bank.payDebt(username, message.data);
     
-            bankUpdate(io);
-            accountUpdate(username, socket);
+            bankUpdate(bank, io);
+            accountUpdate(username, bank, socket);
     
-            saveState();
+            saveState(game, bank);
         });
     
-        socket.on('end_game', () =>{
+        socket.on('end_game', msg =>{
             //When someone presses the end game button, all participants have to vote for the game to end.
-            io.emit('end_game_request', socket.id);
-        });
-    
-        socket.on('end_game_vote', data =>{
-            const id = data.id;
-            const vote = data.vote;
-    
-            console.log("Received vote to end the game (vote: " + vote + ", id: " + id);
-        });
-    
-        socket.on('end_game_accepted', msg => {
             const message = JSON.parse(msg);
-            const username = message.from;
+            const result = message.data;
+            if(typeof result !== 'boolean'){
+                console.log(`Cannot end game. Result is not a boolean! (${result})`);
+                socket.emit('end_game_rejected', 'Server error.');
+                return;
+            }
+
+            //Only send this to the ones participating in the game.
+            const placedBets = game.placedBets;
+            for(let bet of placedBets.values()){
+                const socket = sockets.get(bet.id);
+                if(!socket) continue;
+                socket.emit('end_game_request', result);
+            }
+        });
     
-            if(username == undefined) return;
-            
+        socket.on('end_game_vote', msg =>{
             if(game.isContested()){
                 socket.emit('game_contested');
                 return;
             }
-    
-            let gameResult = game.end(message.data);
-    
-            //Deposit winning share to all winners.
-            if(gameResult.winners.length > 0){
-                for(let winner of gameResult.winners){
-                    bank.deposit(winner.id, gameResult.poolShare);
-                }
+
+            const message = JSON.parse(msg);
+            const vote = message.data.vote;
+
+            if(typeof vote !== 'boolean'){
+                console.log('Received invalid vote!');
+                socket.emit('vote_rejected', 'Your vote is not a boolean!');
+                return;
             }
+
+            game.placeVote(vote);
+            const allHaveVoted = game.allHaveVoted();
+
+            if(allHaveVoted){
+                const canEnd = game.canEnd();
+                if(canEnd){
+                    const result = message.data.result;
+                    endGame(result, game, bank, sockets);
+                    bankUpdate(bank, io);
+                    gameUpdate(game, io); 
+                    io.emit('game_ended');
         
-            //Update all accounts participating in the game.
-            const participants = game.placedBets;
-            for(let bet of participants.values()){
-                const username = bet.id
-                const socket = sockets.get(username);
-    
-                if(!socket) {
-                    console.log("Non-existent socket!");
-                    bank.circulation -= bet.amount;
-                    continue;
+                    saveState(game, bank);
                 }
-    
-                //Shorten debt of all accounts instead if no one won.
-                const acc = bank.accounts.get(username);
-                if(gameResult.winners.length == 0){
-                    bank.circulation -= bet.amount;
+                else{
+                    io.emit('end_game_rejected', 'Did not receive enough yes votes to end the game. Game continues.');
                 }
 
-                acc.setProfit();
-                accountUpdate(username, socket);
+                game.clearVotes();
             }
-    
-            //Game bets can now be cleared.
-            game.placedBets.clear();
-    
-            bankUpdate(io);
-            gameUpdate(io); 
+        });
+
+        socket.on('end_game_bypass', msg => {
+            //Use this to bypass voting.
+            if(game.isContested()){
+                socket.emit('game_contested');
+                return;
+            }
+            const message = JSON.parse(msg);
+            const result = message.data;
+
+            if(typeof result !== 'boolean'){
+                socket.emit('end_game_rejected', 'result is not a boolean!');
+                return;
+            }
+
+            endGame(result, game, bank, sockets);
+            gameUpdate(game, io);
+            bankUpdate(bank, io);
             io.emit('game_ended');
-    
-            saveState();
+
+            saveState(game, bank);
         });
     });
 

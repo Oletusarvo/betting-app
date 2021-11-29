@@ -8,7 +8,7 @@
 
 #game-pool{
     grid-area: game-pool; 
-    height: 800px;
+    height: 1000px;
     color: white;
     display: flex;
     align-items: center;
@@ -20,9 +20,10 @@
 #game-pool-border-circle{
     border: 2px solid white;
     border-radius: 50%;
-    width: 500px;
-    height: 500px;
+    width: 700px;
+    height: 700px;
     display: flex;
+    flex-flow: column;
     justify-content: center;
     align-items: center;
 
@@ -30,7 +31,7 @@
 }
 
 #output-game-pool{
-    font-size: 80px;
+    font-size: 110px;
 }
 
 #output-game-min-bet{

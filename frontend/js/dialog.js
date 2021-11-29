@@ -22,49 +22,36 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-var ControlGrid = /*#__PURE__*/function (_React$Component) {
-  _inherits(ControlGrid, _React$Component);
+var BetDialog = /*#__PURE__*/function (_React$Component) {
+  _inherits(BetDialog, _React$Component);
 
-  var _super = _createSuper(ControlGrid);
+  var _super = _createSuper(BetDialog);
 
-  function ControlGrid(props) {
-    _classCallCheck(this, ControlGrid);
+  function BetDialog() {
+    _classCallCheck(this, BetDialog);
 
-    return _super.call(this, props);
+    return _super.apply(this, arguments);
   }
 
-  _createClass(ControlGrid, [{
+  _createClass(BetDialog, [{
     key: "render",
     value: function render() {
       return /*#__PURE__*/React.createElement("div", {
-        id: "grid-controls",
-        className: "grid-item"
+        className: "dialog-window",
+        id: "bet-dialog"
+      }, /*#__PURE__*/React.createElement("input", {
+        className: "dialog-input",
+        type: "number",
+        min: this.props.minBet || 0.01
+      }), /*#__PURE__*/React.createElement("div", {
+        className: "dialog-buttons"
       }, /*#__PURE__*/React.createElement("button", {
-        className: "control-button",
-        id: "button-place-bet",
-        onClick: this.props.mustCall ? this.props.callFunction : this.props.placeBetFunction
-      }, this.props.mustCall ? "Call" : "Place Bet"), /*#__PURE__*/React.createElement("select", {
-        className: "control-button",
-        id: "input-game-bool"
-      }, /*#__PURE__*/React.createElement("option", null, "True"), /*#__PURE__*/React.createElement("option", null, "False")), /*#__PURE__*/React.createElement("button", {
-        className: "control-button",
-        id: "button-fold",
-        onClick: this.props.foldFunction
-      }, "Fold"), /*#__PURE__*/React.createElement("button", {
-        className: "control-button",
-        id: "button-end-game",
-        onClick: this.props.endGameFunction
-      }, "End Game"), /*#__PURE__*/React.createElement("button", {
-        className: "control-button",
-        id: "button-pay-debt",
-        onClick: this.props.payDebtFunction
-      }, "Pay Debt"), /*#__PURE__*/React.createElement("button", {
-        className: "control-button",
-        id: "button-loan",
-        onClick: this.props.loanFunction
-      }, "Loan"));
+        className: "dialog-button"
+      }, "Ok"), /*#__PURE__*/React.createElement("button", {
+        className: "dialog-button"
+      }, "Cancel")));
     }
   }]);
 
-  return ControlGrid;
+  return BetDialog;
 }(React.Component);

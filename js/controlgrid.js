@@ -12,11 +12,11 @@ class ControlGrid extends React.Component{
                     id="button-place-bet" 
 
                     onClick={
-                        this.props.hasToCall ?
+                        this.props.mustCall ?
                         this.props.callFunction :
                         this.props.placeBetFunction}>
                             
-                            { this.props.hasToCall ? "Call" : "Place Bet" }</button>
+                            { this.props.mustCall ? "Call" : "Place Bet" }</button>
 
                 <select className="control-button" id="input-game-bool">
                     <option>True</option>

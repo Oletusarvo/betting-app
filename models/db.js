@@ -1,4 +1,4 @@
-const replacer = require('../backend/js/replacer')
+const replacer = require('../backend/js/utils').replacer;
 const db  = require('../dbConfig');
 
 module.exports = {
@@ -99,7 +99,7 @@ function getGame(gameName){
 }
 
 async function updateGame(gameData){
-    return db('game_table').where({game_name : game_name}).update({
+    return db('game_table').where({game_name : gameData.game_name}).update({
         pool : gameData.pool,
         min_bet: gameData.minBet,
         placed_bets : JSON.stringify(gameData.placedBets, replacer)

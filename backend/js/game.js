@@ -4,6 +4,8 @@ class Game{
         this.minBet = 0;
         this.gameName = gameName;
         this.placedBets = new Map();
+        this.votes      = [];
+        this.isRaised   = false;
     }
 
     setName(gameName){
@@ -13,17 +15,70 @@ class Game{
     placeBet(bet){
         const existingBet = this.placedBets.get(bet.id);
 
+        let amount = 0;
+
         if(existingBet){
             existingBet.amount += bet.amount;
+            amount = existingBet.amount;
         }
         else{
             this.placedBets.set(bet.id, bet);
+            amount = bet.amount;
         }
 
-        this.pool = this.calculatePool();
-        this.minBet = bet.amount > this.minBet ? bet.amount : this.minBet;
+        this.calculatePool();
+        this.calculateRaised(amount);
+        this.calculateMinBet();
+    }
 
-        return true;
+    hasFolded(username){
+        const bet = this.placedBets.get(username);
+        return bet && bet.folded;
+    }
+
+    raiseBet(username, amount){
+        const bet = this.placedBets.get(username);
+        bet.amount += amount;
+
+        this.calculateMinBet();
+        this.calculateRaised(bet.amount);
+        this.calculatePool();
+    }
+
+    placeVote(vote){
+        this.votes.push(vote);
+    }
+
+    canEnd(){
+        let canEnd = false;
+        //All participants have cast their vote.
+        //If the majority (over 50%) voted to end the game, it will end.
+        const threshold = 0.5;
+        let numYes = 0;
+        let numNo = 0;
+        const numParticipants = this.placedBets.size;
+        
+        for(let vote of this.votes){
+            if(vote){
+                numYes++;
+            }
+            else{
+                numNo++;
+            }
+        }
+
+        if(numYes / numParticipants > threshold){
+            canEnd = true;
+        }
+        return canEnd;
+    }
+
+    allHaveVoted(){
+        return this.votes.length == this.placedBets.size;
+    }
+
+    clearVotes(){
+        this.votes = [];
     }
 
     end(result){
@@ -56,7 +111,24 @@ class Game{
 
         Array.from(this.placedBets.values()).forEach(item => total += item.amount);
 
-        return total;
+        this.pool = total;
+    }
+
+    /**@private */
+    calculateMinBet(){
+        let max = 0;
+        Array.from(this.placedBets.values()).forEach( item => {
+            if(item.amount > max){
+                max = item.amount;
+            }
+        });
+
+        this.minBet = max;
+    }
+
+    /**@private */
+    calculateRaised(amount){
+        this.isRaised = (this.placedBets.size > 1) && (amount > this.minBet);
     }
 }
 

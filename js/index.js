@@ -1,7 +1,22 @@
 const initState = {
-    game : {pool : 0, minBet : undefined, name : "game name", hasToCall : false},
-    bank : {circulation : 0, supply : 0, currencySymbol : "def"},
-    account : {debt : 0, balance : 0, profit : 0, username : undefined}
+    gamePool: 0,
+    gameMinBet: undefined,
+    gameName: 'game name',
+
+    myBet: undefined,
+    
+    bankCirculation: 0,
+    bankSupply: 0,
+    bankCurrencySymbol: 'def',
+
+    accountDebt: 0,
+    accountBalance: 0,
+    accountProfit: 0,
+    accountUsername: undefined,
+
+    mustCall: false,
+    canBet: false,
+    participating: false
 }
 
 let vars = initState;

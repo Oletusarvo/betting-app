@@ -38,17 +38,40 @@ var App = /*#__PURE__*/function (_React$Component) {
 
     var env = _assertThisInitialized(_this);
 
+    _this.socket.on('query_username', function () {
+      var msg = {
+        from: _this.state.accountUsername,
+        to: 'server',
+        data: null
+      };
+
+      _this.socket.emit('username', JSON.stringify(msg));
+    });
+
     _this.socket.on('login_success', function (username) {
-      _this.state.account.username = username;
+      _this.state.accountUsername = username;
+      _this.state.canBet = true;
       alert("Logged in as " + username);
 
       _this.updateState();
     });
 
-    _this.socket.on('end_game_request', function (id) {
+    _this.socket.on('end_game_request', function (result) {
       //Cast your vote on wheter you think the game should end or not.
-      var vote = confirm("Someone requested to end the game. Do you agree?");
-      env.socket.emit('end_game_vote', vote);
+      var vote = confirm("A request to end the game with result '".concat(result, "' has been placed. Do you agree?"));
+      _this.state.canBet = false; //Until game either ends or the vote is rejected.
+
+      var data = {
+        from: env.state.accountUsername,
+        to: 'server',
+        data: {
+          vote: vote,
+          result: result
+        }
+      };
+      env.socket.emit('end_game_vote', JSON.stringify(data));
+
+      _this.updateState();
     });
 
     _this.socket.on('bank_update', function (msg) {
@@ -56,27 +79,25 @@ var App = /*#__PURE__*/function (_React$Component) {
       var circ = data.circulation;
       var cs = data.currencySymbol;
       var supply = data.supply;
-      env.state.bank.circulation = circ;
-      env.state.bank.currencySymbol = cs;
-      env.state.bank.supply = supply;
+      env.state.bankCirculation = circ;
+      env.state.bankCurrencySymbol = cs;
+      env.state.bankSupply = supply;
       env.updateState();
     });
 
     _this.socket.on('game_update', function (msg) {
-      if (_this.state.account.username == undefined) return;
+      if (_this.state.accountUsername == undefined) return;
       var data = JSON.parse(msg);
-      env.state.game.pool = data.pool;
-      var previousMinBet = env.state.game.minBet;
-      env.state.game.minBet = data.minBet;
-      if (previousMinBet < env.state.game.minBet) env.state.game.hasToCall = true;
+      env.state.gamePool = data.pool;
+      env.state.gameMinBet = data.minBet;
       env.updateState();
     });
 
     _this.socket.on('account_update', function (msg) {
       var data = JSON.parse(msg);
-      env.state.account.balance = data.balance;
-      env.state.account.debt = data.debt;
-      env.state.account.profit = data.profit;
+      env.state.accountBalance = data.balance;
+      env.state.accountDebt = data.debt;
+      env.state.accountProfit = data.profit;
       env.updateState();
     });
 
@@ -90,7 +111,7 @@ var App = /*#__PURE__*/function (_React$Component) {
 
     _this.socket.on('logout_success', function () {
       _this.state = _this.props.initState;
-      _this.state.accounts.username = undefined;
+      _this.state.accountsUsername = undefined;
 
       _this.updateState();
 
@@ -101,12 +122,32 @@ var App = /*#__PURE__*/function (_React$Component) {
       alert("Cannot fold! Reason: ".concat(msg));
     });
 
+    _this.socket.on('fold_accepted', function () {
+      _this.state.canBet = false;
+
+      _this.updateState();
+    });
+
     _this.socket.on('bet_rejected', function (msg) {
       alert("Cannot place bet! Reason: ".concat(msg));
     });
 
+    _this.socket.on('bet_accepted', function (amount) {
+      env.state.myBet = amount;
+      env.state.participating = true;
+      env.state.canBet = false;
+
+      _this.updateState();
+    });
+
     _this.socket.on('call_rejected', function (msg) {
       alert("Cannot call! Reason: ".concat(msg));
+    });
+
+    _this.socket.on('call_accepted', function () {
+      _this.state.mustCall = false;
+
+      _this.updateState();
     });
 
     _this.socket.on('general_error', function (msg) {
@@ -114,7 +155,30 @@ var App = /*#__PURE__*/function (_React$Component) {
     });
 
     _this.socket.on('login_rejected', function (msg) {
-      alert("Login was rejected! Reason ".concat(msg));
+      alert("Login was rejected! Reason: ".concat(msg));
+    });
+
+    _this.socket.on('game_ended', function () {
+      //alert('The game has been ended!');
+      env.state.canBet = true;
+      env.state.participating = false;
+      env.state.mustCall = false;
+      env.state.myBet = undefined;
+
+      _this.updateState();
+    });
+
+    _this.socket.on('end_game_rejected', function (msg) {
+      alert("Game cannot be ended! Reason: ".concat(msg));
+      env.state.canBet = true;
+
+      _this.updateState();
+    });
+
+    _this.socket.on('game_raised', function (amount) {
+      _this.state.mustCall = _this.state.myBet ? true : false;
+
+      _this.updateState();
     });
 
     _this.updateState = _this.updateState.bind(_assertThisInitialized(_this));
@@ -138,7 +202,12 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "placeBet",
     value: function placeBet() {
-      var input = prompt("Enter amount to bet:", this.state.game.minBet.toFixed(2) || 0.1);
+      if (this.state.canBet == false) {
+        alert('You can not bet at this moment!');
+        return;
+      }
+
+      var input = prompt("Enter amount to bet:", this.state.gameMinBet.toFixed(2) || 0.1);
       var amount = parseFloat(input);
 
       if (isNaN(amount)) {
@@ -154,7 +223,7 @@ var App = /*#__PURE__*/function (_React$Component) {
         side: side
       };
       var msg = {
-        from: this.state.account.username,
+        from: this.state.accountUsername,
         to: "server",
         data: bet
       };
@@ -166,7 +235,7 @@ var App = /*#__PURE__*/function (_React$Component) {
       var answer = confirm("Do you really want to fold?");
       if (answer == false) return;
       var msg = {
-        from: this.state.account.username,
+        from: this.state.accountUsername,
         to: "server",
         data: null
       };
@@ -175,20 +244,22 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "call",
     value: function call() {
-      var amount = this.state.game.minBet;
-      var answer = confirm("Calling ".concat(amount, ", are you sure?"));
+      var minimum = this.state.gameMinBet;
+      var myBet = this.state.myBet;
+      var callAmount = !isNaN(myBet) ? minimum - myBet : minimum;
+      var answer = confirm("Calling ".concat(callAmount, ", are you sure?"));
       if (answer == false) return;
       var bet = {
-        amount: amount,
+        amount: callAmount,
         side: -1,
-        id: this.state.account.username
+        id: this.state.accountUsername
       };
       var msg = {
-        from: this.state.account.username,
+        from: this.state.accountUsername,
         to: "server",
         data: bet
       };
-      this.sendMessage('call', msg);
+      this.sendMessage('call_bet', msg);
     }
   }, {
     key: "payDebt",
@@ -204,7 +275,7 @@ var App = /*#__PURE__*/function (_React$Component) {
       ; //this.socket.emit('pay_debt', amount);
 
       var msg = {
-        from: this.state.account.username,
+        from: this.state.accountUsername,
         to: "server",
         data: amount
       };
@@ -223,7 +294,7 @@ var App = /*#__PURE__*/function (_React$Component) {
 
       ;
       var msg = {
-        from: this.state.account.username,
+        from: this.state.accountUsername,
         to: "server",
         data: amount
       };
@@ -232,20 +303,29 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "resetGame",
     value: function resetGame() {
-      this.state.game.pool = 0;
-      this.state.game.minBet = 0.01;
+      this.state.gamePool = 0;
+      this.state.gameMinBet = 0.01;
     }
   }, {
     key: "endGame",
     value: function endGame() {
+      /*
+      if(this.state.participating == false){
+          alert('You can not end the game as you are not participating in it!');
+          return;
+      }
+      */
       var sideSelector = document.querySelector("#input-game-bool");
-      var result = sideSelector.value === "True";
+      var result = sideSelector.value === "True"; //What if somebody else already did this?
+
+      var answer = confirm("You are about to request to end the game with result '".concat(result, "'. Are you sure?"));
+      if (answer == false) return;
       var msg = {
-        from: this.state.account.username,
+        from: this.state.accountUsername,
         to: "server",
         data: result
       };
-      this.sendMessage('end_game_accepted', msg);
+      this.sendMessage('end_game_bypass', msg);
     }
   }, {
     key: "createGame",
@@ -254,16 +334,16 @@ var App = /*#__PURE__*/function (_React$Component) {
       var answer = confirm("Is this name ok?: \"" + name + '\"');
       if (answer == false) return;
       var msg = {
-        from: this.state.account.username,
+        from: this.state.accountUsername,
         to: "server",
         data: name
       };
-      this.sendMessage('create-game', msg);
+      this.sendMessage('create_game', msg);
     }
   }, {
-    key: "numberFormat",
-    value: function numberFormat(number) {
-      if (isNaN(number)) return number;
+    key: "formatNumber",
+    value: function formatNumber(number) {
+      if (isNaN(number)) return undefined;
       /*Compresses big numbers, adds a letter postfix representation of the quantity of the number and returns it as a string */
 
       var thousand = 1000;
@@ -294,7 +374,7 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "disconnect",
     value: function disconnect() {
-      var username = this.state.account.username;
+      var username = this.state.accountUsername;
       var msg = {
         from: username,
         to: "server",
@@ -305,34 +385,39 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var pool = this.state.game.pool;
-      var balance = this.state.account.balance;
-      var profit = this.state.account.profit;
-      var debt = this.state.account.debt;
-      var circulation = this.state.bank.circulation;
-      var supply = this.state.bank.supply;
-      var poolRenderAmount = this.numberFormat(pool);
-      var accountBalanceRenderAmount = this.numberFormat(balance);
-      var profitRenderAmount = this.numberFormat(profit);
-      var debtRenderAmount = this.numberFormat(debt);
-      var circulationRenderAmount = this.numberFormat(circulation);
-      var supplyRenderAmount = this.numberFormat(supply);
+      var pool = this.state.gamePool;
+      var balance = this.state.accountBalance;
+      var profit = this.state.accountProfit;
+      var debt = this.state.accountDebt;
+      var circulation = this.state.bankCirculation;
+      var supply = this.state.bankSupply;
+      var poolRenderAmount = this.formatNumber(pool);
+      var accountBalanceRenderAmount = this.formatNumber(balance);
+      var profitRenderAmount = this.formatNumber(profit);
+      var debtRenderAmount = this.formatNumber(debt);
+      var circulationRenderAmount = this.formatNumber(circulation);
+      var supplyRenderAmount = this.formatNumber(supply); //Currently unused.
+
       return /*#__PURE__*/React.createElement("div", {
         id: "app-content"
       }, /*#__PURE__*/React.createElement(GameName, {
-        gameName: this.state.game.name
+        gameName: this.state.gameName
       }), /*#__PURE__*/React.createElement(GamePool, {
         pool: poolRenderAmount,
-        minBet: this.state.game.minBet,
-        currencySymbol: this.state.bank.currencySymbol
+        minBet: this.state.gameMinBet,
+        currencySymbol: this.state.bankCurrencySymbol,
+        canBet: this.state.canBet,
+        mustCall: this.state.mustCall,
+        betFunction: this.placeBet,
+        myBet: this.state.myBet
       }), /*#__PURE__*/React.createElement(BankGrid, {
         circulation: circulationRenderAmount,
-        currencySymbol: this.state.bank.currencySymbol,
+        currencySymbol: this.state.bankCurrencySymbol,
         supply: supplyRenderAmount
       }), /*#__PURE__*/React.createElement(AccountGrid, {
         balance: accountBalanceRenderAmount,
         debt: debtRenderAmount,
-        currencySymbol: "mk",
+        currencySymbol: this.state.bankCurrencySymbol,
         profit: profitRenderAmount
       }), /*#__PURE__*/React.createElement(ControlGrid, {
         payDebtFunction: this.payDebt,
@@ -342,12 +427,12 @@ var App = /*#__PURE__*/function (_React$Component) {
         createGameFunction: this.createGame,
         foldFunction: this.fold,
         callFunction: this.call,
-        minBet: this.state.game.minBet,
-        hasToCall: false
+        minBet: this.state.gameMinBet,
+        mustCall: this.state.mustCall
       }), /*#__PURE__*/React.createElement(LoginGrid, {
         connectFunction: this.connect,
         disconnectFunction: this.disconnect,
-        username: this.state.account.username
+        username: this.state.accountUsername
       }));
     }
   }]);

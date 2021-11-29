@@ -38,7 +38,10 @@ class Bank{
         acc.loan(amount);
     }
 
-    
+    hasFunds(username, amount){
+        const acc = this.accounts.get(username);
+        return acc.balance >= amount;
+    }
 
     payDebt(accountId, amount){
         /*

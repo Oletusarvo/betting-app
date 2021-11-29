@@ -40,7 +40,11 @@ var GamePool = /*#__PURE__*/function (_React$Component) {
         className: "grid-item",
         id: "game-pool"
       }, /*#__PURE__*/React.createElement("div", {
-        id: "game-pool-border-circle"
+        id: "game-pool-border-circle",
+        onClick: this.props.betFunction,
+        style: {
+          borderColor: this.props.mustCall ? "yellow" : this.props.canBet ? "lime" : "red"
+        }
       }, /*#__PURE__*/React.createElement("span", {
         className: "data-output",
         id: "output-game-pool"
