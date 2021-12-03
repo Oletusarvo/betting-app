@@ -194,7 +194,7 @@ db.get().then(data => {
 
                     bank.addAccount(username, password);
                     socket.emit('login_success', username);
-                    
+
                     bank.accounts.get(username).sendUpdate(socket);
                     bank.sendUpdate(socket);
                     game.sendUpdate(socket);
@@ -245,7 +245,7 @@ db.get().then(data => {
             game.sendUpdate(io);
 
             bank.accounts.get(username).saveData(db);
-            game.saveData(db);
+            //game.saveData(db);
 
             socket.emit('bet_accepted', newBet.amount);
 
@@ -294,7 +294,7 @@ db.get().then(data => {
             game.sendUpdate(io);
 
             bank.accounts.get(message.from).saveData(db);
-            game.saveData(db);
+            //game.saveData(db);
 
             if(game.isRaised){
                 socket.broadcast.emit('game_raised', game.placedBets.get(message.from).amount);
@@ -440,7 +440,7 @@ db.get().then(data => {
                     game.sendUpdate(io);
 
                     bank.saveData(db);
-                    game.saveData(db);
+                    //game.saveData(db);
 
                     io.emit('game_ended');
         
@@ -474,7 +474,7 @@ db.get().then(data => {
             bank.sendUpdate(io);
 
             bank.saveData(db);
-            game.saveData(db);
+            //game.saveData(db);
 
             io.emit('game_ended');
 
@@ -486,7 +486,7 @@ db.get().then(data => {
             game.gameName = message.data;
 
             game.sendUpdate(io);
-            game.saveData(db);
+            //game.saveData(db);
         });
     });
 

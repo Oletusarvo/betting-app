@@ -4,6 +4,7 @@ exports.up = function(knex) {
     tbl.increments('id');
     //tbl.string('participations');
     tbl.string('username').notNullable();
+    tbl.string('password').notNullable();
     tbl.float('balance').notNullable();
     tbl.float('debt').notNullable();
     tbl.float('init_balance').notNullable();
