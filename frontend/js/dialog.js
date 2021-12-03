@@ -36,18 +36,20 @@ var BetDialog = /*#__PURE__*/function (_React$Component) {
   _createClass(BetDialog, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("div", {
-        className: "dialog-window",
-        id: "bet-dialog"
+      return /*#__PURE__*/React.createElement("dialog", {
+        className: "dialog-box",
+        id: "bet-dialog",
+        open: true
       }, /*#__PURE__*/React.createElement("input", {
-        className: "dialog-input",
-        type: "number",
-        min: this.props.minBet || 0.01
+        id: "input-bet-amount",
+        className: "dialog-input"
       }), /*#__PURE__*/React.createElement("div", {
-        className: "dialog-buttons"
+        className: "dialog-button-row"
       }, /*#__PURE__*/React.createElement("button", {
+        id: "place-bet-ok",
         className: "dialog-button"
-      }, "Ok"), /*#__PURE__*/React.createElement("button", {
+      }, "OK"), /*#__PURE__*/React.createElement("button", {
+        id: "place-bet-cancel",
         className: "dialog-button"
       }, "Cancel")));
     }

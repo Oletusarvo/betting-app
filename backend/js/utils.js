@@ -31,7 +31,8 @@ function replacer(key, value) {
                 balance : value.balance,
                 debt : value.debt,
                 profit : value.profit,
-                id : value.id,
+                username : value.username,
+                password : value.password,
                 initBalance : value.initBalance,
                 isLoggedIn : value.isLoggedIn
             }
@@ -58,6 +59,7 @@ function replacer(key, value) {
                 circulation : value.circulation,
                 defaultIssueAmount : value.defaultIssueAmount,
                 currencySymbol : value.currencySymbol,
+                bankName : value.bankName,
                 accounts : {dataType : 'Map', value : [...value.accounts]}
             }
         };
@@ -90,6 +92,8 @@ function reviver(key, value) {
             acc.debt = value.value.debt;
             acc.initBalance = value.value.initBalance;
             acc.profit = value.value.profit;
+            acc.username = value.value.username;
+            acc.password = value.value.password;
             acc.isLoggedIn = value.value.isLoggedIn;
 
             return acc;
@@ -108,6 +112,7 @@ function reviver(key, value) {
             bank.accounts = new Map(value.value.accounts);
             bank.defaultIssueAmount = value.value.defaultIssueAmount;
             bank.currencySymbol = value.value.currencySymbol;
+            bank.bankName = value.value.bankName;
             return bank;
         }
         

@@ -1,4 +1,5 @@
 const initState = {
+    lang: "eng",
     gamePool: 0,
     gameMinBet: undefined,
     gameName: 'game name',
@@ -16,7 +17,8 @@ const initState = {
 
     mustCall: false,
     canBet: false,
-    participating: false
+    participating: false,
+    folded : false
 }
 
 let vars = initState;

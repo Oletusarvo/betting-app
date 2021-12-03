@@ -39,10 +39,14 @@ var BankGrid = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         id: "grid-bank",
         className: "grid-item"
-      }, /*#__PURE__*/React.createElement("span", {
-        className: "data-output",
+      }, /*#__PURE__*/React.createElement("table", {
+        id: "bank-table"
+      }, /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+        className: "table-label"
+      }, "Circulation:"), /*#__PURE__*/React.createElement("td", {
+        className: "table-output",
         id: "output-bank-circulation"
-      }, "Circulation: ", this.props.circulation, this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null));
+      }, this.props.circulation, this.props.currencySymbol)))));
     }
   }]);
 

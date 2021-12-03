@@ -5,6 +5,8 @@
 @import 'control-grid';
 @import 'bank-grid';
 @import 'login-grid';
+@import 'login-page';
+@import 'dialog';
 
 body{  
     display: flex;
@@ -45,6 +47,19 @@ button, select{
     font-weight: bold;
 
     background: $primary-color;
+}
+
+table{
+    width: 100%;
+    height: 100%;
+}
+
+.table-label{
+    text-align: left;
+}
+
+.table-output{
+    text-align: right;
 }
 
 #nav-header{

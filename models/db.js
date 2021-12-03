@@ -38,15 +38,14 @@ async function addAccount(account){
         balance : account.balance,
         debt : account.balance,
         username : account.username,
+        password : account.password,
         profit : account.profit,
         init_balance : account.initBalance
     }, ['username']);
-
-    //return getAccount(account.username);
 }
 
 async function getAccount(username){
-    return await db('account_table').where({username}).first();
+    return await db('account_table').where({username: username}).first();
 }
 
 function getAllAccounts(){
@@ -58,28 +57,26 @@ async function updateAccount(data){
         balance : data.balance,
         profit : data.profit,
         debt : data.debt,
-        init_balance : data.initBalance,
-        username : data.username
+        init_balance : data.initBalance
     });
 }
 
 async function addBank(bank){
-    const [circulation, currencySymbol, defaultIssueAmount] = bank;
     return await db('bank_table').insert({
-        circulation : circulation,
-        currencySymbol : currencySymbol,
-        defaultIssueAmount : defaultIssueAmount,
-        accounts : JSON.stringify(bank.accounts, replacer),
+        circulation : bank.circulation,
+        currency_symbol : bank.currencySymbol,
+        default_issue_amount : bank.defaultIssueAmount,
+        //accounts : JSON.stringify(bank.accounts, replacer),
         bank_name : bank.bankName
     }, ['bank_name']);
 }
 
-function getBank(id){
-    return db('bank_table').where({id}).first();
+function getBank(bankName){
+    return db('bank_table').where({bank_name : bankName}).first();
 }
 
 async function updateBank(data){
-    return db('bank_table').where({bank_name : data.bank_name}).update({
+    return await db('bank_table').where({bank_name : data.bankName}).update({
         circulation : data.circulation,
         default_issue_amount : data.defaultIssueAmount
     });
@@ -94,15 +91,21 @@ async function addGame(game){
     }, ['game_name']);
 }
 
+async function addBet(game){
+    return await db('')
+}
+
 function getGame(gameName){
     return db('game_table').where({game_name : gameName}).first();
 }
 
-async function updateGame(gameData){
-    return db('game_table').where({game_name : gameData.game_name}).update({
-        pool : gameData.pool,
-        min_bet: gameData.minBet,
-        placed_bets : JSON.stringify(gameData.placedBets, replacer)
+async function updateGame(data){
+    //If a game name is changed, this will not find the game from the database.
+    return await db('game_table').where({game_name : data.gameName}).update({
+        pool : data.pool,
+        min_bet: data.minBet,
+        bets : JSON.stringify(data.placedBets, replacer),
+        game_name : data.gameName
     });
 }
 

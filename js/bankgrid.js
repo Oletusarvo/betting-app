@@ -6,7 +6,14 @@ class BankGrid extends React.Component{
     render(){
         return(
             <div id="grid-bank" className="grid-item">
-                <span className="data-output" id="output-bank-circulation">Circulation: {this.props.circulation}{this.props.currencySymbol}</span><br/>
+                <table id="bank-table">
+                    <tbody>
+                        <tr>
+                            <td className="table-label">Circulation:</td>
+                            <td className="table-output" id="output-bank-circulation">{this.props.circulation}{this.props.currencySymbol}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         );
     }

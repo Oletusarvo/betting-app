@@ -39,21 +39,29 @@ var AccountGrid = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         id: "grid-account",
         className: "grid-item"
-      }, /*#__PURE__*/React.createElement("span", {
-        className: "data-output",
-        id: "output-account-balance"
-      }, "Balance: ", this.props.balance, this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
-        className: "data-output",
-        id: "output-account-debt"
-      }, "Debt: ", this.props.debt, this.props.currencySymbol), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, "Profit: "), /*#__PURE__*/React.createElement("span", {
-        className: "data-output",
+      }, /*#__PURE__*/React.createElement("table", {
+        id: "account-table"
+      }, /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+        className: "table-label"
+      }, "Balance:"), /*#__PURE__*/React.createElement("td", {
+        id: "output-account-balance",
+        className: "table-output"
+      }, this.props.balance, this.props.currencySymbol)), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+        className: "table-label"
+      }, "Debt:"), /*#__PURE__*/React.createElement("td", {
+        id: "output-account-debt",
+        className: "table-output"
+      }, this.props.debt, this.props.currencySymbol)), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+        className: "table-label"
+      }, "Profit:"), /*#__PURE__*/React.createElement("td", {
         id: "output-account-profit",
+        className: "table-output",
         style: this.props.profit >= 0 ? {
           color: "lime"
         } : {
           color: "red"
         }
-      }, this.props.profit, this.props.currencySymbol));
+      }, this.props.profit, this.props.currencySymbol)))));
     }
   }]);
 

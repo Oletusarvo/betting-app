@@ -48,12 +48,16 @@ class App extends React.Component{
 
         this.socket.on('game_update', msg =>{
 
-            if(this.state.accountUsername == undefined) return;
+            if(this.state.accountUsername == undefined){
+                console.log('Undefined username, returning.');
+                return;
+            }
             
             const data = JSON.parse(msg);
 
             env.state.gamePool = data.pool;
             env.state.gameMinBet = data.minBet;
+            env.state.gameName = data.gameName;
 
             env.updateState();
         });
@@ -87,7 +91,7 @@ class App extends React.Component{
         });
 
         this.socket.on('fold_accepted', () => {
-            this.state.canBet = false;
+            this.state.canBet = this.state.mustCall = false;
             this.updateState();
         });
 
@@ -125,6 +129,7 @@ class App extends React.Component{
             env.state.participating = false;
             env.state.mustCall = false;
             env.state.myBet = undefined;
+            env.state.folded = undefined;
             this.updateState();
         });
         
@@ -135,8 +140,18 @@ class App extends React.Component{
         });
 
         this.socket.on('game_raised', amount => {
-            this.state.mustCall = this.state.myBet ? true : false;
+            this.state.mustCall = this.state.myBet ? true : false; //Causes problems if user has a bet out and disconnects in-between.
             this.updateState();
+        });
+
+        this.socket.on('account_accepted', msg => {
+            alert('Account accepted!');
+            this.state.canBet = true;
+            this.updateState();
+        });
+
+        this.socket.on('account_rejected', msg => {
+            alert(`Account rejected! Reason: ${msg}`);
         });
         
         this.updateState = this.updateState.bind(this);
@@ -144,11 +159,13 @@ class App extends React.Component{
         this.loan = this.loan.bind(this);
         this.payDebt = this.payDebt.bind(this);
         this.endGame = this.endGame.bind(this);
-        this.createGame = this.createGame.bind(this);
         this.fold = this.fold.bind(this);
-        this.connect = this.connect.bind(this);
+        this.fetchData = this.fetchData.bind(this);
         this.disconnect = this.disconnect.bind(this);
         this.call = this.call.bind(this);
+        this.setGameName = this.setGameName.bind(this);
+        this.createAccount = this.createAccount.bind(this);
+        this.dialog = this.dialog.bind(this);
     }
 
 
@@ -157,7 +174,6 @@ class App extends React.Component{
     }
 
     placeBet(){
-
         if(this.state.canBet == false){
             alert('You can not bet at this moment!');
             return;
@@ -265,15 +281,15 @@ class App extends React.Component{
         this.sendMessage('end_game_bypass', msg);
     }
 
-    createGame(){
-        const name = prompt("Enter game name");
+    setGameName(){
+        const gameName = prompt("Enter game name");
 
-        const answer = confirm("Is this name ok?: \"" + name + '\"');
+        const answer = confirm("Is this name ok?: \"" + gameName + '\"');
 
         if(answer == false) return;
 
-        const msg = {from: this.state.accountUsername, to: "server", data: name}
-        this.sendMessage('create_game', msg);
+        const msg = {from: this.state.accountUsername, to: "server", data: gameName}
+        this.sendMessage('set_game_name', msg);
     }
 
     formatNumber(number){
@@ -301,18 +317,45 @@ class App extends React.Component{
         this.socket.emit(type, JSON.stringify(msg));
     }
 
-    connect(){
-        const input = document.querySelector("#input-username");
-        const username = input.value;
+    fetchData(){
 
-        const msg = {from: username, to: "server", data: null}
-        this.sendMessage('login', msg);
+        //TODO: change this to a post method.
+        const inputUsername = document.querySelector("#input-username");
+        const inputPassword = document.querySelector('#input-password');
+        const username = inputUsername.value;
+        const password = inputPassword.value;
+
+        const msg = {from: username, to: "server", data: password}
+        this.sendMessage('fetch_data', msg);
+    }
+
+    createAccount(){
+        const inputUsername = document.querySelector("#input-username");
+        const inputPassword = document.querySelector('#input-password');
+        const username = inputUsername.value;
+        const password = inputPassword.value;
+
+        const answer = confirm(`About to create account with username ${username}. Are you sure?`);
+
+        if(answer == false) return;
+
+        const msg = {from: undefined, to: "server", data: { username : username, password : password}}
+        this.sendMessage('create_account', msg);
     }
 
     disconnect(){
         const username = this.state.accountUsername;
         const msg = {from: username, to: "server", data: null}
         this.sendMessage('logout', msg);
+    }
+
+    dialog(type){
+        if(type == 'bet'){
+            ReactDOM.render(
+                <BetDialog/>,
+                document.getElementById('bet-dialog')
+            );
+        }
     }
 
     render(){
@@ -333,7 +376,7 @@ class App extends React.Component{
 
         return(
             <div id="app-content">
-                <GameName gameName={this.state.gameName}/>
+                <GameName gameName={this.state.gameName} setNameFunction={this.setGameName}/>
 
                 <GamePool 
                     pool={poolRenderAmount}
@@ -341,14 +384,16 @@ class App extends React.Component{
                     currencySymbol={this.state.bankCurrencySymbol}
                     canBet={this.state.canBet}
                     mustCall={this.state.mustCall}
-                    betFunction={this.placeBet}
+                    betFunction={this.state.mustCall ? this.call : this.placeBet}
                     myBet={this.state.myBet}
+                    folded={this.state.folded}
                 />
 
                 <BankGrid 
                     circulation={circulationRenderAmount} 
                     currencySymbol={this.state.bankCurrencySymbol}
                     supply={supplyRenderAmount}
+                    lang={this.state.lang}
                 />
 
                 <AccountGrid 
@@ -356,23 +401,26 @@ class App extends React.Component{
                     debt={debtRenderAmount}
                     currencySymbol={this.state.bankCurrencySymbol}
                     profit={profitRenderAmount}
+                    lang={this.state.lang}
                 />
 
                 <ControlGrid 
                     payDebtFunction={this.payDebt} 
                     loanFunction={this.loan} 
-                    placeBetFunction={this.placeBet}
+                    betFunction={this.state.mustCall ? this.call : this.placeBet}
                     endGameFunction={this.endGame} 
                     createGameFunction={this.createGame}
                     foldFunction={this.fold}
-                    callFunction={this.call}
                     minBet={this.state.gameMinBet}
                     mustCall={this.state.mustCall}
+                    lang={this.state.lang}
+                    dialog={this.dialog}
                 />
 
                 <LoginGrid
-                    connectFunction={this.connect} 
+                    connectFunction={this.fetchData} 
                     disconnectFunction={this.disconnect}
+                    createAccountFunction={this.createAccount}
                     username={this.state.accountUsername}
                 />
             </div>

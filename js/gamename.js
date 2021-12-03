@@ -5,7 +5,10 @@ class GameName extends React.Component{
 
     render(){
         return(
-            <div className="grid-item" id="game-name">{this.props.gameName}</div>
+            <div 
+                className="grid-item" 
+                id="game-name"
+                onClick={this.props.setNameFunction}>{this.props.gameName}</div>
         )
     }
 }

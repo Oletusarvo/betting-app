@@ -1,13 +1,13 @@
 class BetDialog extends React.Component{
     render(){
         return (
-            <div className="dialog-window" id="bet-dialog">
-                <input className="dialog-input" type="number" min={this.props.minBet || 0.01}/>
-                <div className="dialog-buttons">
-                    <button className="dialog-button">Ok</button>
-                    <button className="dialog-button">Cancel</button>
+            <dialog className="dialog-box" id="bet-dialog" open>
+                <input id="input-bet-amount" className="dialog-input"/>
+                <div className="dialog-button-row">
+                    <button id="place-bet-ok" className="dialog-button">OK</button>
+                    <button id="place-bet-cancel" className="dialog-button">Cancel</button>
                 </div>
-            </div>
+            </dialog>
         )
     }
 }

@@ -86,10 +86,15 @@ var App = /*#__PURE__*/function (_React$Component) {
     });
 
     _this.socket.on('game_update', function (msg) {
-      if (_this.state.accountUsername == undefined) return;
+      if (_this.state.accountUsername == undefined) {
+        console.log('Undefined username, returning.');
+        return;
+      }
+
       var data = JSON.parse(msg);
       env.state.gamePool = data.pool;
       env.state.gameMinBet = data.minBet;
+      env.state.gameName = data.gameName;
       env.updateState();
     });
 
@@ -123,7 +128,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     });
 
     _this.socket.on('fold_accepted', function () {
-      _this.state.canBet = false;
+      _this.state.canBet = _this.state.mustCall = false;
 
       _this.updateState();
     });
@@ -164,6 +169,7 @@ var App = /*#__PURE__*/function (_React$Component) {
       env.state.participating = false;
       env.state.mustCall = false;
       env.state.myBet = undefined;
+      env.state.folded = undefined;
 
       _this.updateState();
     });
@@ -176,9 +182,20 @@ var App = /*#__PURE__*/function (_React$Component) {
     });
 
     _this.socket.on('game_raised', function (amount) {
-      _this.state.mustCall = _this.state.myBet ? true : false;
+      _this.state.mustCall = _this.state.myBet ? true : false; //Causes problems if user has a bet out and disconnects in-between.
 
       _this.updateState();
+    });
+
+    _this.socket.on('account_accepted', function (msg) {
+      alert('Account accepted!');
+      _this.state.canBet = true;
+
+      _this.updateState();
+    });
+
+    _this.socket.on('account_rejected', function (msg) {
+      alert("Account rejected! Reason: ".concat(msg));
     });
 
     _this.updateState = _this.updateState.bind(_assertThisInitialized(_this));
@@ -186,11 +203,13 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.loan = _this.loan.bind(_assertThisInitialized(_this));
     _this.payDebt = _this.payDebt.bind(_assertThisInitialized(_this));
     _this.endGame = _this.endGame.bind(_assertThisInitialized(_this));
-    _this.createGame = _this.createGame.bind(_assertThisInitialized(_this));
     _this.fold = _this.fold.bind(_assertThisInitialized(_this));
-    _this.connect = _this.connect.bind(_assertThisInitialized(_this));
+    _this.fetchData = _this.fetchData.bind(_assertThisInitialized(_this));
     _this.disconnect = _this.disconnect.bind(_assertThisInitialized(_this));
     _this.call = _this.call.bind(_assertThisInitialized(_this));
+    _this.setGameName = _this.setGameName.bind(_assertThisInitialized(_this));
+    _this.createAccount = _this.createAccount.bind(_assertThisInitialized(_this));
+    _this.dialog = _this.dialog.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -328,17 +347,17 @@ var App = /*#__PURE__*/function (_React$Component) {
       this.sendMessage('end_game_bypass', msg);
     }
   }, {
-    key: "createGame",
-    value: function createGame() {
-      var name = prompt("Enter game name");
-      var answer = confirm("Is this name ok?: \"" + name + '\"');
+    key: "setGameName",
+    value: function setGameName() {
+      var gameName = prompt("Enter game name");
+      var answer = confirm("Is this name ok?: \"" + gameName + '\"');
       if (answer == false) return;
       var msg = {
         from: this.state.accountUsername,
         to: "server",
-        data: name
+        data: gameName
       };
-      this.sendMessage('create_game', msg);
+      this.sendMessage('set_game_name', msg);
     }
   }, {
     key: "formatNumber",
@@ -360,16 +379,38 @@ var App = /*#__PURE__*/function (_React$Component) {
       this.socket.emit(type, JSON.stringify(msg));
     }
   }, {
-    key: "connect",
-    value: function connect() {
-      var input = document.querySelector("#input-username");
-      var username = input.value;
+    key: "fetchData",
+    value: function fetchData() {
+      //TODO: change this to a post method.
+      var inputUsername = document.querySelector("#input-username");
+      var inputPassword = document.querySelector('#input-password');
+      var username = inputUsername.value;
+      var password = inputPassword.value;
       var msg = {
         from: username,
         to: "server",
-        data: null
+        data: password
       };
-      this.sendMessage('login', msg);
+      this.sendMessage('fetch_data', msg);
+    }
+  }, {
+    key: "createAccount",
+    value: function createAccount() {
+      var inputUsername = document.querySelector("#input-username");
+      var inputPassword = document.querySelector('#input-password');
+      var username = inputUsername.value;
+      var password = inputPassword.value;
+      var answer = confirm("About to create account with username ".concat(username, ". Are you sure?"));
+      if (answer == false) return;
+      var msg = {
+        from: undefined,
+        to: "server",
+        data: {
+          username: username,
+          password: password
+        }
+      };
+      this.sendMessage('create_account', msg);
     }
   }, {
     key: "disconnect",
@@ -381,6 +422,13 @@ var App = /*#__PURE__*/function (_React$Component) {
         data: null
       };
       this.sendMessage('logout', msg);
+    }
+  }, {
+    key: "dialog",
+    value: function dialog(type) {
+      if (type == 'bet') {
+        ReactDOM.render( /*#__PURE__*/React.createElement(BetDialog, null), document.getElementById('bet-dialog'));
+      }
     }
   }, {
     key: "render",
@@ -401,37 +449,43 @@ var App = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         id: "app-content"
       }, /*#__PURE__*/React.createElement(GameName, {
-        gameName: this.state.gameName
+        gameName: this.state.gameName,
+        setNameFunction: this.setGameName
       }), /*#__PURE__*/React.createElement(GamePool, {
         pool: poolRenderAmount,
         minBet: this.state.gameMinBet,
         currencySymbol: this.state.bankCurrencySymbol,
         canBet: this.state.canBet,
         mustCall: this.state.mustCall,
-        betFunction: this.placeBet,
-        myBet: this.state.myBet
+        betFunction: this.state.mustCall ? this.call : this.placeBet,
+        myBet: this.state.myBet,
+        folded: this.state.folded
       }), /*#__PURE__*/React.createElement(BankGrid, {
         circulation: circulationRenderAmount,
         currencySymbol: this.state.bankCurrencySymbol,
-        supply: supplyRenderAmount
+        supply: supplyRenderAmount,
+        lang: this.state.lang
       }), /*#__PURE__*/React.createElement(AccountGrid, {
         balance: accountBalanceRenderAmount,
         debt: debtRenderAmount,
         currencySymbol: this.state.bankCurrencySymbol,
-        profit: profitRenderAmount
+        profit: profitRenderAmount,
+        lang: this.state.lang
       }), /*#__PURE__*/React.createElement(ControlGrid, {
         payDebtFunction: this.payDebt,
         loanFunction: this.loan,
-        placeBetFunction: this.placeBet,
+        betFunction: this.state.mustCall ? this.call : this.placeBet,
         endGameFunction: this.endGame,
         createGameFunction: this.createGame,
         foldFunction: this.fold,
-        callFunction: this.call,
         minBet: this.state.gameMinBet,
-        mustCall: this.state.mustCall
+        mustCall: this.state.mustCall,
+        lang: this.state.lang,
+        dialog: this.dialog
       }), /*#__PURE__*/React.createElement(LoginGrid, {
-        connectFunction: this.connect,
+        connectFunction: this.fetchData,
         disconnectFunction: this.disconnect,
+        createAccountFunction: this.createAccount,
         username: this.state.accountUsername
       }));
     }

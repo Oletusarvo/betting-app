@@ -7,13 +7,9 @@ const Bank          = require('./js/bank');
 const Game          = require('./js/game');
 const db            = require('../models/db');
 
-const fs            = require('fs');
-
 const utils         = require('./js/utils');
 const functions     = require('./js/serverLogic');
-const accountUpdate = functions.accountUpdate;
-const bankUpdate    = functions.bankUpdate;
-const gameUpdate    = functions.gameUpdate;
+
 const endGame       = functions.endGame;
 
 const usernames = new Map();
@@ -32,6 +28,45 @@ function saveState(game, bank){
 }
 
 let bank, game = null;
+/*
+let bankPromise = db.getBank('default');
+let gamePromise = db.getGame('default');
+let promises = [bankPromise, gamePromise];
+
+Promise.all(promises).then( data => {
+    
+    bank = new Bank('default');
+    game = new Game('default');
+
+    if(data){
+        if(data[0]){
+            db.getAllAccounts().then(accounts => {
+                const bankData = {
+                    circulation : data[0].circulation,
+                    bank_name : data[0].bank_name,
+                    currency_symbol : data[0].currency_symbol,
+                    default_issue_amount : data[0].default_issue_amount,
+                    accounts : new Map(accounts)
+                }
+
+                bank.load(bankData);
+            });
+           
+        }
+        
+        if(data[1]){
+            const gameData = data[1];
+            game.load(gameData);
+        }
+    }
+    else{
+        //Save the empty data to initialize database.
+        db.addBank(bank).then();
+        db.addGame(game).then();
+    }
+    
+})
+*/
 
 db.get().then(data => {
     if(!data){
@@ -39,8 +74,6 @@ db.get().then(data => {
         bank = new Bank();
         game = new Game();
         db.add({game_data: JSON.stringify(game, utils.replacer), bank_data: JSON.stringify(bank, utils.replacer)}).then();
-        //db.addBank(bank).then();
-        //db.addGame(game).then();
     }
     else{
         bank = JSON.parse(data.bank_data, utils.reviver);
@@ -66,58 +99,112 @@ db.get().then(data => {
         socket.emit('query_username');
 
         socket.on('username', msg => {
+            //When there is a username stored on the client.
             const message = JSON.parse(msg);
             const username = message.from;
 
-            if(username == undefined) return;
+            const acc = bank.accounts.get(username);
+
+            if(!acc) return;
 
             sockets.set(username, socket);
             usernames.set(socket.id, username);
-            accountUpdate(username, bank, socket);
-            gameUpdate(game, socket);
-            bankUpdate(bank, socket);
 
+            acc.sendUpdate(socket);
+            game.sendUpdate(socket);
+            bank.sendUpdate(socket);
+
+            //Also send a bet accepted to set relevant variables on the client side.
+            const bet = game.placedBets.get(username);
+            if(bet){
+                socket.emit('bet_accepted', bet.amount);
+            }
             console.log(`${username} reconnected!`);
         });
 
         //Send current game state to new connection.
-        socket.on('login', msg => {
+        socket.on('fetch_data', msg => {
             const message = JSON.parse(msg);
             const username = message.from;
-            
-            if(username == undefined){
-                socket.emit('login_rejected', 'Username is undefined!');
+
+            if(username == ''){
+                socket.emit('login_rejected', 'Username is empty!');
+                return;
+            }
+
+            const password = message.data;
+            if(password == ''){
+                socket.emit('login_rejected', 'Password is empty!');
                 return;
             }
     
-            usernames.set(socket.id, username);
-            sockets.set(username, socket);
-    
-            const acc = bank.accounts.get(username);
-    
-            if(!acc){
-                bank.addAccount(username);
-                db.addAccount(bank.accounts.get(username));
-            }
-            
-            //acc.isLoggedIn = true;
-            socket.emit('login_success', username);
-    
-            accountUpdate(username, bank, socket);
-            bankUpdate(bank, io);
-            gameUpdate(game, socket);
-            
-            saveState(game, bank);
+            db.getAccount(username).then(data => {
+                if(!data){
+                    socket.emit('login_rejected', `Account \'${username}\' does not exist!`);
+                }
+                else{
+                    if(data.password != password){
+                        socket.emit('login_rejected', 'Incorrect password!');
+                        return;
+                    }
+
+                    usernames.set(socket.id, username);
+                    sockets.set(username, socket);
+                    
+                    socket.emit('login_success', username);
+                    
+                    //Also send a bet accepted to set relevant variables on the client side.
+                    const bet = game.placedBets.get(username);
+                    if(bet){
+                        socket.emit('bet_accepted', bet.amount);
+                    }
+
+                    bank.accounts.get(username).sendUpdate(socket);
+                    bank.sendUpdate(socket);
+                    game.sendUpdate(socket);
+                    
+                    saveState(game, bank);
+                }
+            });
         });
-    
-        socket.on('logout', msg => {
+
+        socket.on('create_account', msg => {
             const message = JSON.parse(msg);
-            const acc = bank.accounts.get(message.from);
-            acc.isLoggedIn = false;
+            const username = message.data.username;
+            const password = message.data.password;
+
+            if(username == ''){
+                socket.emit('account_rejected', 'Username is empty!');
+                return;
+            }
+
+            if(password == ''){
+                socket.emit('account_rejected', 'Password is empty!');
+                return;
+            }
+
+            db.getAccount(username).then(data => {
+                if(data){
+                    socket.emit('account_rejected', `An account with username ${username} already exists!`);
+                    return;
+                }
+                else{
+                    sockets.set(username, socket);
+                    usernames.set(socket.id, username);
+
+                    bank.addAccount(username, password);
+                    socket.emit('login_success', username);
+                    
+                    bank.accounts.get(username).sendUpdate(socket);
+                    bank.sendUpdate(socket);
+                    game.sendUpdate(socket);
+
+                    
+                    bank.accounts.get(username).saveData(db);
+                    saveState(game, bank);
+                }
+            });
             
-            console.log('logging out...');
-            socket.emit('logout_success');
-            socket.disconnect(true);
         });
     
         socket.on('disconnect', () => {
@@ -152,13 +239,17 @@ db.get().then(data => {
 
             const newBet = new Bet(message.data.amount, message.data.side, message.from);
             game.placeBet(newBet);
-
             bank.deposit(username, -newBet.amount);
-            accountUpdate(username, bank, socket);
-            gameUpdate(game, io);
+
+            bank.accounts.get(username).sendUpdate(socket);
+            game.sendUpdate(io);
+
+            bank.accounts.get(username).saveData(db);
+            game.saveData(db);
 
             socket.emit('bet_accepted', newBet.amount);
 
+            //Other participants have to raise.
             if(game.isRaised){
                 socket.broadcast.emit('game_raised', game.placedBets.get(username).amount);
             }
@@ -184,7 +275,6 @@ db.get().then(data => {
 
                 bank.deposit(message.from, -amountToCall);
                 game.raiseBet(message.from, amountToCall);
-                console.log(amountToCall);
             }
             else{
                 const amount = message.data.amount;
@@ -200,9 +290,16 @@ db.get().then(data => {
                 bank.deposit(message.from, -newBet.amount);
             }
 
-            accountUpdate(message.from, bank, socket);
-            //bankUpdate(bank, io);
-            gameUpdate(game, io);
+            bank.accounts.get(message.from).sendUpdate(socket);
+            game.sendUpdate(io);
+
+            bank.accounts.get(message.from).saveData(db);
+            game.saveData(db);
+
+            if(game.isRaised){
+                socket.broadcast.emit('game_raised', game.placedBets.get(message.from).amount);
+            }
+
             socket.emit('call_accepted');
             saveState(game, bank);
         });
@@ -253,8 +350,12 @@ db.get().then(data => {
     
                 const amount = message.data;
                 bank.loan(username, amount);
-                accountUpdate(username, bank, socket);
-                bankUpdate(bank, io);
+
+                bank.accounts.get(username).sendUpdate(socket);
+                bank.sendUpdate(io);
+
+                bank.accounts.get(username).saveData(db);
+                bank.saveData(db);
     
                 saveState(game, bank);
             }
@@ -283,9 +384,12 @@ db.get().then(data => {
 
             bank.payDebt(username, message.data);
     
-            bankUpdate(bank, io);
-            accountUpdate(username, bank, socket);
-    
+            bank.sendUpdate(io);
+            bank.accounts.get(username).sendUpdate(socket);
+
+            bank.accounts.get(username).saveData(db);
+            bank.saveData(db);
+
             saveState(game, bank);
         });
     
@@ -331,8 +435,13 @@ db.get().then(data => {
                 if(canEnd){
                     const result = message.data.result;
                     endGame(result, game, bank, sockets);
-                    bankUpdate(bank, io);
-                    gameUpdate(game, io); 
+
+                    bank.sendUpdate(io);
+                    game.sendUpdate(io);
+
+                    bank.saveData(db);
+                    game.saveData(db);
+
                     io.emit('game_ended');
         
                     saveState(game, bank);
@@ -359,12 +468,25 @@ db.get().then(data => {
                 return;
             }
 
-            endGame(result, game, bank, sockets);
-            gameUpdate(game, io);
-            bankUpdate(bank, io);
+            endGame(result, game, bank, db, sockets);
+
+            game.sendUpdate(io);
+            bank.sendUpdate(io);
+
+            bank.saveData(db);
+            game.saveData(db);
+
             io.emit('game_ended');
 
             saveState(game, bank);
+        });
+
+        socket.on('set_game_name', msg => {
+            const message = JSON.parse(msg);
+            game.gameName = message.data;
+
+            game.sendUpdate(io);
+            game.saveData(db);
         });
     });
 

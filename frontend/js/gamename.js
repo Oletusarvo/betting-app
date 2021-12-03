@@ -38,7 +38,8 @@ var GameName = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       return /*#__PURE__*/React.createElement("div", {
         className: "grid-item",
-        id: "game-name"
+        id: "game-name",
+        onClick: this.props.setNameFunction
       }, this.props.gameName);
     }
   }]);

@@ -6,15 +6,43 @@ class AccountGrid extends React.Component{
     render(){
         return(
             <div id="grid-account" className="grid-item">
-                <span className="data-output" id="output-account-balance">Balance: {this.props.balance}{this.props.currencySymbol}</span><br/>
-                <span className="data-output" id="output-account-debt">Debt: {this.props.debt}{this.props.currencySymbol}</span><br/>
 
-                <span>Profit: </span>
-                <span 
-                    className="data-output" 
-                    id="output-account-profit"
-                    style={this.props.profit >= 0 ? {color : "lime"} : {color : "red"}}
-                    >{this.props.profit}{this.props.currencySymbol}</span>
+                <table id="account-table">
+                    <tbody>
+                        <tr>
+                            <td className="table-label">
+                                Balance:
+                            </td>
+
+                            <td id="output-account-balance" className="table-output">
+                                {this.props.balance}{this.props.currencySymbol}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className="table-label">
+                                Debt:
+                            </td>
+
+                            <td id="output-account-debt" className="table-output">
+                                {this.props.debt}{this.props.currencySymbol}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className="table-label">
+                                Profit:
+                            </td>
+
+                            <td id="output-account-profit"
+                                className="table-output"
+                                style={this.props.profit >= 0 ? {color : "lime"} : {color : "red"}}
+                            >
+                                {this.props.profit}{this.props.currencySymbol}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         );
     }

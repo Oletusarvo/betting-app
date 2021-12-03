@@ -1,6 +1,7 @@
 "use strict";
 
 var initState = {
+  lang: "eng",
   gamePool: 0,
   gameMinBet: undefined,
   gameName: 'game name',
@@ -14,7 +15,8 @@ var initState = {
   accountUsername: undefined,
   mustCall: false,
   canBet: false,
-  participating: false
+  participating: false,
+  folded: false
 };
 var vars = initState;
 ReactDOM.render( /*#__PURE__*/React.createElement(App, {

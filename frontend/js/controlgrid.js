@@ -42,27 +42,27 @@ var ControlGrid = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-place-bet",
-        onClick: this.props.mustCall ? this.props.callFunction : this.props.placeBetFunction
-      }, this.props.mustCall ? "Call" : "Place Bet"), /*#__PURE__*/React.createElement("select", {
+        onClick: this.props.betFunction
+      }, this.props.mustCall ? this.props.lang == 'fin' ? "Vastaa" : "Call" : this.props.lang == 'fin' ? "Veikkaa" : "Place Bet"), /*#__PURE__*/React.createElement("select", {
         className: "control-button",
         id: "input-game-bool"
       }, /*#__PURE__*/React.createElement("option", null, "True"), /*#__PURE__*/React.createElement("option", null, "False")), /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-fold",
         onClick: this.props.foldFunction
-      }, "Fold"), /*#__PURE__*/React.createElement("button", {
+      }, this.props.lang == 'fin' ? 'Luovuta' : 'Fold'), /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-end-game",
         onClick: this.props.endGameFunction
-      }, "End Game"), /*#__PURE__*/React.createElement("button", {
+      }, this.props.lang == 'fin' ? 'Lopeta Peli' : 'End Game'), /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-pay-debt",
         onClick: this.props.payDebtFunction
-      }, "Pay Debt"), /*#__PURE__*/React.createElement("button", {
+      }, this.props.lang == 'fin' ? 'Maksa Velka' : 'Pay Debt'), /*#__PURE__*/React.createElement("button", {
         className: "control-button",
         id: "button-loan",
         onClick: this.props.loanFunction
-      }, "Loan"));
+      }, this.props.lang == 'fin' ? 'Lainaa' : 'Loan'));
     }
   }]);
 

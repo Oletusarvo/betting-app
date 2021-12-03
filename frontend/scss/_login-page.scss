@@ -1,0 +1,24 @@
+
+.content-box{
+    background: lighten($primary-color, 50);
+    border-radius: $borderRadius;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: $gapSize;
+    
+    button{
+        width: 100%;
+    }
+}
+
+#login-body{
+    display: flex;
+    flex-flow: column;
+
+    justify-content: center;
+    align-items: center;
+}

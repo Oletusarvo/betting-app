@@ -21,11 +21,47 @@ class Bank{
         this.circulation += amount;
     }
 
-    addAccount(username){
-        const acc = new Account(username);
+    load(data){
+        this.circulation = data.circulation;
+        this.defaultIssueAmount = data.default_issue_amount;
+        this.currencySymbol = data.currency_symbol;
+        this.accounts = data.accounts;
+        this.bankName = data.bank_name;
+    }
+
+    addAccount(username, password){
+        const acc = new Account(username, password);
         this.fund(acc);
         this.mint();
         this.accounts.set(username, acc);
+    }
+
+    sendUpdate(socket){
+        socket.emit('bank_update', JSON.stringify({
+            circulation : this.circulation,
+            currencySymbol : this.currencySymbol
+        }));
+    }
+
+    saveData(db){
+        db.getBank(this.bankName).then(data => {
+            if(data){
+                db.updateBank(this).then(data => {
+                    console.log(`Bank \'${this.bankName}\' updated data.`);
+                })
+                .catch(err => {
+                    console.log('Failed to update bank!');
+                })
+            }
+            else{
+                db.addBank(this).then(data => {
+                    console.log(`Bank \'${this.bankName}\' saved data.`);
+                })
+                .catch(err => {
+                    console.log(`Failed to save bank \'${this.bankName}!\'`);
+                })
+            }
+        });
     }
     
     loan(accountId, amount){
@@ -41,6 +77,10 @@ class Bank{
     hasFunds(username, amount){
         const acc = this.accounts.get(username);
         return acc.balance >= amount;
+    }
+
+    setProfit(username){
+        this.accounts.get(username).setProfit();
     }
 
     payDebt(accountId, amount){

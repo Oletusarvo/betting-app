@@ -1,11 +1,19 @@
 class Game{
     constructor(gameName = "default"){
         this.pool = 0;
-        this.minBet = 0;
+        this.minBet = 0.01;
         this.gameName = gameName;
         this.placedBets = new Map();
         this.votes      = [];
         this.isRaised   = false;
+    }
+
+    load(data){
+        this.pool = data.pool;
+        this.minBet = data.min_bet;
+        this.gameName = data.game_name;
+        this.votes  = JSON.parse(data.votes);
+        this.isRaised = data.isRaised;
     }
 
     setName(gameName){
@@ -73,6 +81,37 @@ class Game{
         return canEnd;
     }
 
+    sendUpdate(socket){
+        socket.emit('game_update', JSON.stringify({
+            pool : this.pool, 
+            minBet : this.minBet,
+            gameName : this.gameName
+        }));
+    }
+
+    saveData(db){
+        db.getGame(this.gameName).then(data => {
+            if(data){
+                db.updateGame(this).then(data => {
+                    console.log(`Game \'${this.gameName}\' updated data.`);
+                })
+                .catch(err => {
+                    console.log(`Failed to update game \'${this.gameName}\'!`);
+                    console.log(err);
+                })
+            }
+            else{
+                db.addGame(this).then(data => {
+                    console.log(`Game \'${this.gameName}\' saved data.`);
+                })
+                .catch(err => {
+                    console.log(`Failed to add game \'${this.gameName}\'!`);
+                    console.log(err);
+                })
+            }
+        });
+    }
+
     allHaveVoted(){
         return this.votes.length == this.placedBets.size;
     }
@@ -84,10 +123,6 @@ class Game{
     end(result){
         const winners = Array.from(this.placedBets.values()).filter(item => !item.folded && item.side == result);
         const poolShare = this.pool / winners.length;
-
-        this.pool = 0;
-        this.minBet = 0;
-        //this.placedBets.clear();
         
         return {
             winners : winners,
@@ -129,6 +164,13 @@ class Game{
     /**@private */
     calculateRaised(amount){
         this.isRaised = (this.placedBets.size > 1) && (amount > this.minBet);
+    }
+
+    /**@private */
+    reset(){
+        this.pool = 0;
+        this.minBet = 0.01;
+        this.placedBets.clear();
     }
 }
 

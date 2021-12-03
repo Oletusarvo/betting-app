@@ -39,16 +39,25 @@ var LoginGrid = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         className: "grid-item",
         id: "login-grid"
-      }, /*#__PURE__*/React.createElement("label", {
-        htmlFor: "username"
-      }, "Username:"), /*#__PURE__*/React.createElement("input", {
+      }, /*#__PURE__*/React.createElement("input", {
+        className: "login-input",
         name: "username",
         id: "input-username",
-        type: "text"
+        type: "text",
+        placeholder: "username"
+      }), /*#__PURE__*/React.createElement("input", {
+        className: "login-input",
+        name: "password",
+        id: "input-password",
+        type: "password",
+        placeholder: "password"
       }), /*#__PURE__*/React.createElement("button", {
         id: "button-username-ok",
         onClick: this.props.connectFunction
-      }, "Fetch"));
+      }, "Fetch"), /*#__PURE__*/React.createElement("button", {
+        id: "button-create",
+        onClick: this.props.createAccountFunction
+      }, "Create"));
     }
   }]);
 

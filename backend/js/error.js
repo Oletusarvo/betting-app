@@ -1,5 +1,9 @@
-function error(type, what){
-    throw {type: type, what: what};
-}
+class Error{}
 
-module.exports = error;
+Error.balance = 0;
+Error.maxDebt = 1;
+Error.bet = 2;
+
+module.exports = {
+    Error
+}
