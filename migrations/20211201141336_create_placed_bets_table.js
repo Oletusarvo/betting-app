@@ -7,10 +7,6 @@ exports.up = function(knex) {
     tbl.boolean('folded').notNullable();
     tbl.string('username').notNullable();
     tbl.string('game_name').notNullable() //What game is this bet placed on?
-    .references('game_name')
-    .inTable('game_table')
-    .onDelete('CASCADE')
-    .onUpdate('CASCADE');
 
     tbl.timestamps(true, true);
   });
