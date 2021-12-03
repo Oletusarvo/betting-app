@@ -187,6 +187,11 @@ class App extends React.Component{
             return;
         }
 
+        if(amount == 0){
+            alert('Amount cannot be 0!');
+            return;
+        }
+
         const sideSelector = document.querySelector("#input-game-bool");
         const side = sideSelector.value === "True";
 
@@ -283,6 +288,11 @@ class App extends React.Component{
 
     setGameName(){
         const gameName = prompt("Enter game name");
+
+        if(gameName == ""){
+            alert('Game name cannot be empty!');
+            return;
+        }
 
         const answer = confirm("Is this name ok?: \"" + gameName + '\"');
 

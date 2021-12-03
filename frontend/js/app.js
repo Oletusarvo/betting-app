@@ -234,6 +234,11 @@ var App = /*#__PURE__*/function (_React$Component) {
         return;
       }
 
+      if (amount == 0) {
+        alert('Amount cannot be 0!');
+        return;
+      }
+
       var sideSelector = document.querySelector("#input-game-bool");
       var side = sideSelector.value === "True";
       var bet = {
@@ -350,6 +355,12 @@ var App = /*#__PURE__*/function (_React$Component) {
     key: "setGameName",
     value: function setGameName() {
       var gameName = prompt("Enter game name");
+
+      if (gameName == "") {
+        alert('Game name cannot be empty!');
+        return;
+      }
+
       var answer = confirm("Is this name ok?: \"" + gameName + '\"');
       if (answer == false) return;
       var msg = {

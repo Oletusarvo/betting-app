@@ -57,11 +57,11 @@ class Bank{
                 db.addBank(this).then(data => {
                     console.log(`Bank \'${this.bankName}\' saved data.`);
                 })
-                .catch(err => {
-                    console.log(`Failed to save bank \'${this.bankName}!\'`);
-                })
             }
-        });
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
     
     loan(accountId, amount){
