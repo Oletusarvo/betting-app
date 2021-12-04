@@ -68,11 +68,12 @@ Promise.all(promises).then( data => {
 })
 */
 
+console.log('Starting server...');
 let gotData = db.get();
 let canLoad = null;
 
 gotData.then(data => {
-    console.log('Starting server...');
+    
     if(!data){
         //Database is empty, add initial data in.
         bank = new Bank();
