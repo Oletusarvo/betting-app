@@ -112,6 +112,8 @@ db.get().then(data => {
             const message = JSON.parse(msg);
             const username = message.from;
 
+            if(username == undefined) return;
+
             const acc = bank.accounts.get(username);
 
             if(!acc) return;
@@ -136,6 +138,10 @@ db.get().then(data => {
         socket.on('fetch_data', msg => {
             const message = JSON.parse(msg);
             const username = message.from;
+
+            if(username == undefined){
+                return;
+            }
 
             if(username == ''){
                 socket.emit('login_rejected', 'Username is empty!');
