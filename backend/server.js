@@ -24,7 +24,7 @@ function saveState(game, bank){
     //db.updateGame(game).then();
     //db.updateBank(bank).then();
 
-   db.update(game, bank).then(console.log('Saved state.'));
+   db.update(game, bank).then(console.log('Saved state.')).catch(err => console.log('Unable to update game state!', err));
 }
 
 let bank, game = null;
@@ -73,13 +73,22 @@ db.get().then(data => {
         //Database is empty, add initial data in.
         bank = new Bank();
         game = new Game();
-        db.add({game_data: JSON.stringify(game, utils.replacer), bank_data: JSON.stringify(bank, utils.replacer)}).then();
+        db.add({game_data: JSON.stringify(game, utils.replacer), bank_data: JSON.stringify(bank, utils.replacer)}).then(data => {
+            console.log('Saved empty data.');
+        })
+        .catch(err => {
+            console.log(`Unable to save game data!`, err);
+            process.exit();
+        });
     }
     else{
         bank = JSON.parse(data.bank_data, utils.reviver);
         game = JSON.parse(data.game_data, utils.reviver);
         console.log('Loaded state.');
     }
+})
+.catch(err => {
+    console.log(err);
 })
 .finally( () => {
     const app           = express();
@@ -119,6 +128,7 @@ db.get().then(data => {
             if(bet){
                 socket.emit('bet_accepted', bet.amount);
             }
+
             console.log(`${username} reconnected!`);
         });
 
@@ -165,7 +175,10 @@ db.get().then(data => {
                     
                     saveState(game, bank);
                 }
-            });
+            })
+            .catch(err => {
+                console.log(err);
+            })
         });
 
         socket.on('create_account', msg => {
@@ -203,7 +216,10 @@ db.get().then(data => {
                     bank.accounts.get(username).saveData(db);
                     saveState(game, bank);
                 }
-            });
+            })
+            .catch(err => {
+                console.log(err);
+            })
             
         });
     

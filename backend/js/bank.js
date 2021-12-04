@@ -50,18 +50,22 @@ class Bank{
                     console.log(`Bank \'${this.bankName}\' updated data.`);
                 })
                 .catch(err => {
-                    console.log('Failed to update bank!');
-                })
+                    console.log(`Failed to update bank \'${this.bankName}\'!`, err);
+                });
             }
             else{
                 db.addBank(this).then(data => {
                     console.log(`Bank \'${this.bankName}\' saved data.`);
                 })
+                .catch(err => {
+                    console.log(`Failed to save bank '${this.bankName}\'!`, err);
+                });
             }
         })
         .catch(err => {
-            console.log(err);
-        })
+
+            console.log(`Unable to get bank data for \'${this.bankName}\'!`, err);
+        });
     }
     
     loan(accountId, amount){

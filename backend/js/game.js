@@ -95,16 +95,22 @@ class Game{
                 db.updateGame(this).then(data => {
                     console.log(`Game \'${this.gameName}\' updated data.`);
                 })
+                .catch(err => {
+                    console.log(`Failed to update game \'${this.gameName}\'!`, err);
+                });
             }
             else{
                 db.addGame(this).then(data => {
                     console.log(`Game \'${this.gameName}\' saved data.`);
                 })
+                .catch(err => {
+                    console.log(`Failed to save game \'${this.gameName}\'!`, err);
+                });
             }
         })
         .catch(err => {
-            console.log(err);
-        })
+            console.log(`Unable to get data for game \'${this.gameName}\'!`, err);
+        });
     }
 
     allHaveVoted(){
