@@ -73,11 +73,11 @@ let gotData = db.get();
 let canLoad = null;
 
 gotData.then(data => {
-    
     if(!data){
         //Database is empty, add initial data in.
         bank = new Bank();
         game = new Game();
+        console.log('Saving initial data...');
         canLoad = db.add({game_data: JSON.stringify(game, utils.replacer), bank_data: JSON.stringify(bank, utils.replacer)});
     }
     else{
@@ -514,10 +514,13 @@ gotData.then(data => {
                 game.sendUpdate(io);
                 //game.saveData(db);
             });
-        });
+        })
     
         const PORT = process.env.PORT || 3000;
         server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch(err => {
+        console.log(err);
     });
 });
 
