@@ -2,8 +2,8 @@
 exports.up = function(knex) {
     return knex.schema.createTable('data_table', tbl => {
         tbl.increments('id');
-        tbl.json('game_data').notNullable();
-        tbl.json('bank_data').notNullable();
+        tbl.text('game_data').notNullable();
+        tbl.text('bank_data').notNullable();
     })
     .createTable('account_table', tbl => {
         tbl.increments('id');
