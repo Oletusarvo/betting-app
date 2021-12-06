@@ -21,54 +21,14 @@ const react         = require('react');
 const reactDom      = require('react-dom');
 
 function saveState(game, bank){
-    //db.updateGame(game).then();
-    //db.updateBank(bank).then();
-
-   db.update(game, bank).then(console.log('Saved state.')).catch(err => console.log('Unable to update game state!', err));
+   db.update(game, bank)
+   .then(console.log('Saved state.'))
+   .catch(err => console.log('Unable to update game state!', err));
 }
 
 let bank, game = null;
-/*
-let bankPromise = db.getBank('default');
-let gamePromise = db.getGame('default');
-let promises = [bankPromise, gamePromise];
 
-Promise.all(promises).then( data => {
-    
-    bank = new Bank('default');
-    game = new Game('default');
-
-    if(data){
-        if(data[0]){
-            db.getAllAccounts().then(accounts => {
-                const bankData = {
-                    circulation : data[0].circulation,
-                    bank_name : data[0].bank_name,
-                    currency_symbol : data[0].currency_symbol,
-                    default_issue_amount : data[0].default_issue_amount,
-                    accounts : new Map(accounts)
-                }
-
-                bank.load(bankData);
-            });
-           
-        }
-        
-        if(data[1]){
-            const gameData = data[1];
-            game.load(gameData);
-        }
-    }
-    else{
-        //Save the empty data to initialize database.
-        db.addBank(bank).then();
-        db.addGame(game).then();
-    }
-    
-})
-*/
-
-console.log('Starting server...');
+console.log('Loading server...');
 let gotData = db.get();
 let canLoad = null;
 
@@ -77,13 +37,12 @@ gotData.then(data => {
         //Database is empty, add initial data in.
         bank = new Bank();
         game = new Game();
-        console.log('Saving initial data...');
+
         canLoad = db.add({game_data: JSON.stringify(game, utils.replacer), bank_data: JSON.stringify(bank, utils.replacer)});
     }
     else{
         bank = JSON.parse(data.bank_data, utils.reviver);
         game = JSON.parse(data.game_data, utils.reviver);
-        console.log('Loaded state.');
 
         canLoad = Promise.resolve();
     }
@@ -93,6 +52,8 @@ gotData.then(data => {
 })
 .finally( () => {
     canLoad.then( () => {
+        console.log('Done loading.');
+        
         const app           = express();
         const server        = http.createServer(app);
         const io            = socketio(server);
@@ -117,10 +78,6 @@ gotData.then(data => {
                 if(username == undefined) return;
     
                 const acc = bank.accounts.get(username);
-    
-                if(!acc) {
-    
-                }
     
                 sockets.set(username, socket);
                 usernames.set(socket.id, username);

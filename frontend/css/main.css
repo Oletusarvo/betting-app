@@ -26,17 +26,15 @@ html {
 
 @media screen and (min-width: 1001px) {
   #game-pool-border-circle {
-    width: 350px;
-    height: 350px; }
+    width: 450px;
+    height: 450px; }
   #app-content {
-    width: 100vw;
-    height: 50%;
+    width: 95vw;
     display: grid;
     grid-template-areas: 'game-name game-name game-name' 'game-pool account controls' 'game-pool bank controls' 'game-pool login login';
     background: #2e2b00;
     gap: 3px;
-    padding: 2px;
-    align-items: center; } }
+    padding: 2px; } }
 
 #game-name {
   grid-area: game-name;
