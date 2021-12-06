@@ -30,7 +30,7 @@ let bank, game = null;
 
 console.log('Loading server...');
 let gotData = db.get();
-let canLoad = null;
+let canLoad = new Promise(() => {}, () => {});
 
 gotData.then(data => {
     if(!data){
