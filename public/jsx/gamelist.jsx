@@ -48,7 +48,7 @@ class GameList extends React.Component{
                     ) 
                     
                     ? 
-                    <button onClick={() => this.props.gameCloseFunction(item.game_id)}>Close</button> : <></>
+                    <button onClick={() => this.props.action('closegame', item.game_id)}>Close</button> : <></>
                 }
             </div>
 

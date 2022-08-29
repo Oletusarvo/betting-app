@@ -28,7 +28,7 @@ class Signup extends React.Component{
                 password2 : form.password2.value
             };
 
-            this.props.signupFunction(data);
+            this.props.signup(data);
         });
     }
 }

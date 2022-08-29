@@ -3,6 +3,7 @@ class Header extends React.Component{
         super(props);
     }
 
+    
     render(){
         return (
             <header>
@@ -10,16 +11,16 @@ class Header extends React.Component{
                     <h2>Betting App</h2>
                 </div>
 
-                <div id="login-links">
+                <div id="links">
                     {
-                        this.props.user == undefined || (this.props.currentSelection === 'home' && this.props.user == undefined)? 
+                        this.props.state.user == undefined || (this.props.state.appcontext === 'home' && this.props.state.user == undefined)? 
                         <>
-                            <span id="login-link">Login</span>
-                            <span id="signup-link">Signup</span>
+                            <span id="login-link" className="link">Login</span>
+                            <span id="signup-link" className="link">Signup</span>
                         </>
                         :
-                        <span id="logout-link" onClick={() => this.props.logoutFunction()}>Logout</span>
-                }
+                        <span id="logout-link" onClick={() => this.props.action('logout')}>Logout</span>
+                    }
                     
                 </div>
             </header>

@@ -4,20 +4,18 @@ class Content extends React.Component{
     }
 
     render(){
-        /*if(this.props.user == undefined){
-            return <Login loginFunction={this.props.loginFunction} signupFunction={this.props.signupFunction}/>
+
+       if(this.props.state.appcontext === 'home'){
+            return <Home state={this.props.state} updateState={this.props.updateState} action={this.props.action}/>
         }
-        else*/ if(this.props.currentSelection === 'home'){
-            return <Home user={this.props.user} loginFunction={this.props.loginFunction} signupFunction={this.props.signupFunction}/>
+        else if(this.props.state.appcontext === 'account'){
+            return <Account state={this.props.state} updateState={this.props.updateState} action={this.props.action}/>
         }
-        else if(this.props.currentSelection === 'account'){
-            return <Account user={this.props.user} token={this.props.token} gameCloseFunction={this.props.gameCloseFunction}/>
+        else if(this.props.state.appcontext === 'games'){
+            return <Games state={this.props.state} updateState={this.props.updateState} action={this.props.action}/>
         }
-        else if(this.props.currentSelection === 'games'){
-            return <Games user={this.props.user} token={this.props.token} selectGameFunction={this.props.selectGameFunction}/>
-        }
-        else if(this.props.currentSelection === 'newgame'){
-            return <NewGame user={this.props.user} token={this.props.token} newGameFunction={this.props.newGameFunction}/>
+        else if(this.props.state.appcontext === 'newgame'){
+            return <NewGame state={this.props.state} updateState={this.props.updateState} action={this.props.action}/>
         }
         else{
             return <Unknown/>

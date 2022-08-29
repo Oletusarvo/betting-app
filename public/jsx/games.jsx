@@ -27,9 +27,11 @@ class Games extends React.Component{
             return <Betting 
                 selectedGame={this.state.selectedGame} 
                 bettingReturnFunction={this.bettingReturnFunction}
+                updateState={this.props.updateState}
+                state={this.props.state}
                 />
         }
-        else if(this.props.user === undefined){
+        else if(this.props.state.user === undefined){
             return <Forbidden/>
         }
         else{
@@ -38,7 +40,7 @@ class Games extends React.Component{
                 loading={this.state.loading} 
                 selectGameFunction={this.selectGameFunction}
                 title="All Bets"
-                user={this.props.user}
+                state={this.props.state}
                 />
         }
     }
@@ -50,11 +52,11 @@ class Games extends React.Component{
             req.open('GET', '/gamelist', true);
 
             const payload = {
-                token : this.props.token
+                token : this.props.state.token
             };
 
             req.setRequestHeader('Content-Type', 'application/json');
-            req.setRequestHeader('auth', this.props.token);
+            req.setRequestHeader('auth', this.props.state.token);
 
             req.send(JSON.stringify(payload));
 

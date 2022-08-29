@@ -12,12 +12,17 @@
 form{
     display: flex;
     flex-flow: column;
-    padding: 1rem;
-    gap: 1rem;
+    padding: 0.1rem;
+    gap: $container-gap;
 
-    input, button, select{
+    input, button, select, option{
         color: black;
     }
+}
+
+img{
+    width: 32px;
+    height: 32px;
 }
 
 table{
@@ -28,10 +33,12 @@ table{
         overflow: hidden;
         text-overflow: ellipsis;
         border-bottom: 1px solid white;
+        padding: 5px 0 5px 0;
+        
     }
 }
 
-button, input, select{
+button, input, select, textarea{
     color: black;
 }
 
@@ -43,30 +50,35 @@ body{
 header{
     display: flex;
     flex-flow: row;
-    gap: 1rem;
-    padding: 1rem;
+    gap: $container-gap;
+    padding: 0 1rem 0 1rem;
     width: 100%;
-    align-items: baseline;
+    align-items: center;
 
     #app-name{
         flex: 1;
     }
 
-    #login-links{
+    #links{
         display: inherit;
         flex-flow: row;
         gap: 1rem;
+        align-items: center;
 
-        span{
+        span, div{
             cursor: pointer;
         }
     }
 }
 
+textarea{
+    resize: none;
+}
+
 #app{
     height: 100vh;
     width: 100vw;
-    padding-top: 0rem;
+    padding-top: 1.5rem;
     display: flex;
     flex-flow: column;
     background: $secondary-color;
@@ -76,11 +88,18 @@ header{
     align-items: center;
     display: flex;
     flex-flow: column;
-    gap: 1rem;
+    gap: $container-gap;
     width: 100%;
     flex: 1;
     padding: 2rem 0.5rem 0.5rem 0.5rem;
-    overflow: hidden;
+    overflow-x: hidden;
+}
+
+.link{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .navbar{
@@ -135,7 +154,7 @@ header{
     .game-list-entry-element{
         display: flex;
         flex-flow: row;
-        gap: 1rem;
+        gap: $container-gap;
         border: 1px solid white;
     }
 
@@ -206,12 +225,24 @@ header{
     #bet-controls{
         form{
             flex-flow: row;
-            align-items: stretch;
+
+            input, button, select{
+                flex: 1;
+                align-self: stretch;
+                width: calc(100% / 3);
+            }
         }
     }
 }
 
 #loading-page{
+    align-items: center;
+    justify-content: center;
+}
+
+#account-info{
+    display: flex;
+    flex-flow: column;
     align-items: center;
     justify-content: center;
 }
@@ -222,7 +253,7 @@ header{
     form{
         display: flex;
         flex-flow: column;
-        gap: 1rem;
+        gap: $container-gap;
 
         input, button{
             color: black;

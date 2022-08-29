@@ -9,6 +9,7 @@ class NewGame extends React.Component{
 
         this.success = this.success.bind(this);
         this.failure = this.failure.bind(this);
+        this.newgame = this.newgame.bind(this);
     }
 
     success(){
@@ -19,10 +20,34 @@ class NewGame extends React.Component{
         return <h1>Game creation failure!</h1>
     }
 
-    render(){
-        
+    newgame(game){
+        const state = this.props.state;
+        state.action = 'newgame';
+        this.props.updateState(state, () => {
+            const req = new XMLHttpRequest();
+            req.open('POST', '/gamelist', true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.setRequestHeader('auth', state.token);
 
-        if(this.props.user === undefined){
+            req.send(JSON.stringify(game));
+
+            req.onload = () => {
+                state.action = 'none';
+
+                if(req.status == 200){
+                    state.appcontext = 'games';
+                }
+                else{
+                    alert(`Bet creation failed! Code: ${req.status}`);
+                }
+
+                this.props.updateState(state);
+            }
+        });
+    }
+
+    render(){
+        if(this.props.state.user === undefined){
             return <Forbidden/>
         }
         else{
@@ -35,6 +60,7 @@ class NewGame extends React.Component{
                         <input name="minimumBet" type="number" min="0.01" step="0.01" placeholder="Enter minimum bet" required={true}></input>
                         <input name="increment" type="number" min="0.01" step="0.01" defaultValue={0.01} placeholder="Bet Increment"></input>
                         <input name="expiryDate" type="date" placeholder="Enter expiry date"></input>
+                        <textarea name="available_to" maxLength={500} placeholder="Space-separated list of users who will be able to participate."></textarea>
                         <button type="submit">Create</button>
                     </form>
                     {ring}
@@ -45,7 +71,7 @@ class NewGame extends React.Component{
     }
 
     componentDidMount(){
-        if(this.props.user){
+        if(this.props.state.user){
             const form = document.querySelector('#new-game-form');
             form.addEventListener('submit', e => {
                 e.preventDefault();
@@ -55,10 +81,11 @@ class NewGame extends React.Component{
                     minimum_bet : form.minimumBet.value,
                     expiry_date : form.expiryDate.value,
                     increment : form.increment.value,
-                    created_by : this.props.user.username
+                    created_by : this.props.state.user.username,
+                    //available_to : form.available_to.value
                 };
 
-                this.props.newGameFunction(game);
+               this.newgame(game);
             });
         }
         

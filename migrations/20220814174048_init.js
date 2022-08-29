@@ -4,8 +4,11 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable('bets', tbl => {
-    tbl.string('username').notNullable().references('username').inTable('accounts');
-    tbl.string('game_id').notNullable().references('game_id').inTable('games');
+    tbl.string('username')
+    .notNullable();
+
+    tbl.string('game_id').notNullable();
+
     tbl.float('amount').defaultTo(0);
     tbl.boolean('folded').defaultTo(false);
     tbl.timestamps(true, true);

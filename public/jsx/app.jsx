@@ -1,74 +1,34 @@
+import {BrowserRouter as Router} from 'react-router';
+
 class App extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
-            currentSelection : 'home',
-            user : localStorage.getItem('user') || undefined,
-            token : localStorage.getItem('token') || '',
+            appcontext : 'home',
+            user : undefined,
+            token : localStorage.getItem('token'),
             action : 'none'
-        }
+        };
 
-        this.signupFunction = this.signupFunction.bind(this);
-        this.loginFunction = this.loginFunction.bind(this);
+        const user = localStorage.getItem('user');
+        this.state.user = user ? JSON.parse(user) : undefined;
+
         this.bettingBackButtonFunction = this.bettingBackButtonFunction.bind(this);
         this.gameCloseFunction = this.gameCloseFunction.bind(this);
-        this.newGameFunction = this.newGameFunction.bind(this);
-        this.logoutFunction = this.logoutFunction.bind(this);
+        this.logout = this.logout.bind(this);
         this.navigate = this.navigate.bind(this);
+        this.action = this.action.bind(this);
+        this.updateState = this.updateState.bind(this);
 
     }
 
-    signupFunction(data){
-        this.state.action = 'signup';
-        this.setState(this.state, () => {
-            const req = new XMLHttpRequest();
-            req.open('POST', '/signup', true);
-            req.setRequestHeader('Content-Type', 'application/json');
-
-            
-
-            req.send(JSON.stringify(data));
-            req.onload = () => {
-                if(req.status === 200){
-                    this.state.action = 'none';
-                    this.setState(this.state);
-                }
-            }
-        });
-    }
-
-    loginFunction(data){
-        //LOGIN
-        this.state.action = 'login';
-        this.setState(this.state, () => {
-            const req = new XMLHttpRequest();
-            req.open('POST', '/login', true);
-            req.setRequestHeader('Content-Type', 'application/json');
-
-            req.send(JSON.stringify(data));
-            req.onload = () => {
-                if(req.status == 200){
-                    const payload = JSON.parse(req.response);
-                    this.state.user = payload.user;
-                    this.state.token = payload.token;
-                    this.state.action = 'none';
-
-                    localStorage.setItem('token', this.state.token);
-                    localStorage.setItem('user', this.state.user);
-                    
-                    this.setState(this.state);
-                }
-            }
-        });
-    }
-
-    logoutFunction(){
+    logout(){
         this.state.action = 'logout';
         this.setState(this.state, () => {
-            this.state.currentSelection = 'home';
+            this.state.appcontext = 'home';
             this.state.user = undefined;
-            this.state.token = '';
+            this.state.token = undefined;
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             this.state.action = 'none';
@@ -99,39 +59,47 @@ class App extends React.Component{
                     this.state.action = 'none';
                     this.setState(this.state);
                 }
-            }
-        });
-    }
-
-    newGameFunction(game){
-        this.state.action = 'newgame';
-        this.setState(this.state, () => {
-            const req = new XMLHttpRequest();
-            req.open('POST', '/gamelist', true);
-            req.setRequestHeader('Content-Type', 'application/json');
-            req.setRequestHeader('auth', this.state.token);
-
-            req.send(JSON.stringify(game));
-
-            req.onload = () => {
-                if(req.status == 200){
-                    this.state.currentSelection = 'games';
-                    this.state.action = 'none';
-                    this.setState(this.state);
+                else{
+                    alert(`Failed to close the bet! Code: ${req.status}`);
                 }
             }
         });
     }
 
     navigate(target){
-        this.state.currentSelection = target;
+        this.state.appcontext = target;
         this.setState(this.state);
+    }
+
+    fold(){
+        this.state.action = 'fold';
+        this.setState(this.state, () => {
+            const req = new XMLHttpRequest();
+            req.open('POST', 'gamelist/fold', true);
+            req.setRequestHeader('auth', this.state.token);
+        });
+    }
+
+    action(id, options = undefined){
+        if(id === 'logout'){
+            this.logout();
+        }
+        else if(id === 'closegame'){
+            this.gameCloseFunction(options);
+        }
+        else if(id === 'fold'){
+            this.fold();
+        }
+    }
+
+    updateState(newState, callback = undefined){
+        this.setState(newState, callback);
     }
 
     render(){
         return (
             <div id="app">
-                <Header user={this.state.user} logoutFunction={this.logoutFunction} currentSelection={this.state.currentSelection}/>
+                <Header state={this.state} action={this.action}/>
                 {
                     this.state.action === 'login' ? 
                     <Loading title="Logging In..."/> :
@@ -143,33 +111,19 @@ class App extends React.Component{
                     <Loading title="Signing up..."/> :
                     this.state.action === 'delete' ? 
                     <Loading title="Deleting bet..."/> :
+                    this.state.action === 'betting' ? 
+                    <Loading title="Placing bet..."/> :
                     
                     <Content 
-                        currentSelection={this.state.currentSelection} 
-                        user={this.state.user} 
-                        token={this.state.token}
-                        loginFunction={this.loginFunction}
-                        signupFunction={this.signupFunction}
-                        bettingBackButtonFunction={this.bettingBackButtonFunction}
-                        gameCloseFunction={this.gameCloseFunction}
-                        newGameFunction={this.newGameFunction}
+                        action={this.action}
+                        updateState={this.updateState}
+                        state={this.state}
                     />
-
                 }
                 
                 <Navbar user={this.state.user} navigateFunction={this.navigate}/>
             </div>
         );
-    }
-
-    componentDidMount(){
-        const logoutLink = document.querySelector('#logout-link');
-        if(logoutLink){
-            logoutLink.addEventListener('click', () => {
-                this.state.selected = 'login';
-                
-            });
-        }
     }
 }
 

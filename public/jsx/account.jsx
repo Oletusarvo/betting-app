@@ -9,20 +9,22 @@ class Account extends React.Component{
     }
 
     render(){
-        if(this.props.user === undefined){
+        if(this.props.state.user === undefined){
             return <Forbidden/>
         }
         else{
             return (
                 <div className="page" id="account-page">
+                    <h1>Your Account</h1>
                     <div id="account-info">
-                        <h1>Your Account</h1>
+                        <h3>Total Balance:</h3>
+                        <h1>${this.props.state.user.balance.toFixed(2)}</h1>
                     </div>
                     <GameList 
                         gamelist={this.state.gamelist} 
                         loading={this.state.loading} 
                         deleteEnabled={true} 
-                        gameCloseFunction={this.props.gameCloseFunction} 
+                        action={this.props.action} 
                         title="Bets Created By You"
                     />
                 </div>
@@ -31,11 +33,11 @@ class Account extends React.Component{
     }
 
     componentDidMount(){
-        if(this.props.user && this.state.gamelist.length == 0){
+        if(this.props.state.user && this.state.gamelist.length == 0){
             const req = new XMLHttpRequest();
-            req.open('GET', `/gamelist/${this.props.user.username}`, true);
+            req.open('GET', `/gamelist/${this.props.state.user.username}`, true);
             req.setRequestHeader('Content-Type', 'application/json');
-            req.setRequestHeader('auth', this.props.token);
+            req.setRequestHeader('auth', this.props.state.token);
             req.send();
 
             req.onload = () => {

@@ -26,7 +26,7 @@ class Login extends React.Component{
                 password : form.password.value,
             };
 
-            this.props.loginFunction(data);
+            this.props.login(data);
         });
     }
 }
