@@ -1,3 +1,6 @@
+import React from 'react';
+import LoadingRing from './loadingring';
+
 class Loading extends React.Component{
     constructor(props){
         super(props);
@@ -12,3 +15,5 @@ class Loading extends React.Component{
         )
     }
 }
+
+export default Loading;

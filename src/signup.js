@@ -1,6 +1,31 @@
+import React from 'react';
+
 class Signup extends React.Component{
     constructor(props){
         super(props);
+
+        this.signup = this.signup.bind(this);
+    }
+
+    signup(data){
+        const state = this.props.state;
+        state.action = 'signup';
+        this.props.updateState(state, () => {
+            const req = new XMLHttpRequest();
+            req.open('POST', '/signup', true);
+            req.setRequestHeader('Content-Type', 'application/json');
+
+            req.send(JSON.stringify(data));
+            req.onload = () => {
+                if(req.status === 200){
+                    state.action = 'none';
+                    this.props.updateState(state);
+                }
+                else{
+                    alert(`Failed to sign up! Code: ${req.status}`);
+                }
+            }
+        });
     }
 
     render(){
@@ -28,7 +53,9 @@ class Signup extends React.Component{
                 password2 : form.password2.value
             };
 
-            this.props.signup(data);
+            this.signup(data);
         });
     }
 }
+
+export default Signup;

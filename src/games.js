@@ -1,3 +1,8 @@
+import React from 'react';
+import Betting from './betting';
+import GameList from './gamelist';
+import Forbidden from './forbidden';
+
 class Games extends React.Component{
     constructor(props){
         super(props);
@@ -31,7 +36,7 @@ class Games extends React.Component{
                 state={this.props.state}
                 />
         }
-        else if(this.props.state.user === undefined){
+        else if(this.props.state.user === null){
             return <Forbidden/>
         }
         else{
@@ -41,6 +46,7 @@ class Games extends React.Component{
                 selectGameFunction={this.selectGameFunction}
                 title="All Bets"
                 state={this.props.state}
+                updateState={this.props.updateState}
                 />
         }
     }
@@ -49,7 +55,7 @@ class Games extends React.Component{
         if(this.state.gamelist.length == 0 || this.state.selectedGame === undefined){
 
             const req = new XMLHttpRequest();
-            req.open('GET', '/gamelist', true);
+            req.open('GET', '/games', true);
 
             const payload = {
                 token : this.props.state.token
@@ -72,3 +78,5 @@ class Games extends React.Component{
         }
     }
 }
+
+export default Games;

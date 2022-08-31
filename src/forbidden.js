@@ -1,3 +1,5 @@
+import React from 'react';
+
 class Forbidden extends React.Component{
     constructor(props){
         super(props);
@@ -11,3 +13,5 @@ class Forbidden extends React.Component{
         );
     }
 }
+
+export default Forbidden;

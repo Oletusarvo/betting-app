@@ -7,6 +7,12 @@ require('dotenv').config();
 router.post('/', async (req, res) => {
     const {username, password} = req.body;
     const user = await db.getAccount(username);
+
+    if(user === undefined){
+        res.status(404).send(`Account with username ${username} does not exist!`);
+        return;
+    }
+
     if(await bcrypt.compare(password, user.password)){
         const token = jwt.sign(user, process.env.SERVER_TOKEN_SECRET);
 

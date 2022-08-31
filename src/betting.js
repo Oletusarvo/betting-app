@@ -1,3 +1,5 @@
+import React from 'react';
+
 class Betting extends React.Component{
     constructor(props){
         super(props);
@@ -28,7 +30,7 @@ class Betting extends React.Component{
         state.action = 'betting';
         this.props.updateState(state, () => {
             const req = new XMLHttpRequest();
-            req.open('POST', '/gamelist/bet', true);
+            req.open('POST', '/games/bet', true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.setRequestHeader('auth', state.token);
             req.send(JSON.stringify(bet));
@@ -123,3 +125,5 @@ class Betting extends React.Component{
         });
     }
 }
+
+export default Betting;

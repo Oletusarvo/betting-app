@@ -1,3 +1,7 @@
+import React from 'react';
+import Forbidden from './forbidden';
+import GameList from './gamelist';
+
 class Account extends React.Component{
     constructor(props){
         super(props);
@@ -9,7 +13,7 @@ class Account extends React.Component{
     }
 
     render(){
-        if(this.props.state.user === undefined){
+        if(this.props.state.user === null){
             return <Forbidden/>
         }
         else{
@@ -24,8 +28,9 @@ class Account extends React.Component{
                         gamelist={this.state.gamelist} 
                         loading={this.state.loading} 
                         deleteEnabled={true} 
-                        action={this.props.action} 
                         title="Bets Created By You"
+                        state={this.props.state}
+                        updateState={this.props.updateState}
                     />
                 </div>
             );
@@ -35,7 +40,7 @@ class Account extends React.Component{
     componentDidMount(){
         if(this.props.state.user && this.state.gamelist.length == 0){
             const req = new XMLHttpRequest();
-            req.open('GET', `/gamelist/${this.props.state.user.username}`, true);
+            req.open('GET', `/games/${this.props.state.user.username}`, true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.setRequestHeader('auth', this.props.state.token);
             req.send();
@@ -50,3 +55,5 @@ class Account extends React.Component{
         }
     }
 }
+
+export default Account;

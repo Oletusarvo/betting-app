@@ -8,11 +8,8 @@ app.use(express.static('node_modules'));
 app.use(express.static('public'));
 app.use(express.json());
 
-const indexRouter = require('./routes/index.js');
-app.use('/', indexRouter);
-
-const gameListRouter = require('./routes/gamelist.js');
-app.use('/gamelist', gameListRouter);
+const gamesRouter = require('./routes/games.js');
+app.use('/games', gamesRouter);
 
 const signupRouter = require('./routes/signup.js');
 app.use('/signup', signupRouter);

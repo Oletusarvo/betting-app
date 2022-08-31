@@ -1,6 +1,37 @@
+import React from 'react';
+import Loading from './loading';
+
 class GameList extends React.Component{
     constructor(props){
         super(props);
+        this.closeGame = this.closeGame.bind(this);
+    }
+
+    closeGame(id){
+        const state = this.props.state;
+
+        state.action = 'deletegame';
+        this.props.updateState(state, () => {
+            const req = new XMLHttpRequest();
+            req.open('DELETE', '/games', true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.setRequestHeader('auth', state.token);
+            
+            const data = {
+                id
+            };
+    
+            req.send(JSON.stringify(data));
+    
+            req.onload = () => {
+                state.action = 'none';
+                if(req.status !== 200){
+                    alert(`Failed to close the bet! Code: ${req.status}`);
+                }
+
+                this.props.updateState(state);
+            }
+        });
     }
 
     render(){
@@ -48,7 +79,7 @@ class GameList extends React.Component{
                     ) 
                     
                     ? 
-                    <button onClick={() => this.props.action('closegame', item.game_id)}>Close</button> : <></>
+                    <button onClick={() => this.closeGame(item.game_id)}>Close</button> : <></>
                 }
             </div>
 
@@ -68,3 +99,5 @@ class GameList extends React.Component{
         }
     }
 }
+
+export default GameList;

@@ -1,3 +1,5 @@
+import React from 'react';
+
 class NewGame extends React.Component{
     constructor(props){
         super(props);
@@ -25,7 +27,7 @@ class NewGame extends React.Component{
         state.action = 'newgame';
         this.props.updateState(state, () => {
             const req = new XMLHttpRequest();
-            req.open('POST', '/gamelist', true);
+            req.open('POST', '/games', true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.setRequestHeader('auth', state.token);
 
@@ -35,7 +37,7 @@ class NewGame extends React.Component{
                 state.action = 'none';
 
                 if(req.status == 200){
-                    state.appcontext = 'games';
+                    this.props.updateState(state, () => location.assign('/#/games'));
                 }
                 else{
                     alert(`Bet creation failed! Code: ${req.status}`);
@@ -91,3 +93,5 @@ class NewGame extends React.Component{
         
     }
 }
+
+export default NewGame;
