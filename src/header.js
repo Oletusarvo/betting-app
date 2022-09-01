@@ -9,6 +9,8 @@ class Header extends React.Component{
     }
 
     logout(){
+        location.assign('/#');
+
         const state = this.props.state;
         state.action = 'logout';
 
@@ -18,7 +20,7 @@ class Header extends React.Component{
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             state.action = 'none';
-            this.props.updateState(state, () => location.assign('/#'));
+            this.props.updateState(state);
         });
         
     }
@@ -38,7 +40,7 @@ class Header extends React.Component{
                             <Link id="signup-link" className="link" to="/signup">Signup</Link>
                         </>
                         :
-                        <span id="logout-link" onClick={() => this.logout()}>Logout</span>
+                        <span id="logout-link" onClick={this.logout}>Logout</span>
                     }
                     
                 </div>

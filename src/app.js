@@ -47,11 +47,11 @@ class App extends React.Component{
                         <Loading title="Deleting game..."/> :
                     
                     <Routes >
-                        <Route path="/" element={<Home state={this.state} updateState={this.updateState}/>} />
+                        <Route path="/" element={<Home appState={this.state} updateAppState={this.updateState}/>} />
                         <Route exact path="/login" element={<Login state={this.state} updateState={this.updateState}/>} />
                         <Route exact path="/signup" element={<Signup state={this.state} updateState={this.updateState}/>} />
-                        <Route exact path="/account" element={<Account state={this.state} updateState={this.updateState}/>} />
-                        <Route exact path="/games" element={<Games state={this.state} updateState={this.updateState}/>} />
+                        <Route exact path="/account" element={<Account appState={this.state} updateAppState={this.updateState}/>} />
+                        <Route exact path="/games" element={<Games appState={this.state} updateState={this.updateState}/>} />
                         <Route exact path="/newgame" element={<NewGame state={this.state} updateState={this.updateState}/>} />
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>

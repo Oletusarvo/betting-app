@@ -5,85 +5,145 @@ class Betting extends React.Component{
         super(props);
 
         this.socket = io();
-        this.state = this.props.selectedGame;
+
+        this.state = {
+            selectedGame : this.props.selectedGame,
+            bet : {
+                amount : 'none',
+                side : 'none'
+            }
+        };
 
         this.socket.on('bet_update', data =>{
-            const game = JSON.parse(data);
-            this.state = game;
+            const {game, bet} = JSON.parse(data);
+            this.state.selectedGame = game;
+            this.state.bet = bet;
             this.setState(this.state);
         });
 
         this.socket.on('bet_rejected', msg => {
-            alert(msg);
+            alert(`Bet rejected! Reason: ${msg}`);
         });
 
-        this.socket.emit('get_bet_data', this.state.game_id);
-    }
+        this.socket.on('account_update', data => {
+            const user = JSON.parse(data);
+            const appState = this.props.appState;
+            appState.user = user;
+            this.props.updateAppState(appState);
+        });
 
-    placeBet2(bet){
-        this.socket.emit('bet', JSON.stringify(bet));
+        this.socket.on('consolidated_bet', data => {
+            const consolidated = JSON.parse(data);
+            this.bet = consolidated;
+        });
+
+        this.socket.emit('get_bet_data', JSON.stringify({
+            game_id : this.state.selectedGame.game_id,
+            username : this.props.appState.user.username}));
+
+        this.placeBet = this.placeBet.bind(this);
+        this.fold = this.fold.bind(this);
+        this.returnFunction = this.returnFunction.bind(this);
+        this.call = this.call.bind(this);
+        this.displayBet = this.displayBet.bind(this);
     }
 
     placeBet(bet){
-        const state = this.props.state;
+        this.socket.emit('bet', JSON.stringify(bet));
+    }
 
-        state.action = 'betting';
-        this.props.updateState(state, () => {
-            const req = new XMLHttpRequest();
-            req.open('POST', '/games/bet', true);
-            req.setRequestHeader('Content-Type', 'application/json');
-            req.setRequestHeader('auth', state.token);
-            req.send(JSON.stringify(bet));
+    fold(){
+        const answer = confirm('You are about to fold. Are you sure?');
 
-            req.onload = () => {
-                state.action = 'none';
+        if(!answer) return;
 
-                if(req.status === 200){
-                    const res = JSON.parse(req.response);
-                    state.user.balance = res.balance;
-                    
-                }
-                else{
-                    alert(`Bet failed! Reason: ${req.response}`);
-                }
+        this.socket.emit('fold', JSON.stringify({
+            game_id : this.state.selectedGame.game_id,
+            username : this.props.appState.user.username
+        }));
+    }
 
-                this.props.updateState(state);
+    call(){
+        const amount = this.state.selectedGame.minimum_bet - this.state.bet.amount;
+        if(amount > 0){
+            const answer = confirm(`You are about to increase your bet by ${amount}, are you sure?`);
+            if(answer){
+                const bet = {
+                    game_id : this.state.selectedGame.game_id,
+                    amount,
+                    username : this.props.appState.user.username,
+                    side : this.state.bet.side
+                };
+
+                this.placeBet(bet);
             }
-        });
+        }
+        else{
+            alert('You cannot bet at this time.');
+        } 
+    }
+
+    returnFunction(){
+        const state = undefined;
+        this.props.updateGameState(state, () => location.assign('/#/games'));
+    }
+
+    displayBet(){
+        const bet = this.state.bet;
+        if(bet){
+            if(bet.folded){
+                return `Folded`;
+            }
+            else{
+                return `\'${bet.side}\' for ${'$' + bet.amount}`;
+            }
+        }
+        else{
+            return 'None';
+        }
     }
 
     render(){
         return (
             <div className="page" id="betting-page">
                 <div className="betting-container container" id="bet-title">
-                    <div id="back-button" onClick={this.props.bettingReturnFunction}>
+                    <div id="back-button" onClick={this.returnFunction}>
                         <img src="../img/arrow.png"></img>
                     </div>
-                    <h3 id="bet-name">{this.state.game_title}</h3>
+                    <h3 id="bet-name">{this.state.selectedGame.game_title}</h3>
                 </div>
 
                 <div className="betting-container container" id="bet-info">
                     <table>
                         <tbody>
                             <tr>
+                                <td>Your Balance:</td>
+                                <td className="align-right">${this.props.appState.user.balance.toFixed(2)}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Your Bet:</td>
+                                <td className="align-right">{this.displayBet()}</td>
+                            </tr>
+                            <tr>
                                 <td>Minimum Bet: </td>
-                                <td className="align-right">${this.state.minimum_bet.toFixed(2)}</td>
+                                <td className="align-right">${this.state.selectedGame.minimum_bet.toFixed(2)}</td>
                             </tr>
 
                             <tr>
                                 <td>Increment:</td>
-                                <td className="align-right">${this.state.increment.toFixed(2)}</td>
+                                <td className="align-right">${this.state.selectedGame.increment.toFixed(2)}</td>
                             </tr>
 
                             <tr>
                                 <td>Expiry Date:</td>
-                                <td className="align-right">{this.state.expiry_date}</td>
+                                <td className="align-right">{this.state.selectedGame.expiry_date}</td>
                             </tr>
 
                             <tr>
                                 <td>Time Left:</td>
                                 <td className="align-right">
-                                    {this.state.expiry_date != 'When Closed' ? Math.round((new Date(this.state.expiry_date) - new Date()) / 1000 / 60 / 60 / 24) + ' days' : 'No Limit'}
+                                    {this.state.selectedGame.expiry_date != 'When Closed' ? Math.round((new Date(this.state.selectedGame.expiry_date) - new Date()) / 1000 / 60 / 60 / 24) + ' days' : 'No Limit'}
                                     
                                 </td>
                             </tr>
@@ -91,19 +151,19 @@ class Betting extends React.Component{
                     </table>
                 </div>
                 <div className="betting-container container" id="bet-pool">
-                    <div id="bet-pool-ring">
-                       <h1>${this.state.pool.toFixed(2)}</h1>
+                    <div id="bet-pool-ring" className={this.state.bet.amount == 0 ? 'entry' : this.state.bet.amount < this.state.selectedGame.minimum_bet && this.state.bet.folded == false ? 'call' : 'set'} onClick={this.call}>
+                       <h1>${this.state.selectedGame.pool.toFixed(2)}</h1>
                     </div>
                 </div>
                 <div className="betting-container container" id="bet-controls">
                     <form id="betting-form">
-                        <input type="number" name="amount" placeholder="Bet Amount" min={this.state.minimum_bet} step={this.state.increment}></input>
+                        <input type="number" name="amount" placeholder="Bet Amount" min="0.01" step={this.state.selectedGame.increment}></input>
                         <select name="side">
                             <option>Kyllä</option>
                             <option>Ei</option>
                         </select>
-                        <button>Place Bet</button>
-                        <button>Fold</button>
+                        <button type="submit">Place Bet</button>
+                        <button onClick={this.fold} type="button">Fold</button>
                     </form>
                 </div>
             </div>
@@ -116,12 +176,12 @@ class Betting extends React.Component{
             e.preventDefault();
             const data = {
                 amount : form.amount.value,
-                username : this.props.state.user.username,
-                game_id : this.state.game_id,
+                username : this.props.appState.user.username,
+                game_id : this.state.selectedGame.game_id,
                 side : form.side.value
             }
 
-            this.placeBet2(data);
+            this.placeBet(data);
         });
     }
 }

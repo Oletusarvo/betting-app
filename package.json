@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "sass": "npx node-sass -w src/scss/ -o public/css/",
-    "babel": "npx babel public/jsx/ -d public/js/ -w",
+    "babel": "npx babel src/ -d src/compiled/ -w",
     "server": "npx nodemon server.js"
   },
   "keywords": [],

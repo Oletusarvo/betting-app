@@ -8,17 +8,23 @@ class GameList extends React.Component{
     }
 
     closeGame(id){
-        const state = this.props.state;
+        const state = this.props.appState;
+        const side = prompt('What side should the bet close on? (Y/N)');
+
+        if(side == undefined){
+            return;
+        }
 
         state.action = 'deletegame';
-        this.props.updateState(state, () => {
+        this.props.updateAppState(state, () => {
             const req = new XMLHttpRequest();
             req.open('DELETE', '/games', true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.setRequestHeader('auth', state.token);
             
             const data = {
-                id
+                id,
+                side
             };
     
             req.send(JSON.stringify(data));
@@ -26,10 +32,10 @@ class GameList extends React.Component{
             req.onload = () => {
                 state.action = 'none';
                 if(req.status !== 200){
-                    alert(`Failed to close the bet! Code: ${req.status}`);
+                    alert(`Failed to close the bet! Reason: ${req.response}`);
                 }
 
-                this.props.updateState(state);
+                this.props.updateAppState(state);
             }
         });
     }
@@ -37,7 +43,7 @@ class GameList extends React.Component{
     render(){
         const final = [];
         this.props.gamelist.forEach(item => {
-            const elem = <div className="game-list-entry container" key={item.game_id} onClick={ () => this.props.selectGameFunction ? this.props.selectGameFunction(item) : {}}>
+            const elem = <div className="game-list-entry container" key={item.game_id} onClick={ () => this.props.selectGame ? this.props.selectGame(item) : {}}>
                 <table>
                     <tbody>
                         <tr>

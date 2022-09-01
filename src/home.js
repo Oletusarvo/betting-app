@@ -1,4 +1,5 @@
 import React from 'react';
+import Notifications from './notifications';
 
 class Home extends React.Component{
     constructor(props){
@@ -13,9 +14,13 @@ class Home extends React.Component{
         return (
             <div className="page" id="home-page">
                 {
-                    this.props.state.user === null ? 
+                    this.props.appState.user === null ? 
                     <h1>Home</h1> :
-                    <h1>Logged in as {this.props.state.user.username}</h1>
+                    <>  
+                        <h1>Logged in as {this.props.appState.user.username}</h1>
+                        <Notifications appState={this.props.appState} updateAppState={this.props.updateAppState}/>
+                    </>
+                    
                 }
                 
             </div>

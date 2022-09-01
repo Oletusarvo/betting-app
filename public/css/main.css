@@ -37,11 +37,11 @@ header {
   display: flex;
   flex-flow: row;
   gap: 0.5rem;
-  padding: 0 1rem 0 1rem;
+  padding: 1.7rem 1rem 1rem 1rem;
   width: 100%;
-  align-items: center; }
-  header #app-name {
-    flex: 1; }
+  align-items: center;
+  justify-content: space-between;
+  background: #090071; }
   header #links {
     display: inherit;
     flex-flow: row;
@@ -56,7 +56,6 @@ textarea {
 #app {
   height: 100vh;
   width: 100vw;
-  padding-top: 1.5rem;
   display: flex;
   flex-flow: column;
   background: #000031; }
@@ -68,7 +67,7 @@ textarea {
   gap: 0.5rem;
   width: 100%;
   flex: 1;
-  padding: 2rem 0.5rem 0.5rem 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   overflow-x: hidden; }
 
 .link {
@@ -105,7 +104,8 @@ textarea {
   font-weight: bold; }
 
 .container {
-  border-radius: 5px; }
+  border-radius: 5px;
+  width: 100%; }
 
 .game-list-entry {
   background: #090071;
@@ -163,7 +163,14 @@ textarea {
   border: 0.25rem solid white;
   border-radius: 50%;
   width: 300px;
-  height: 300px; }
+  height: 300px;
+  transition: border-color 0.2s ease-out; }
+  #betting-page #bet-pool-ring.call {
+    border-color: yellow; }
+  #betting-page #bet-pool-ring.set {
+    border-color: red; }
+  #betting-page #bet-pool-ring.entry {
+    border-color: limegreen; }
 
 #betting-page #bet-controls form {
   flex-flow: row; }

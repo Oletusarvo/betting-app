@@ -2,6 +2,7 @@ const router = require('express').Router();
 const db = require('../models/db.js');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 const processBet = require('../middleware/processBet.js').processBet;
+
 router.get('/', checkAuth, async (req, res) => {
     const gamelist = await db.getGamelist();
     res.status(200).send(JSON.stringify(gamelist));
@@ -42,13 +43,13 @@ router.post('/bet', checkAuth, processBet, async (req, res) => {
 });
 
 router.delete('/', checkAuth, async (req, res) => {
-    const id = req.body.id;
+    const {id, side} = req.body;
     try{
-        await db.deleteGame(id);
+        await db.closeGame(id, side);
         res.status(200).send();
     }
     catch(err){
-        res.status(500).send();
+        res.status(500).send(err.message);
     }
 });
 

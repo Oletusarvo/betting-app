@@ -25,7 +25,6 @@ class Login extends React.Component{
                     state.user = payload.user;
                     state.token = payload.token;
                     
-
                     localStorage.setItem('token', state.token);
                     localStorage.setItem('user', JSON.stringify(state.user));
                     
