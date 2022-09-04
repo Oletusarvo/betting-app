@@ -1,31 +1,28 @@
 import React from 'react';
 import Notifications from './notifications';
+import GameList  from './GameList/GameList.js';
+function Home(props){
 
-class Home extends React.Component{
-    constructor(props){
-        super(props);
+    const {username, balance} = props.user ? props.user : {};
+    const {token} = props;
 
-        this.state = {
-            selected : 'login'
-        };
-    }
+    return (
+        <div className="page" id="home-page">
+            {
+                props.user === null ? 
+                <h1>Home</h1> :
+                <>  
+                    <h2>Logged in as {username}</h2>
+                    <h3>Total Balance:</h3>
+                    <h1>${balance.toFixed(2)}</h1>
 
-    render(){
-        return (
-            <div className="page" id="home-page">
-                {
-                    this.props.appState.user === null ? 
-                    <h1>Home</h1> :
-                    <>  
-                        <h1>Logged in as {this.props.appState.user.username}</h1>
-                        <Notifications appState={this.props.appState} updateAppState={this.props.updateAppState}/>
-                    </>
-                    
-                }
+                    <h2>Bets created by you:</h2>
+                    <GameList username={username} token={token}/>
+                </>
                 
-            </div>
-        );
-    }
+            }
+        </div>
+    );
 }
 
 export default Home;

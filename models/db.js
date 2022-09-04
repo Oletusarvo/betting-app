@@ -104,6 +104,10 @@ module.exports = {
         return hasToCall;
     },
 
+    getBet : async (game_id, username) => {
+        return await db('bets').where({username, game_id}).first();
+    },
+
     addNotification : async (username, game_id, game_title, message) => {
         return await db('notifications').insert({
             username,
@@ -141,7 +145,9 @@ module.exports = {
         }
 
         await db('bets').where({game_id}).del();
-        return await db('games').where({game_id}).del();
+        await db('games').where({game_id}).del();
+
+        return await db('games');
     },
 
     getGame : async (game_id) => {
@@ -185,85 +191,49 @@ module.exports = {
         });
     },
 
-    getBetsInGame : async (game_id, username) => {
+    getBetsByUsername : async (game_id, username) => {
         return await db('bets').where({game_id, username});
     },
 
-    getBetsInGameConsolidated : async (game_id, username) => {
-        const bets = await db('bets').where({game_id, username});
-        let bet = {
-            amount : 0,
-            side : bets.length > 0 ? bets[0].side : 'none',
-            folded : bets.length > 0 ? bets[0].folded : false,
-        }
-
-        for(let item of bets){
-            bet.amount += item.amount;
-        }
-
-        return bet;
-    },
-
-    getAllBetsInGame : async (game_id) => {
+    getBets : async (game_id) => {
         return await db('bets').where({game_id});
     },
 
     placeBet : async (game_id, username, amount, side) => {
-        const {minimum_bet, game_title}     = await db('games').where({game_id}).first();
-        const {balance}         = await db('accounts').where({username}).first();
-        const amountParsed      = parseFloat(amount);
-        const previousBets      = await db('bets').where({username, game_id});
-        
-        if(amount == ''){
-            throw new Error('Amount cannot be empty!');
-        }
+       const game           = await module.exports.getGame(game_id);
+       const account        = await module.exports.getAccount(username);
+       let bet              = await module.exports.getBet(game_id, username);
+       const amountParsed   = parseFloat(amount);
 
-        let folded = isFolded(previousBets);
-        if(folded){
-            throw new Error('You have folded! Cannot participate.');
-        }
+       if(bet){
+            bet.amount += amountParsed;
+            await db('bets').where({username, game_id}).update(bet);
+       }
+       else{
+            bet = await db('bets').insert({
+                username,
+                amount,
+                game_id,
+                side,
+            });
+       }
 
-        if(!sidesMatch(previousBets, side)){
-            throw new Error('Cannot switch sides on a bet underway!');
-        }
+       if(bet.amount > game.minimum_bet){
+            game.minimum_bet = bet.amount;
+       }
 
-        const consolidatedAmount = consolidateAmount(previousBets);
-        const call = consolidatedAmount < minimum_bet;
-        if(!call){
-            throw new Error('Cannot update bet until you have to call a previous bet!');
-        }
+       game.pool        += parseFloat(amount);
+       account.balance  -= parseFloat(amount);
 
-        const totalAmount = consolidatedAmount + amountParsed;
-        if(totalAmount < minimum_bet){
-            throw new Error('Amount must be at least the minimum bet!');
-        }
-
-        if(amountParsed > balance){
-            throw new Error('Amount exceedes your account balance!');
-        }
-
-        await db('bets').insert({
-            username,
-            amount,
-            game_id,
-            side
-        });
-
-        await db('accounts').where({username}).update({
-            balance : balance - amount
-        });
-
-        const hasToCall = await module.exports.getHasToCall(game_id);
-        for(let item of hasToCall){
-            await module.exports.addNotification(item, game_id, game_title, 'Time to make a call!');
-        }
-
-        return await module.exports.updateGame(game_id);
+       await db('games').where({game_id}).update(game);
+       await db('accounts').where({username}).update(account);
     },
 
     foldBet : async (game_id, username) => {
-        return await db('bets').where({game_id, username}).update({
+        await db('bets').where({game_id, username}).update({
             folded : true
         });
+
+        return db('bets').where({game_id, username}).first();
     }
 }

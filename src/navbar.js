@@ -24,15 +24,6 @@ class Navbar extends React.Component{
                 {
                     this.props.state.user !== null ? 
                     <>
-                         <div id="account-link">
-                            <Link to="/account">
-                                <i className="navbar-icon" id="account-icon">
-                                    <img src={AccountIcon}></img>
-                                </i>
-                            </Link>
-                            
-                        </div>
-
                         <div id="games-link">
                             <Link to="/games">
                                 <i className="navbar-icon" id="games-icon">

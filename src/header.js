@@ -9,20 +9,15 @@ class Header extends React.Component{
     }
 
     logout(){
-        location.assign('/#');
-
         const state = this.props.state;
         state.action = 'logout';
-
-        this.props.updateState(state, () => {
-            state.token = null;
-            state.user = null;
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            state.action = 'none';
-            this.props.updateState(state);
-        });
-        
+        state.token = null;
+        state.user = null;
+        state.action = 'none';
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.props.updateState(state);
+        location.assign('/');
     }
 
     render(){

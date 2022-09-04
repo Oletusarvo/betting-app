@@ -13,6 +13,9 @@ form {
   form input, form button, form select, form option {
     color: black; }
 
+a {
+  text-decoration: none; }
+
 img {
   width: 32px;
   height: 32px; }
@@ -41,7 +44,7 @@ header {
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  background: #090071; }
+  background: #343434; }
   header #links {
     display: inherit;
     flex-flow: row;
@@ -69,6 +72,9 @@ textarea {
   flex: 1;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   overflow-x: hidden; }
+
+#home-page h1 {
+  font-size: 3rem; }
 
 .link {
   display: flex;
@@ -104,21 +110,12 @@ textarea {
   font-weight: bold; }
 
 .container {
-  border-radius: 5px;
-  width: 100%; }
-
-.game-list-entry {
+  align-items: center;
   background: #090071;
-  padding: 1rem;
-  width: 100%; }
-  .game-list-entry button {
-    align-self: right; }
-  .game-list-entry .game-list-entry-element {
-    display: flex;
-    flex-flow: row;
-    gap: 0.5rem;
-    border: 1px solid white; }
-  .game-list-entry:hover {
+  padding: 0.5rem;
+  width: 100%;
+  border-radius: 5px; }
+  .container:hover {
     background: #1100d7; }
 
 #games-page {

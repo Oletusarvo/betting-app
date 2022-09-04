@@ -5,12 +5,12 @@ module.exports.processBet = async (req, res, next) => {
         const user = req.user;
         const bet = req.body;
         const game = await db.getGame(bet.game_id);
-        const previousBets = await db.getBetsInGame(bet.game_id, user.username);
+        const previousBet = await db.getBet(bet.game_id, user.username);
         
-        if(previousBets.length > 0 && previousBets[0].folded){
+        if(previousBet && previousBet.folded){
             res.status(400).send('You cannot bet as you have folded!');
         }
-        else if(previousBets.length == 0 && bet.folded){
+        else if(bet.folded){
             res.status(400).send('There is no bet to fold!');
         }
         else if(bet.amount > user.balance){
@@ -21,7 +21,7 @@ module.exports.processBet = async (req, res, next) => {
         }
         else{
             req.game = game;
-            req.previousBets = previousBets;
+            req.previousBet = previousBet;
             req.user.balance -= parseFloat(bet.amount);
             next();
         }

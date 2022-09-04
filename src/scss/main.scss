@@ -20,6 +20,10 @@ form{
     }
 }
 
+a{
+    text-decoration: none;
+}
+
 img{
     width: 32px;
     height: 32px;
@@ -55,7 +59,7 @@ header{
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    background: $primary-color;
+    background: $navbar-color;
     
 
     #links{
@@ -91,6 +95,12 @@ textarea{
     flex: 1;
     padding: $container-gap 0.5rem 0.5rem 0.5rem;
     overflow-x: hidden;
+}
+
+#home-page{
+    h1{
+        font-size: 3rem;
+    }
 }
 
 .link{
@@ -138,24 +148,11 @@ textarea{
 }
 
 .container{
-    border-radius: 5px;
-    width: 100%;
-}
-
-.game-list-entry{
+    align-items: center;
     background: $primary-color;
-    padding: 1rem;
+    padding: 0.5rem;
     width: 100%;
-
-    button{
-        align-self: right;
-    }
-    .game-list-entry-element{
-        display: flex;
-        flex-flow: row;
-        gap: $container-gap;
-        border: 1px solid white;
-    }
+    border-radius: 5px;
 
     &:hover{
         background: lighten($primary-color, 20);
