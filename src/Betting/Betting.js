@@ -3,7 +3,7 @@ import {useParams, useNavigate, Link} from 'react-router-dom';
 import Loading from '../loading';
 import {placeBet, submit, fold} from './Api';
 import Bet from './Bet';
-import Balance from './Balance';
+import Balance from '../Balance/Balance.js';
 
 function Betting(props) {
     const {game_id} = useParams();
@@ -51,7 +51,7 @@ function Betting(props) {
                         <tbody>
                             <tr>
                                 <td>Your Balance:</td>
-                                <td className="align-right"><Balance username={props.user.username} token={props.token} latestUpdate={latestUpdate}/></td>
+                                <td className="align-right"><Balance username={props.user.username} token={props.token}/></td>
                             </tr>
 
                             <tr>

@@ -17,7 +17,6 @@ export function submit(e, updateState){
     req.onload = () => {
         if(req.status === 200){
             const {token, user} = JSON.parse(req.response);
-            console.log(token, user);
             updateState({
                 token,
                 user,

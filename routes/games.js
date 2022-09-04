@@ -40,10 +40,16 @@ router.post('/', checkAuth, async (req, res) => {
 });
 
 router.delete('/:id', checkAuth, async (req, res) => {
-    const id = req.params.id;
-    const {side} = req.body;
-    const list = await db.closeGame(id, side);
-    res.status(200).send(JSON.stringify(list));
+    try{
+        const id = req.params.id;
+        const {side} = req.body;
+        const list = await db.closeGame(id, side);
+        res.status(200).send(JSON.stringify(list));
+    }
+    catch(err){
+        res.status(500).send(err.message);
+    }
+    
   
 });
 

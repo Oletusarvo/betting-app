@@ -1,26 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import GameList from './GameList/GameList.js';
 import Forbidden from './forbidden';
+import Balance from './Balance/Balance.js';
 
 function Account(props){
-
-    const [balance, setBalance] = useState(0);
     const {username, token} = props.user;
-
-    useEffect(() => {
-        const req = new XMLHttpRequest();
-        req.open('GET', `/accounts/${username}`, true);
-        req.setRequestHeader('auth', token);
-        req.send();
-
-        req.onload = () => {
-            if(req.status === 200){
-                setBalance(
-                    JSON.parse(req.response).balance
-                );
-            }
-        }
-    }, []);
 
     if(props.user === null){
         return <Forbidden/>
@@ -31,7 +15,7 @@ function Account(props){
                 <h1>Your Account</h1>
                 <div id="account-info">
                     <h3>Total Balance:</h3>
-                    <h1>${balance.toFixed(2)}</h1>
+                    <h1><Balance username={props.username} token={props.token}/></h1>
                 </div>
                 <h1>Bets created by you:</h1>
                 <GameList 

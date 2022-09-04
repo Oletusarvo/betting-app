@@ -18,8 +18,7 @@ function GameList(props){
     
         req.setRequestHeader('auth', props.token);
         req.send();
-    
-        let final = [];
+
         req.onload = () => {
             if(req.status === 200){
                 const list = JSON.parse(req.response);
@@ -31,7 +30,7 @@ function GameList(props){
     useEffect(() => {
         let final = [];
         gameList.forEach(item => {
-            const div = <div className='container'>
+            const div = <div className='container gamelist-container'>
             <Link to={getDestination(props.username, item.game_id) } key={item.game_id}>
                 <table>
                     <tbody>

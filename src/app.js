@@ -21,7 +21,6 @@ function App (props){
     });
 
     useEffect(() => {
-        console.log('Ryybs');
         if(state && state.user){
             localStorage.setItem('user', JSON.stringify(state.user));
         }
