@@ -36,7 +36,8 @@ module.exports.processBet = async (req, res, next) => {
                 return;
             }
 
-            if(bet.amount > user.balance){
+            if(parseFloat(bet.amount) > user.balance){
+                console.log(user.balance);
                 res.status(400).send('Amount exceedes your balance!');
                 return;
             }

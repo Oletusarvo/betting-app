@@ -218,8 +218,9 @@ module.exports = {
             });
        }
 
-       if(bet.amount > game.minimum_bet){
-            game.minimum_bet = bet.amount;
+       if(amountParsed > game.minimum_bet){
+            console.log('Kaljalla')
+            game.minimum_bet = amountParsed;
        }
 
        game.pool        += parseFloat(amount);
