@@ -4,17 +4,16 @@ import {fold} from './Api';
 function Bet(props){
 
     const [bet, setBet] = useState(null);
-    const [newData, setNewData] = useState(true);
     const [lastUpdate, setLastUpdate] = useState(-1);
 
-    const {game_id, username, token, latestUpdate} = props;
+    const {game, username, token, latestUpdate, setBettingState} = props;
     
     useEffect(() => {
         console.log('Prop change')
         if(lastUpdate >= latestUpdate) return;
 
         const req = new XMLHttpRequest();
-        req.open('GET', `/bets/?username=${username}&game_id=${game_id}`, true);
+        req.open('GET', `/bets/?username=${username}&game_id=${game.game_id}`, true);
         req.setRequestHeader('auth', token);
 
         req.send();
@@ -26,6 +25,15 @@ function Bet(props){
                 );
 
                 setLastUpdate(latestUpdate);
+
+                if(bet && Math.round(bet.amount) < Math.round(game.minimum_bet)){
+                    setBettingState('call');
+                }
+                else{
+                    setBettingState('set');
+                }
+
+                
             }
         }
     }, [props]);
@@ -35,7 +43,7 @@ function Bet(props){
             return <span>Folded</span>
         }
         else{
-            return <span className="table-field">{`\"${bet.side}\" for $${bet.amount}`} <button onClick={() => fold(game_id, username, token, setBet)}>Fold</button></span>
+            return <span className="table-field">{`\"${bet.side}\" for $${bet.amount}`} <button onClick={() => fold(game.game_id, username, token, setBet)}>Fold</button></span>
         }
     }
     else{

@@ -9,7 +9,7 @@ function Betting(props) {
     const {game_id} = useParams();
     const [game, setGame] = useState(null);
     const [latestUpdate, setLatestUpdate] = useState(0);
-
+    const [bettingState, setBettingState] = useState('entry');
 
     const [socket, setSocket] = useState(io());
 
@@ -56,7 +56,7 @@ function Betting(props) {
 
                             <tr>
                                 <td>Your Bet:</td>
-                                <td className="align-right"><Bet username={props.user.username} token={props.token} game_id={game.game_id} latestUpdate={latestUpdate}/></td>
+                                <td className="align-right"><Bet username={props.user.username} token={props.token} game={game} latestUpdate={latestUpdate} setBettingState={setBettingState}/></td>
                             </tr>
                             <tr>
                                 <td>Minimum Bet: </td>
@@ -84,7 +84,7 @@ function Betting(props) {
                     </table>
                 </div>
                 <div className="betting-container container" id="bet-pool">
-                    <div id="bet-pool-ring">
+                    <div id="bet-pool-ring" className={bettingState}>
                        <h1>${game.pool.toFixed(2)}</h1>
                     </div>
                 </div>
