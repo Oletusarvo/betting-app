@@ -43,7 +43,8 @@ router.delete('/:id', checkAuth, async (req, res) => {
     try{
         const id = req.params.id;
         const {side} = req.body;
-        const list = await db.closeGame(id, side);
+        await db.closeGame(id, side);
+        const list = await db.getGamesCreatedBy(req.user.username);
         res.status(200).send(JSON.stringify(list));
     }
     catch(err){

@@ -10,22 +10,20 @@ class Signup extends React.Component{
     signup(data){
         const state = this.props.state;
         state.action = 'signup';
-        this.props.updateState(state, () => {
-            const req = new XMLHttpRequest();
-            req.open('POST', '/signup', true);
-            req.setRequestHeader('Content-Type', 'application/json');
+        const req = new XMLHttpRequest();
+        req.open('POST', '/signup', true);
+        req.setRequestHeader('Content-Type', 'application/json');
 
-            req.send(JSON.stringify(data));
-            req.onload = () => {
-                if(req.status === 200){
-                    state.action = 'none';
-                    this.props.updateState(state);
-                }
-                else{
-                    alert(`Failed to sign up! Code: ${req.status}`);
-                }
+        req.send(JSON.stringify(data));
+        req.onload = () => {
+            if(req.status === 200){
+                state.action = 'none';
+                location.assign('/');
             }
-        });
+            else{
+                alert(`Failed to sign up! Code: ${req.status}`);
+            }
+        }
     }
 
     render(){
