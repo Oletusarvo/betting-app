@@ -31,6 +31,9 @@ app.use('/login', loginRouter);
 const notificationsRouter = require('./routes/notifications.js');
 app.use('/notifications', notificationsRouter);
 
+const coinsRouter = require('./routes/coins.js');
+app.use('/coins', coinsRouter);
+
 const PORT = process.env.PORT || 3000;
 
 

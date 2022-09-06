@@ -12,6 +12,8 @@ import Unknown from './unknown';
 import Loading from './loading';
 import Betting  from './Betting/Betting.js';
 import ManageGame from './ManageGame/ManageGame.js';
+import GenerateCoins from './GenerateCoins/GenerateCoins.js';
+import BackgroundDie from './BackgroundDie.js';
 
 function App (props){
     const [state, updateState] = useState({
@@ -31,8 +33,10 @@ function App (props){
     }, [state]);
 
     return (
+        
         <Router>
             <div id="app">
+                <BackgroundDie/>
                 <Header state={state} updateState={updateState}/>
                 <Routes >
                     <Route path="/" element={<Home user={state.user} token={state.token}/>} />
@@ -44,6 +48,7 @@ function App (props){
                     <Route exact path="/games" element={<Games appState={state}/>} />
                     <Route exact path="/games/:game_id" element={<Betting token={state.token} user={state.user}/>}></Route>
                     <Route exact path="/games/manage/:game_id" element={<ManageGame token={state.token}/>}></Route>
+                    <Route exact path="/coins" element={<GenerateCoins token={state.token}/>}></Route>
 
                     <Route exact path="/newgame" element={<NewGame username={state.user} token={state.token}/>} />
                     <Route path="*" element={<Unknown/>}/>
