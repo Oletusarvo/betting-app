@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {fold} from './Api';
+import {fold, getBettingState} from './Api';
 
 function Bet(props){
 
@@ -8,9 +8,12 @@ function Bet(props){
 
     const {game, username, token, latestUpdate, setBettingState} = props;
     
+    const bettingState = getBettingState(bet, game.minimum_bet);
+    setBettingState(bettingState); 
+
     useEffect(() => {
         console.log('Prop change')
-        if(lastUpdate >= latestUpdate) return;
+        //if(lastUpdate >= latestUpdate) return;
 
         const req = new XMLHttpRequest();
         req.open('GET', `/bets/?username=${username}&game_id=${game.game_id}`, true);
@@ -25,14 +28,6 @@ function Bet(props){
                 );
 
                 setLastUpdate(latestUpdate);
-
-                if(bet && Math.round(bet.amount) < Math.round(game.minimum_bet)){
-                    setBettingState('call');
-                }
-                else{
-                    setBettingState('set');
-                }
-
                 
             }
         }

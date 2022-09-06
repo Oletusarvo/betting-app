@@ -18,10 +18,11 @@ class Signup extends React.Component{
         req.onload = () => {
             if(req.status === 200){
                 state.action = 'none';
-                location.assign('/');
+                alert('Signup success!');
+                location.assign('/#/login');
             }
             else{
-                alert(`Failed to sign up! Code: ${req.status}`);
+                alert(`Failed to sign up! Reason: ${req.response}`);
             }
         }
     }

@@ -30,8 +30,8 @@ function GameList(props){
     useEffect(() => {
         let final = [];
         gameList.forEach(item => {
-            const div = <div className='container gamelist-container'>
-            <Link to={getDestination(props.username, item.game_id) } key={item.game_id}>
+            const div = <div className='container gamelist-container'  key={item.game_id}>
+            <Link to={getDestination(props.username, item.game_id) }>
                 <table>
                     <tbody>
                         <tr>

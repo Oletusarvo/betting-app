@@ -25,5 +25,8 @@ export function submit(e, updateState){
 
             location.assign('/#/');
         }
+        else{
+            alert(`Failed to login! Reason: ${req.response}`);
+        }
     }
 }

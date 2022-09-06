@@ -1,33 +1,7 @@
 const db = require('../dbConfig.js');
 const crypto = require('crypto');
 
-function consolidateAmount(bets){
-    //Returns the consolidated amount of bets by username
-    return bets.reduce((acc, cur) => acc + cur.amount, 0);
-}
-
-function isFolded(bets){
-    for(let bet of bets){
-        if(bet.folded == 1){
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function sidesMatch(bets, side){
-    for(let bet of bets){
-        if(bet.side !== side){
-            return false;
-        }
-    }
-
-    return true;
-}
-
 module.exports = {
-
     insertGame : async (game_title, created_by, minimum_bet = 0.01, expiry_date = '', increment = 0.01, available_to = '') => {
         return await db('games').insert({
             game_id : crypto.createHash('SHA256').update(JSON.stringify(game_title + minimum_bet + expiry_date + new Date().toDateString())).digest('hex'),
@@ -222,8 +196,8 @@ module.exports = {
             console.log('Kaljalla')
             game.minimum_bet = amountParsed;
        }
-
-       game.pool        += parseFloat(amount);
+       
+       game.pool = await module.exports.calculatePool(game_id);
        account.balance  -= parseFloat(amount);
 
        await db('games').where({game_id}).update(game);
