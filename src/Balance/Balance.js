@@ -5,7 +5,6 @@ function Balance(props){
     const {username, token} = props;
 
     useEffect(() => {
-        console.log('Balance props changed');
         const req = new XMLHttpRequest();
         req.open('GET', `/accounts/${username}`, true);
         req.setRequestHeader('auth', token);

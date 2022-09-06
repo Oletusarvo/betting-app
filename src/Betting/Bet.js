@@ -7,14 +7,9 @@ function Bet(props){
     const [lastUpdate, setLastUpdate] = useState(-1);
 
     const {game, username, token, latestUpdate, setBettingState} = props;
-    
-    const bettingState = getBettingState(bet, game.minimum_bet);
-    setBettingState(bettingState); 
 
     useEffect(() => {
-        console.log('Prop change')
-        //if(lastUpdate >= latestUpdate) return;
-
+        console.log('brobs');
         const req = new XMLHttpRequest();
         req.open('GET', `/bets/?username=${username}&game_id=${game.game_id}`, true);
         req.setRequestHeader('auth', token);
@@ -28,10 +23,14 @@ function Bet(props){
                 );
 
                 setLastUpdate(latestUpdate);
-                
             }
         }
     }, [props]);
+
+    useEffect(() => {
+        const bettingState = getBettingState(bet, game.minimum_bet);
+        setBettingState(bettingState); 
+    }, [bet]);
 
     if(bet){
         if(bet.folded){

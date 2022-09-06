@@ -62,7 +62,10 @@ export function fold(game_id, username, token, setBet){
 }
 
 export function getBettingState(bet, minimum_bet){
-    if(bet && Math.round(bet.amount) < Math.round(minimum_bet)){
+    if(bet == undefined){
+        return 'entry';
+    }
+    else if(bet && Math.round(bet.amount) < Math.round(minimum_bet)){
         return 'call';
     }
     else{
