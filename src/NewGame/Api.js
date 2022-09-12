@@ -1,4 +1,4 @@
-export function submit(e, user, token, updateState = undefined){
+export function submit(e, username, token){
     e.preventDefault();
 
     const req = new XMLHttpRequest();
@@ -9,9 +9,9 @@ export function submit(e, user, token, updateState = undefined){
     const form = document.querySelector('#new-game-form');
     const data = {
         game_title : form.title.value,
-        minimum_bet : form.minimumBet.value,
-        increment : form.increment.value,
-        created_by : user.username,
+        minimum_bet : form.minimumBet.valueAsNumber,
+        increment : form.increment.valueAsNumber,
+        created_by : username,
         available_to : form.availableTo.value,
         expiry_date : form.expiryDate.value,
     }

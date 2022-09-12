@@ -1,0 +1,15 @@
+@import '../Config';
+
+#new-game-page{
+    justify-content: center;
+    form{
+        display: flex;
+        flex-flow: column;
+        gap: $container-gap;
+
+        input, button{
+            color: black;
+        }
+        
+    }
+}

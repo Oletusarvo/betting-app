@@ -1,0 +1,9 @@
+@import '../Config';
+
+#home-page{
+    h1{
+        font-size: 3rem;
+    }
+
+    gap: $container-gap;
+}

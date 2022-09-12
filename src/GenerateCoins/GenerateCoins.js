@@ -1,30 +1,41 @@
-import React, {useState, useEffect} from 'react';
-import {rollDice} from './Api';
+import React, {useState, useEffect, useRef, useContext} from 'react';
+import AppContext from '../Contexts/AppContext.js';
+import './Style.scss';
 
 function GenerateCoins(props){
 
-    const [rollState, setRollState] = useState('idle');
-    const [animateColor, setAnimateColor] = useState('animate-red');
-    const {token} = props;
+    const {token, user} = useContext(AppContext);
+    const [numbers, setNumbers] = useState([]);
+    let cursor = useRef(3);
+
+    function submitGuess(){
+        const req = new XMLHttpRequest();
+        req.open('POST', '/coins', true);
+        req.setRequestHeader('auth', token);
+
+    }
+
+    function input(n){
+        let newNumbers = [...numbers];
+        newNumbers.push(n);
+        setNumbers(newNumbers);
+    }
+
+    const numberButtons = [];
+    for(let n = 1; n <= 40; ++n){
+        numberButtons.push(
+            <div className="number-btn" key={`n-btn-${n}`} onClick={() => input(n)}>{n}</div>
+        );
+    }
 
     useEffect(() => {
-        console.log('Effect');
-        console.log(animateColor);
-        const s = document.querySelector('#coins-ring');
-        
-        setTimeout(() => s.classList.remove(animateColor), 200);
 
     });
 
     return (
-        <div className="page" id="coins-page">
-            <div id="coins-ring" className={animateColor} onClick={() => rollDice(token, setAnimateColor)}>   
-                <div className="cube">Guess</div>
-                <div className="cube">The</div>
-                <div className="cube">Secret</div>
-                <div className="cube">Number</div>
-            </div>
-            
+        <div className="flex-column fill gap-default pad center-all" id="coins-page">
+            <div className="flex-column glass container" id="number-display">{numbers.split('').join(' ')}</div>
+            <div className="glass" id="number-buttons">{numberButtons}</div>
         </div>
     );
 }

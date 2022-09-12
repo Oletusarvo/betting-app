@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import AppContext from '../Contexts/AppContext.js';
 
 function Balance(props){
     const [balance, setBalance] = useState('');
-    const {username, token} = props;
+    const {user, token} = useContext(AppContext);
 
     useEffect(() => {
         const req = new XMLHttpRequest();
-        req.open('GET', `/accounts/${username}`, true);
+        req.open('GET', `/accounts/${user.username}`, true);
         req.setRequestHeader('auth', token);
         req.send();
 

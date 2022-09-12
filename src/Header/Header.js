@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
+import './Style.scss';
+
 class Header extends React.Component{
     constructor(props){
         super(props);
@@ -9,14 +11,8 @@ class Header extends React.Component{
     }
 
     logout(){
-        const state = this.props.state;
-        state.action = 'logout';
-        state.token = null;
-        state.user = null;
-        state.action = 'none';
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        this.props.updateState(state);
+        localStorage.removeItem('betting-app-token');
+        localStorage.removeItem('betting-app-user');
         location.assign('/');
     }
 
@@ -24,7 +20,9 @@ class Header extends React.Component{
         return (
             <header>
                 <div id="app-name">
-                    <h2>Betting App</h2>
+                    <Link to="/#/">
+                        <h2>Betting App</h2>
+                    </Link>
                 </div>
 
                 <div id="links">

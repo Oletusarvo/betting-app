@@ -1,12 +1,13 @@
 const router = require('express').Router();
-const db = require('../models/db.js');
+const {Database, Bank} = require('../models/db.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 router.post('/', async (req, res) => {
     const {username, password} = req.body;
-    const user = await db.getAccount(username);
+    const bank = new Bank();
+    const user = await bank.getAccount(username);
 
     if(user === undefined){
         res.status(404).send(`Account with username ${username} does not exist!`);

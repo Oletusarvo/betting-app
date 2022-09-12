@@ -1,0 +1,23 @@
+@import '../Config.scss';
+
+header{
+    display: flex;
+    flex-flow: row;
+    gap: $container-gap;
+    padding: 1.7rem 1rem 1rem 1rem;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    background: $navbar-color;
+    
+    #links{
+        display: inherit;
+        flex-flow: row;
+        gap: 1rem;
+        align-items: center;
+
+        span, div{
+            cursor: pointer;
+        }
+    }
+}

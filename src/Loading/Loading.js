@@ -1,5 +1,5 @@
 import React from 'react';
-import LoadingRing from './loadingring';
+import Spinner from './Spinner';
 
 class Loading extends React.Component{
     constructor(props){
@@ -9,7 +9,7 @@ class Loading extends React.Component{
     render(){
         return(
             <div className="page" id="loading-page">
-                <LoadingRing/>
+                <Spinner/>
                 <div id="message"><h3>{this.props.title}</h3></div>
             </div>
         )

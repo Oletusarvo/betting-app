@@ -1,0 +1,146 @@
+$primary-color: rgb(13, 0, 156);
+$secondary-color: rgb(0, 0, 49);
+$navbar-color: rgb(52, 52, 52);
+$container-item-color : $primary-color;
+$container-item-border-radius : 10px;
+$container-gap: 0.3rem;
+$container-text-color: white;
+$container-padding: 0.5rem;
+$header-height: 2rem;
+$navbar-height: 2rem;
+$pool-circle-dimensions: 15rem;
+
+*{
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+
+form{
+    display: flex;
+    flex-flow: column;
+    padding: 0.1rem;
+    gap: $container-gap;
+
+    input, button, select, option{
+        color: black;
+    }
+}
+
+a{
+    text-decoration: none;
+}
+
+img{
+    width: 32px;
+    height: 32px;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+
+    td{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-bottom: 1px solid white;
+        padding: 5px 0 5px 0;
+        
+    }
+}
+
+button, input, select, textarea{
+    color: black;
+}
+
+body{
+    height: 100vh;
+    width: 100vw;
+}
+
+.page{
+    align-items: center;
+    display: flex;
+    flex-flow: column;
+    gap: $container-gap;
+    width: 100%;
+    flex: 1;
+    padding: $container-gap 0.5rem 0.5rem 0.5rem;
+    overflow-x: hidden;
+}
+
+.flex-column{
+    display: flex;
+    flex-flow: column;
+}
+
+.flex-row{
+    display: flex;
+    flex-flow: row;
+}
+
+.center-all{
+    align-items: center;
+    justify-content: center;
+}
+
+.center-align{
+    align-items: center;
+}
+
+.center-justify{
+    justify-content: center;
+}
+
+.align-text-right{
+    text-align: right;
+}
+
+.align-text-center{
+    text-align: center;
+}
+
+.fill{
+    flex: 1;
+}
+
+.center-all{
+    align-items: center;
+    justify-content: center;
+}
+
+.w-100{
+    width: 100%;
+}
+
+.h-100{
+    height: 100%;
+}
+
+.pad{
+    padding: $container-gap;
+}
+
+.overflow-y-scroll{
+    overflow-y: scroll;
+}
+
+.overflow-x-hide{
+    overflow-x: hidden;
+}
+
+.sep{
+    background: gray;
+    height: 1px;
+    width: 100%;
+}
+
+.gap-default{
+    gap: $container-gap;
+}
+
+.bg-fade{
+    background: radial-gradient($primary-color, rgba(black, 0)) !important;
+}

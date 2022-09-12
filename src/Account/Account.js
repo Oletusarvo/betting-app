@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import GameList from './GameList/GameList.js';
-import Forbidden from './forbidden';
-import Balance from './Balance/Balance.js';
+import GameList from '../GameList/GameList.js';
+import Forbidden from '../forbidden';
+import Balance from '../Balance/Balance.js';
 
 function Account(props){
     const {username, token} = props.user;
@@ -11,7 +11,7 @@ function Account(props){
     }
     else{
         return (
-            <div className="page" id="account-page">
+            <div className="flex-column fill center-all" id="account-page">
                 <h1>Your Account</h1>
                 <div id="account-info">
                     <h3>Total Balance:</h3>

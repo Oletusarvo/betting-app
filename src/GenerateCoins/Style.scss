@@ -1,0 +1,33 @@
+@import '../Config';
+
+#number-display{
+    background: $primary-color;
+    border-radius: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    border: 1px solid white;
+}
+
+#number-buttons{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+}
+
+.number-btn{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    background: $primary-color;
+    border-radius: 10px;
+    width: 48px;
+    height: 48px;
+    border: 1px solid white;
+
+    &:hover{
+        background: lighten($primary-color, 20);
+    }
+}

@@ -20,7 +20,7 @@ export function submit(e, updateState){
             updateState({
                 token,
                 user,
-                action : 'none'
+                socket : io(),
             });
 
             location.assign('/#/');

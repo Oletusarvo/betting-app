@@ -1,29 +1,29 @@
 const router = require('express').Router();
-const db = require('../models/db.js');
+const {Bank} = require('../models/db.js');
 const bcrypt = require('bcrypt');
 
 router.post('/', async (req, res) => {
     const {username, password1, password2} = req.body;
-
-    const user = await db.getAccount(username);
-
-    if(user){
-        res.status(403).send(`User ${username} already exists!`);
+    if(password1 !== password2){
+        return res.status(403).send('Passwords do not match!');
+    
     }
     else{
-        if(password1 !== password2){
-            res.status(403).send('Passwords do not match!');
-        }
-        else{
-            bcrypt.hash(password1, 10, async (err, pass) => {
-                if(err){
-                    res.status(500).send();
-                }
+        bcrypt.hash(password1, 10, async (err, pass) => {
+            if(err){
+                return res.status(500).send(err.message);
+            }
 
-                await db.insertAccount(username, pass);
-            });
-        }
+            const bank = new Bank();
+            try{
+                await bank.addAccount(username, pass);
+            }
+            catch(err){
+                return res.status(500).send(err.message);
+            }
+        });
     }
+    
 
     res.status(200).send();
 

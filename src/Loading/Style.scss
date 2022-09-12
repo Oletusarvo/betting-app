@@ -1,0 +1,21 @@
+@keyframes RingAnimation{
+    0% {transform: rotate(0deg) };
+    50% {transform: rotate(180deg)};
+    100% {transform: rotate(365deg)};
+}
+
+.spinner{
+    display: flex;
+    flex-flow: column;
+    
+    .ring-prong{
+        width: 128px;
+        height: 128px;
+        animation: RingAnimation;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        align-self: center;
+        justify-self: center;
+    }
+}

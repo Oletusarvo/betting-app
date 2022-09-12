@@ -1,22 +1,26 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Link} from 'react-router-dom';
 import {closeGame, getDestination} from './Api';
+import AppContext from '../Contexts/AppContext.js';
+import Loading from '../Loading/Loading.js';
+import './Style.scss';
 
 function GameList(props){
 
     const [renderList, setRenderList] = useState([]);
-    const [gameList, setGameList] = useState([]);
+    const [gameList, setGameList] = useState(null);
+    const {user, token} = useContext(AppContext);
     const req = new XMLHttpRequest();
 
     useEffect(() => {
-        if(props.username !== undefined){
-            req.open('GET', `/games/by_user/${props.username}`, true);
+        if(props.byUser){
+            req.open('GET', `/games/by_user/${user.username}`, true);
         }
         else{
             req.open('GET', '/games/', true);
         }
     
-        req.setRequestHeader('auth', props.token);
+        req.setRequestHeader('auth', token);
         req.send();
 
         req.onload = () => {
@@ -28,10 +32,11 @@ function GameList(props){
     }, []);
 
     useEffect(() => {
+        if(!gameList) return;
         let final = [];
         gameList.forEach(item => {
-            const div = <div className='container gamelist-container'  key={item.game_id}>
-            <Link to={getDestination(props.username, item.game_id) }>
+            const div = <div className='container gamelist-container glass w-100 bg-fade'  key={item.game_id}>
+            <Link to={getDestination(user.username, item.game_id) }>
                 <table>
                     <tbody>
                         <tr>
@@ -63,7 +68,7 @@ function GameList(props){
             </Link>
 
             {
-                props.username ? <button onClick={() => closeGame(item.game_id, props.token, setGameList)}>CLOSE</button> : <></>
+                props.byUser ? <button onClick={() => closeGame(item.game_id, token, setGameList)}>CLOSE</button> : <></>
             }
             
             </div>
@@ -77,7 +82,7 @@ function GameList(props){
 
     return (
         <>
-            {renderList}
+            {!gameList ? <Loading title={'Loading gamelist...'}/> : renderList}
         </>
     );
 }

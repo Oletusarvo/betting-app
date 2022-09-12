@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('../models/db');
+const {Bank} = require('../models/db');
 const dotenv = require('dotenv').config();
 const {checkAuth} = require('../middleware/checkAuth.js');
 
@@ -10,9 +10,8 @@ router.post('/', checkAuth, async (req, res) => {
     console.log(n);
 
     if(guess == n){
-        const acc = await db.getAccount(req.user.username);
-        acc.balance += reward;
-        await db.updateAccount(req.user.username, acc.balance);
+        const bank = new Bank();
+        await bank.deposit(reward);
 
         res.status(200).send(reward.toString());
     }
