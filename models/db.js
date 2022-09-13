@@ -15,7 +15,8 @@ class Bank{
         else{
             await db('accounts').insert({
                 username,
-                password
+                password,
+                balance: 100
             });
         }
     }
@@ -60,7 +61,6 @@ class Game{
     }
 
     async placeBet(bet){
-
         await this.validateBet(bet);
         const {username, amount} = bet;
         const previousBet = await this.getBet(username);
