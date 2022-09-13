@@ -128,11 +128,9 @@ class Game{
 
         side = side == 'Y' || side == 'y' ? 'Kyllä' : 'Ei';
         const participants = await this.getAllBets();
-        console.log(side, participants);
         const winners = participants.filter(item => item.side == side && item.folded != true);
         const share = Math.round(this.game.pool / winners.length);
 
-        console.log(winners);
         const bank = new Bank();
         for(let winner of winners){
             await bank.deposit(winner.username, share);

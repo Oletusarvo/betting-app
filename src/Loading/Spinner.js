@@ -1,5 +1,5 @@
 import React from 'react';
-const Icon = './Img/casino-chip.png';
+const Icon = './img/casino-chip.png';
 import './Style.scss';
 
 class Spinner extends React.Component{
