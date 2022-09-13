@@ -23,7 +23,7 @@ class Navbar extends React.Component{
                     </Link>
                 </div>
                 {
-                    this.props.state.user !== null ? 
+                    this.props.user !== null ? 
                     <>
                         <div id="games-link">
                             <Link to="/games">

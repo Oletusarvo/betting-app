@@ -18,33 +18,49 @@ import './Style.scss';
 
 
 function App (props){
-    const [state, updateState] = useState({
-        user : JSON.parse(localStorage.getItem('betting-app-user')),
-        token : localStorage.getItem('betting-app-token'),
+    const [user, setUser] = useState(() => {
+        const data = localStorage.getItem('betting-app-user');
+        if(data){
+            return JSON.parse(data);
+        }
+
+        return null;
     });
 
-    useEffect(() => {
-        if(state && state.user){
-            localStorage.setItem('betting-app-user', JSON.stringify(state.user));
-        }
+    const [token, setToken] = useState(() => {
+        const data = localStorage.getItem('betting-app-token');
+        if(data) return data;
 
-        if(state && state.token){
-            localStorage.setItem('betting-app-token', state.token);
+        return null;
+    });
+
+    const [socket] = useState(io());
+    const [currency] = useState('⚄');
+
+    useEffect(() => {
+        if(user){
+            localStorage.setItem('betting-app-user', JSON.stringify(user));
         }
-    }, [state]);
+    }, [user]);
+
+    useEffect(() => {
+        if(token){
+            localStorage.setItem('betting-app-token', token);
+        }
+    }, [token]);
 
     return (
         <Router>
             <div id="app" className="flex-column center-align">
                 <BackgroundDie/>
-                <AppContext.Provider value={state}>
-                    <Header state={state} updateState={updateState}/>
+                <AppContext.Provider value={{user, token, socket, currency}}>
+                    <Header user={user} setUser={setUser} setToken={setToken}/>
                     <Routes >
                         <Route path="/" element={
-                            <Home user={state.user} token={state.token}/>
+                            <Home user={user} token={token}/>
                         } />
 
-                        <Route exact path="/login" element={<Login updateState={updateState}/>} />
+                        <Route exact path="/login" element={<Login setUser={setUser} setToken={setToken}/>} />
                         <Route exact path="/signup" element={<Signup/>} />
 
                         <Route exact path="/games" element={<Games/>} />
@@ -53,7 +69,7 @@ function App (props){
                         <Route exact path="/newgame" element={<NewGame/>} />
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>
-                    <Navbar state={state}/>
+                    <Navbar user={user}/>
                 </AppContext.Provider>
             </div>
         </Router>

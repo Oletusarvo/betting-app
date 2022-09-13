@@ -22,9 +22,10 @@ function GenerateCoins(props){
     }
 
     const numberButtons = [];
-    for(let n = 1; n <= 40; ++n){
+    for(let n = 1; n <= 0xf; ++n){
+        const sym = n.toString(16).toUpperCase();
         numberButtons.push(
-            <div className="number-btn" key={`n-btn-${n}`} onClick={() => input(n)}>{n}</div>
+            <div className="number-btn" key={`n-btn-${n}`} onClick={() => input(sym)}>{sym}</div>
         );
     }
 
@@ -34,7 +35,7 @@ function GenerateCoins(props){
 
     return (
         <div className="flex-column fill gap-default pad center-all" id="coins-page">
-            <div className="flex-column glass container" id="number-display">{numbers.split('').join(' ')}</div>
+            <div className="flex-column glass container" id="number-display">{numbers.join(' ')}</div>
             <div className="glass" id="number-buttons">{numberButtons}</div>
         </div>
     );

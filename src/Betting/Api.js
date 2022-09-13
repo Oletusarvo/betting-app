@@ -69,8 +69,8 @@ export function getBettingState(bet, minimum_bet){
     }
 }
 
-export function call(bet, minimum_bet){
-    const callAmount = minimum_bet - bet.amount;
+export function call(username, game_id, amount, token){
+    const callAmount = amount;
     const res = confirm(`You are about to call for ${callAmount}. Are you sure?`);
     if(res){
         const req = new XMLHttpRequest();
@@ -78,7 +78,12 @@ export function call(bet, minimum_bet){
         req.setRequestHeader('auth', token);
         req.setRequestHeader('Content-Type', 'application/json');
 
-        bet.amount = callAmount;
+        const bet = {
+            username,
+            game_id,
+            amount
+        }
+        
         req.send(JSON.stringify(bet));
 
         req.onload = () => {
@@ -87,4 +92,59 @@ export function call(bet, minimum_bet){
             }
         }
     }
+}
+
+export function loadBet(username, game_id, token){
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
+        req.open('GET', `/bets/?username=${username}&game_id=${game_id}`, true);
+        req.setRequestHeader('auth', token);
+
+        req.onload = () => {
+            if(req.status === 200){
+                if(req.response == ""){
+                    resolve(null);
+                } 
+                else{
+                    const res = JSON.parse(req.response);
+                    resolve(res);
+                }
+            }
+            else{
+                reject({
+                    statusCode : req.status,
+                    reason: req.response
+                });
+            }
+        }
+
+        req.send();
+    });
+}
+
+export function loadGame(game_id, token){
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
+        req.open('GET', `/games/${game_id}`);
+        req.setRequestHeader('auth', token);
+        req.onload = () => {
+            if(req.status === 200){
+                const data = JSON.parse(req.response);
+                if(!data){
+                    reject(`Unable to load game data!`);
+                }
+                else{
+                    resolve(data);
+                }
+            }
+            else{
+                reject({
+                    statusCode : req.status,
+                    reason: req.response
+                });
+            }
+        }
+
+        req.send();
+    })
 }

@@ -128,7 +128,7 @@ class Game{
 
         side = side == 'Y' || side == 'y' ? 1 : 0;
         const participants = await this.getAllBets();
-        const winners = participants.filter(item => item.side == side && item.folded !== 1);
+        const winners = participants.filter(item => item.side == side && item.folded != 1);
         const share = Math.round(this.game.pool / winners.length);
 
         const bank = new Bank();
@@ -169,6 +169,10 @@ class Game{
             const previousSide = previousBet.side;
             const combinedAmount = previousAmount + amount;
 
+            if(previousBet.folded){
+                throw new Error('You have folded!');
+            }
+            
             if(previousAmount >= this.game.minimum_bet){
                 throw new Error('Cannot raise until minimum bet has changed!');
             }

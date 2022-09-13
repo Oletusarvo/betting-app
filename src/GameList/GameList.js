@@ -9,7 +9,7 @@ function GameList(props){
 
     const [renderList, setRenderList] = useState([]);
     const [gameList, setGameList] = useState(null);
-    const {user, token} = useContext(AppContext);
+    const {user, token, currency} = useContext(AppContext);
     const req = new XMLHttpRequest();
 
     useEffect(() => {
@@ -46,12 +46,12 @@ function GameList(props){
 
                         <tr>
                             <td>Minimum Bet:</td>
-                            <td className="align-right">${item.minimum_bet}</td>
+                            <td className="align-right">{currency + item.minimum_bet}</td>
                         </tr>
 
                         <tr>
                             <td>Pool:</td>
-                            <td className="align-right">${item.pool.toFixed(2)}</td>
+                            <td className="align-right">{currency + item.pool}</td>
                         </tr>
 
                         <tr>

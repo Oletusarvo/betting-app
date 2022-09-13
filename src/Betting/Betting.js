@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {useParams, useNavigate, Link} from 'react-router-dom';
 import Loading from '../Loading/Loading.js';
-import {placeBet, submit, fold, call} from './Api';
+import {placeBet, submit, fold, call, loadGame} from './Api';
 import Bet from './Bet';
 import Balance from '../Balance/Balance.js';
 import AppContext from '../Contexts/AppContext.js';
@@ -11,28 +11,14 @@ import './Style.scss';
 
 function Betting(props) {
     const {game_id} = useParams();
-    const {user, token, socket} = useContext(AppContext);
+    const {user, token, socket, currency} = useContext(AppContext);
 
     const [game, setGame] = useState();
-
     const [bettingState, setBettingState] = useState('entry');
-    
-    function load(){
-        const req = new XMLHttpRequest();
-        req.open('GET', `/games/${game_id}`, true);
-        req.setRequestHeader('auth', token);
-        req.send();
-
-        req.onload = () => {
-            if(req.status === 200){
-                setGame(JSON.parse(req.response));
-            }
-        }
-    }
+    const [minBet, setMinBet] = useState(0);
 
     useEffect(() => {
-        load();
-        
+        loadGame(game_id, token).then(data => setGame(data));
         socket.on('game_update', data => {
             setGame(JSON.parse(data));
         });
@@ -62,7 +48,7 @@ function Betting(props) {
                         <tr>
                             <td>Your Bet:</td>
                             <td className="align-text-right">
-                                <GameContext.Provider value={{game, setBettingState}}>
+                                <GameContext.Provider value={{game, setBettingState, setMinBet}}>
                                     <Bet/>
                                 </GameContext.Provider>
                                 
@@ -70,12 +56,12 @@ function Betting(props) {
                         </tr>
                         <tr>
                             <td>Minimum Bet: </td>
-                            <td className="align-text-right">${game.minimum_bet.toFixed(2)}</td>
+                            <td className="align-text-right">{currency + game.minimum_bet}</td>
                         </tr>
 
                         <tr>
                             <td>Increment:</td>
-                            <td className="align-text-right">${game.increment.toFixed(2)}</td>
+                            <td className="align-text-right">{currency + game.increment}</td>
                         </tr>
 
                         <tr>
@@ -94,13 +80,13 @@ function Betting(props) {
                 </table>
             </div>
             <div className="betting-container container glass bg-fade" id="bet-pool">
-                <div id="bet-pool-ring" className={bettingState} onClick={() => {}}>
-                    <h1>${game.pool.toFixed(2)}</h1>
+                <div id="bet-pool-ring" className={bettingState} onClick={() => {call(user.username, game.game_id, minBet, token)}}>
+                    <h1>{currency + game.pool}</h1>
                 </div>
             </div>
             <div className="betting-container container glass bg-fade" id="bet-controls">
                 <form id="betting-form" onSubmit={(e) => submit(e, token, user.username, game.game_id, setGame)}>
-                    <input type="number" name="amount" placeholder="Bet Amount" min="0.00" step={game.increment}></input>
+                    <input type="number" name="amount" placeholder="Bet Amount" min={minBet} step={game.increment}></input>
                     <select name="side">
                         <option>Kyllä</option>
                         <option>Ei</option>

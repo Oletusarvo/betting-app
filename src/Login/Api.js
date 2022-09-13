@@ -1,4 +1,4 @@
-export function submit(e, updateState){
+export function submit(e, setUser, setToken){
     e.preventDefault();
 
     const form = document.querySelector('#login-form');
@@ -17,12 +17,8 @@ export function submit(e, updateState){
     req.onload = () => {
         if(req.status === 200){
             const {token, user} = JSON.parse(req.response);
-            updateState({
-                token,
-                user,
-                socket : io(),
-            });
-
+            setUser(user);
+            setToken(token);
             location.assign('/#/');
         }
         else{

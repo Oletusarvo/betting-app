@@ -3,7 +3,7 @@ import AppContext from '../Contexts/AppContext.js';
 
 function Balance(props){
     const [balance, setBalance] = useState('');
-    const {user, token} = useContext(AppContext);
+    const {user, token, currency} = useContext(AppContext);
 
     useEffect(() => {
         const req = new XMLHttpRequest();
@@ -14,14 +14,14 @@ function Balance(props){
         req.onload = () => {
             if(req.status === 200){
                 setBalance(
-                    JSON.parse(req.response).balance.toFixed(2)
+                    JSON.parse(req.response).balance
                 );
             }
         }
     }, [props]);
 
     return (
-        <span>${balance}</span>
+        <span>{currency + balance}</span>
     );
 }
 

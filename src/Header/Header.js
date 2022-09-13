@@ -13,6 +13,8 @@ class Header extends React.Component{
     logout(){
         localStorage.removeItem('betting-app-token');
         localStorage.removeItem('betting-app-user');
+        this.props.setUser(null);
+        this.props.setToken(null);
         location.assign('/');
     }
 
@@ -27,7 +29,7 @@ class Header extends React.Component{
 
                 <div id="links">
                     {
-                        this.props.state.user == undefined || (this.props.state.appcontext === 'home' && this.props.state.user == undefined)? 
+                        this.props.user == undefined ? 
                         <>
                             <Link id="login-link" className="link" to="/login">Login</Link>
                             <Link id="signup-link" className="link" to="/signup">Signup</Link>
