@@ -126,11 +126,13 @@ class Game{
             throw new Error('Cannot close the game before its expiry date!');
         }
 
-        side = side == 'Y' || side == 'y' ? 1 : 0;
+        side = side == 'Y' || side == 'y' ? 'Kyllä' : 'Ei';
         const participants = await this.getAllBets();
-        const winners = participants.filter(item => item.side == side && item.folded != 1);
+        console.log(side, participants);
+        const winners = participants.filter(item => item.side == side && item.folded != true);
         const share = Math.round(this.game.pool / winners.length);
 
+        console.log(winners);
         const bank = new Bank();
         for(let winner of winners){
             await bank.deposit(winner.username, share);
@@ -162,6 +164,10 @@ class Game{
 
         if(amount > account.balance){
             throw new Error('Amount exceedes your balance!');
+        }
+
+        if(amount - this.game.minimum_bet > this.game.increment){
+            throw new Error('Your bet cannot exceed the minimum bet by more than the defined increment!');
         }
 
         if(previousBet){

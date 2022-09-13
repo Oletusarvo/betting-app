@@ -12,7 +12,6 @@ export function submit(e, username, token){
         minimum_bet : form.minimumBet.valueAsNumber,
         increment : form.increment.valueAsNumber,
         created_by : username,
-        available_to : form.availableTo.value,
         expiry_date : form.expiryDate.value,
     }
 

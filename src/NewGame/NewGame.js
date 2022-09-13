@@ -19,11 +19,14 @@ function NewGame(props){
                 </div>
                 <div className="sep"></div>
                 <form id="new-game-form" onSubmit={(e) => submit(e, user.username, token)}>
+                    <label>Title:</label>
                     <input name="title" placeholder="Enter game title" required={true} maxLength={50}></input>
+                    <label>Minimum Bet:</label>
                     <input name="minimumBet" type="number" min="1" step="1" placeholder="Enter minimum bet" required={true}></input>
+                    <label>Increment:</label>
                     <input name="increment" type="number" min="1" step="1" defaultValue={1} placeholder="Bet Increment"></input>
+                    <label>Expiry Date:</label>
                     <input name="expiryDate" type="date" placeholder="Enter expiry date"></input>
-                    <textarea name="availableTo" maxLength={500} placeholder="Space-separated list of users who will be able to participate."></textarea>
                     <button type="submit">Create</button>
                 </form>
             </div>

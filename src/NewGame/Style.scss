@@ -6,9 +6,16 @@
         display: flex;
         flex-flow: column;
         gap: $container-gap;
+        width: 100%;
 
         input, button{
+            font-size: 2rem;
             color: black;
+            width: 100%;
+        }
+
+        button{
+            margin-top: 1rem,
         }
         
     }

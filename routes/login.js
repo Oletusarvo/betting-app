@@ -16,7 +16,6 @@ router.post('/', async (req, res) => {
 
     if(await bcrypt.compare(password, user.password)){
         const token = jwt.sign(user, process.env.SERVER_TOKEN_SECRET);
-
         const payload = {
             token,
             user : {
@@ -25,6 +24,8 @@ router.post('/', async (req, res) => {
             }
         }
 
+        
+        
         res.status(200).send(JSON.stringify(payload));
     }
     else{

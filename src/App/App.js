@@ -34,6 +34,7 @@ function App (props){
         return null;
     });
 
+
     const [socket] = useState(io());
     const [currency] = useState('⚄');
 
