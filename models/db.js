@@ -125,12 +125,16 @@ class Game{
         if(now < expiry){
             throw new Error('Cannot close the game before its expiry date!');
         }
-
+        
+        const {pool} = this.game;
         const participants = await this.getAllBets();
         const winners = participants.filter(item => item.side == side && item.folded != true);
-        const share = Math.round(this.game.pool / winners.length);
+        const shareForCreator = pool % winners.length;
+        const share = Math.round((pool - shareForCreator) / winners.length);
 
         const bank = new Bank();
+        await bank.deposit(this.game.created_by, shareForCreator); //The creator of the bet gets the remainder of what would have been an uneven division.
+
         for(let winner of winners){
             await bank.deposit(winner.username, share);
         }
