@@ -31,7 +31,7 @@ export function fold(game_id, username, token, setBet){
     }
 }
 
-export function submit(e, token, username, game_id, setGame){
+export function submit(e, token, username, game_id){
     e.preventDefault();
 
     const req = new XMLHttpRequest();

@@ -9,9 +9,13 @@
         width: 100%;
 
         input, button{
-            font-size: 2rem;
             color: black;
             width: 100%;
+        }
+
+        textarea{
+            width: 100%;
+            resize: none;
         }
 
         button{

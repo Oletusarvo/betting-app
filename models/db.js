@@ -126,7 +126,6 @@ class Game{
             throw new Error('Cannot close the game before its expiry date!');
         }
 
-        side = side == 'Y' || side == 'y' ? 'Kyllä' : 'Ei';
         const participants = await this.getAllBets();
         const winners = participants.filter(item => item.side == side && item.folded != true);
         const share = Math.round(this.game.pool / winners.length);
@@ -141,7 +140,7 @@ class Game{
     }
 
     data(){
-        const {game_title, game_id, pool, minimum_bet, created_by, expiry_date, increment} = this.game;
+        const {game_title, game_id, pool, minimum_bet, created_by, expiry_date, increment, options} = this.game;
         return {
             game_title,
             game_id,
@@ -149,7 +148,8 @@ class Game{
             minimum_bet,
             created_by,
             expiry_date,
-            increment
+            increment,
+            options
         }
     }
 
@@ -199,7 +199,7 @@ class Game{
 
 class Database{
     async insertGame(game){
-        const {game_title, minimum_bet, increment, expiry_date, available_to, created_by} = game;
+        const {game_title, minimum_bet, increment, expiry_date, created_by, available_to, options, type} = game;
         return await db('games').insert({
             game_id : crypto.createHash('SHA256').update(game_title + minimum_bet + increment + expiry_date + available_to + new Date().toDateString()).digest('hex'),
             game_title,
@@ -207,7 +207,9 @@ class Database{
             increment,
             expiry_date : expiry_date == '' ? 'When Closed' : expiry_date,
             created_by,
-            available_to
+            available_to,
+            type,
+            options : type === 'Boolean' ? 'Kyllä;Ei' : options,
         });
     }
 

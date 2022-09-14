@@ -35,6 +35,9 @@ function GameList(props){
         if(!gameList) return;
         let final = [];
         gameList.forEach(item => {
+            let options = [];
+            item.options.split(';').forEach(option => options.push(<option key={`option-${option}`}>{option}</option>));
+            
             const div = <div className='container gamelist-container glass w-100 bg-fade'  key={item.game_id}>
             <Link to={getDestination(user.username, item.game_id) }>
                 <table>
@@ -68,7 +71,13 @@ function GameList(props){
             </Link>
 
             {
-                props.byUser ? <button onClick={() => closeGame(item.game_id, token, setGameList)}>CLOSE</button> : <></>
+                props.byUser ? 
+                <div className="flex-row fill gap-s">
+                    <select id={`side-select-${item.game_id}`}>
+                        {options}
+                    </select>
+                    <button onClick={() => closeGame(item.game_id, token, setGameList)}>CLOSE</button>
+                </div> : <></>
             }
             
             </div>

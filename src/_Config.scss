@@ -47,7 +47,6 @@ table{
         text-overflow: ellipsis;
         border-bottom: 1px solid white;
         padding: 5px 0 5px 0;
-        
     }
 }
 
@@ -139,6 +138,14 @@ body{
 
 .gap-default{
     gap: $container-gap;
+}
+
+.gap-s{
+    gap: 0.25rem;
+}
+
+.gap-m{
+    gap: 0.5rem;
 }
 
 .bg-fade{

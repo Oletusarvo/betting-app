@@ -3,9 +3,11 @@ export function closeGame(game_id, token, setGameList){
         throw Error('Game id must be a string!');
     }
 
-    const side = prompt('What side should the game close on?');
+    const side = document.querySelector(`#side-select-${game_id}`).value;
 
-    if(!side) return;
+    const res = confirm(`You are about to close the game on \'${side}\'. Are you sure?`);
+
+    if(!res) return;
 
     const req = new XMLHttpRequest();
     req.open('DELETE', `/games/${game_id}`, true);

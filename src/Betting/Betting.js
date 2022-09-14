@@ -28,6 +28,12 @@ function Betting(props) {
         return <Loading title="Loading game..." />
     }
     else{
+        let options = game.options.split(';');
+        let renderOptions = [];
+        options.forEach(option => renderOptions.push(
+            <option key={`option-${option}`}>{option}</option>
+        ));
+
         return (
             <div className="flex-column fill gap-default w-100 center-align pad overflow-y-scroll" id="betting-page">
             <div className="betting-container container glass bg-fade" id="bet-title">
@@ -85,11 +91,10 @@ function Betting(props) {
                 </div>
             </div>
             <div className="betting-container container glass bg-fade" id="bet-controls">
-                <form id="betting-form" onSubmit={(e) => submit(e, token, user.username, game.game_id, setGame)}>
-                    <input type="number" name="amount" placeholder="Bet Amount" min={minBet} step={game.increment}></input>
+                <form id="betting-form" onSubmit={(e) => submit(e, token, user.username, game.game_id)}>
+                    <input type="number" name="amount" placeholder="Bet Amount" min={minBet} defaultValue={minBet} step={game.increment}></input>
                     <select name="side">
-                        <option>Kyllä</option>
-                        <option>Ei</option>
+                        {renderOptions}
                     </select>
                     <button type="submit">Place Bet</button>
                 </form>

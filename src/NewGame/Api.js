@@ -13,6 +13,9 @@ export function submit(e, username, token){
         increment : form.increment.valueAsNumber,
         created_by : username,
         expiry_date : form.expiryDate.value,
+        type : form.betType.value,
+        options : form.betOptions.value,
+
     }
 
     req.send(JSON.stringify(data));

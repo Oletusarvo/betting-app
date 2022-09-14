@@ -15,7 +15,12 @@ function Bet(props){
     useEffect(() => {
         const bettingState = getBettingState(bet, game.minimum_bet);
         setBettingState(bettingState); 
-        if(bet) setMinBet(game.minimum_bet - bet.amount);
+        if(bet) {
+            setMinBet(game.minimum_bet - bet.amount);
+        }
+        else{
+            setMinBet(game.minimum_bet);
+        }
     }, [bet]);
 
     if(bet){
