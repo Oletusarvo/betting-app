@@ -7,6 +7,17 @@ function NewGame(props){
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
 
     const {user, token} = useContext(AppContext);
+
+    function updateSelection(){
+        const betSelect = document.querySelector('#select-bet-type');
+        if(betSelect.value === 'Boolean'){
+            setBetTypeSelect('Boolean');
+        }
+        else{
+            setBetTypeSelect('Multi-Choice');
+        }
+    }
+
     return (
         <div className="flex-column fill w-100 pad" id="new-game-page">
             <div className="container flex-column glass w-100 bg-fade">
@@ -22,11 +33,11 @@ function NewGame(props){
                     <label>Increment:</label>
                     <input name="increment" type="number" min="1" step="1" defaultValue={1} placeholder="Bet Increment"></input>
                     <label>Type:</label>
-                    <select name="betType" id="select-bet-type">
-                        <option onClick={() => setBetTypeSelect('Boolean')}>Boolean</option>
-                        <option onClick={() => setBetTypeSelect('Multi-Choice')}>Multi-Choice</option>
+                    <select name="betType" id="select-bet-type" onChange={updateSelection}>
+                        <option>Boolean</option>
+                        <option>Multi-Choice</option>
                     </select>
-                    <textarea id="input-bet-options" name="betOptions" placeholder="Multi-choice bet options separated by semi-colon" maxLength={256} disabled={betTypeSelect === 'Boolean' ? true : false}></textarea>
+                    <textarea id="input-bet-options" name="betOptions" placeholder="Multi-choice bet options separated by semi-colon(;)" maxLength={256} disabled={betTypeSelect === 'Boolean' ? true : false}></textarea>
                     <label>Expiry Date:</label>
                     <input name="expiryDate" type="date" placeholder="Enter expiry date"></input>
                     <button type="submit">Create</button>

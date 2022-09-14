@@ -86,7 +86,7 @@ function Betting(props) {
                 </table>
             </div>
             <div className="betting-container container glass bg-fade" id="bet-pool">
-                <div id="bet-pool-ring" className={bettingState} onClick={() => {call(user.username, game.game_id, minBet, token)}}>
+                <div id="bet-pool-ring" className={bettingState} onClick={() => {}}>
                     <h1>{currency + game.pool}</h1>
                 </div>
             </div>
