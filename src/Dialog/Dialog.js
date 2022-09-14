@@ -6,10 +6,11 @@ function Dialog({text, options}){
     ));
 
     return (
-        <div className="flex-column gap-s center-all">
+        <div className="flex-column gap-s center-all bg-fade glass">
             <div id="dialog-text">{text}</div>
-            <div id="dialog-buttons" className="flex-row gap-s center-all">
+            <div id="dialog-buttons" className="flex-row gap-s center-all fill">
                 <select name="bet-side">{renderedOptions}</select>
+                <button>Send</button>
             </div>
         </div>
     );

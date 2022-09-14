@@ -1,4 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
+import ReactDOM from 'react-dom';
+
 import {useParams, useNavigate, Link} from 'react-router-dom';
 import Loading from '../Loading/Loading.js';
 import {placeBet, submit, fold, call, loadGame} from './Api';
@@ -6,6 +8,7 @@ import Bet from './Bet';
 import Balance from '../Balance/Balance.js';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
+import Dialog from '../Dialog/Dialog.js';
 
 import './Style.scss';
 
@@ -86,7 +89,7 @@ function Betting(props) {
                 </table>
             </div>
             <div className="betting-container container glass bg-fade" id="bet-pool">
-                <div id="bet-pool-ring" className={bettingState} onClick={() => {}}>
+                <div id="bet-pool-ring" className={bettingState}>
                     <h1>{currency + game.pool}</h1>
                 </div>
             </div>
