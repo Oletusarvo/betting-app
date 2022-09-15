@@ -49,12 +49,12 @@ function GameList(props){
 
                         <tr>
                             <td>Minimum Bet:</td>
-                            <td className="align-right">{currency + item.minimum_bet}</td>
+                            <td className="align-right">{currency + item.minimum_bet.toLocaleString('en')}</td>
                         </tr>
 
                         <tr>
                             <td>Pool:</td>
-                            <td className="align-right">{currency + item.pool}</td>
+                            <td className="align-right">{currency + item.pool.toLocaleString('en')}</td>
                         </tr>
 
                         <tr>

@@ -21,7 +21,7 @@ function Balance(props){
     }, [props]);
 
     return (
-        <span>{currency + balance}</span>
+        <span>{currency + (balance.toLocaleString('en'))}</span>
     );
 }
 

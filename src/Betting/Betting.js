@@ -65,12 +65,12 @@ function Betting(props) {
                         </tr>
                         <tr>
                             <td>Minimum Bet: </td>
-                            <td className="align-text-right">{currency + game.minimum_bet}</td>
+                            <td className="align-text-right">{currency + game.minimum_bet.toLocaleString('en')}</td>
                         </tr>
 
                         <tr>
                             <td>Increment:</td>
-                            <td className="align-text-right">{currency + game.increment}</td>
+                            <td className="align-text-right">{currency + game.increment.toLocaleString('en')}</td>
                         </tr>
 
                         <tr>
@@ -90,7 +90,7 @@ function Betting(props) {
             </div>
             <div className="betting-container container glass bg-fade" id="bet-pool">
                 <div id="bet-pool-ring" className={bettingState}>
-                    <h1>{currency + game.pool}</h1>
+                    <h1>{currency + game.pool.toLocaleString('en')}</h1>
                 </div>
             </div>
             <div className="betting-container container glass bg-fade" id="bet-controls">

@@ -1,0 +1,16 @@
+{
+    "name": "Betting App",
+    "short_name": "Betting App",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#FFFF",
+    "theme_color": "#0F00",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "./app-icon",
+            "type": "image/png",
+            "sizes": "32x32"
+        }
+    ]
+}

@@ -28,7 +28,7 @@ function Bet(props){
             return <span>Folded</span>
         }
         else{
-            return <span className="table-field">{`\"${bet.side}\" for ${currency + bet.amount}`} <button onClick={() => fold(game.game_id, user.username, token, setBet)}>Fold</button></span>
+            return <span className="table-field">{`\"${bet.side}\" for ${currency + bet.amount.toLocaleString('en')}`} <button onClick={() => fold(game.game_id, user.username, token, setBet)}>Fold</button></span>
         }
     }
     else{
