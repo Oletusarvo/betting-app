@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {HashRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from '../Home/Home';
-import Account from '../Account/Account.js';
 import Delete from '../Account/Delete.js';
 import Header from '../Header/Header.js';
 import Navbar from '../navbar';
@@ -11,9 +10,8 @@ import Login from '../Login/Login.js';
 import Signup from '../Signup/Signup.js';
 import Unknown from '../unknown';
 import Betting  from '../Betting/Betting.js';
-import ManageGame from '../ManageGame/ManageGame.js';
+import Background from '../Background/Background.js';
 import GenerateCoins from '../GenerateCoins/GenerateCoins.js';
-import BackgroundDie from '../BackgroundDie.js';
 import AppContext from '../Contexts/AppContext';
 import './Style.scss';
 
@@ -54,7 +52,7 @@ function App (props){
     return (
         <Router>
             <div id="app" className="flex-column center-align">
-                <BackgroundDie/>
+                <Background/>
                 <AppContext.Provider value={{user, token, socket, currency}}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
                     <Routes >

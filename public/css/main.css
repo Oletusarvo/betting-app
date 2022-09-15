@@ -62,26 +62,6 @@ textarea {
   display: flex;
   flex-flow: column; }
 
-#bg {
-  display: flex;
-  position: absolute;
-  top: 0;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-  z-index: -1;
-  height: 100vh;
-  width: 100vw;
-  background: #000031; }
-  #bg img {
-    width: 256px;
-    height: 256px;
-    opacity: 0.5;
-    animation-name: rotateAnimation;
-    animation-timing-function: linear;
-    animation-duration: 10s;
-    animation-iteration-count: infinite; }
-
 .page {
   align-items: center;
   display: flex;
