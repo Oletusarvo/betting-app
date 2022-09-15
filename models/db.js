@@ -35,10 +35,19 @@ class Bank{
 
         acc.balance += amount;
         await db('accounts').where({username}).update(acc);
+        return true;
     }
 }
 
 class Game{
+    constructor(){
+        this.error = {
+            INCREMENT : 1,
+            BALANCE : 2,
+            CALL : 3,
+            MINBET : 4,
+        }
+    }
     /**@private */
     async calculatePool(){
         const bets = await this.getAllBets();
@@ -52,7 +61,7 @@ class Game{
     /**@private */
     async update(){
         await db('games').where({game_id : this.game.game_id}).update(this.game);
-        this.game = await db('games').where({game_id : this.game.game_id}).first();
+        await this.load(this.game.game_id);
     }
 
     async load(game_id){
@@ -118,7 +127,6 @@ class Game{
     }
 
     async close(side){
-
         const now = new Date().getTime();
         const expiry = new Date(this.game.expiry_date).getTime();
 
@@ -163,6 +171,10 @@ class Game{
 
         const previousBet = await this.getBet(username);
         const account = await bank.getAccount(username);
+
+        if(new Date().getTime() >= new Date(this.game.expiry_date).getTime()){
+            throw new Error('The game has expired!');
+        }
 
         if(amount > account.balance){
             throw new Error('Amount exceedes your balance!');

@@ -1,15 +1,16 @@
 import React from 'react';
-import Notifications from '../notifications';
+import {Link} from 'react-router-dom';
 import GameList  from '../GameList/GameList.js';
 import Balance from '../Balance/Balance.js';
 import './Style.scss';
 
 function Home(props){
 
-    const {username, balance} = props.user ? props.user : {};
+    const {username} = props.user ? props.user : {};
     const {token} = props;
 
     return (
+        <>
         <div className="flex-column fill center-align w-100 pad overflow-y-scroll overflow-x-hide gap-default" id="home-page">
             {
                 props.user === null ? 
@@ -17,7 +18,6 @@ function Home(props){
                     <h1>Betting App</h1>
                     <br/>
                     <p>
-                        
                         Welcome to the betting app! Here you can create bets out of 
                         anything you choose and bid virtual currency in the form of dice.
                         Each new account receives 100 dice for use in betting. While 
@@ -63,10 +63,18 @@ function Home(props){
                     <div className="sep"></div>
                     <h2>Bets created by you:</h2>
                     <GameList byUser={true}/>
+                    <div>
+                        <Link to="/account/delete">Delete Account</Link>
+                    </div>
+                    
                 </>
                 
             }
         </div>
+        
+        </>
+        
+        
     );
 }
 

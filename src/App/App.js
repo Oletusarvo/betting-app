@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {HashRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from '../Home/Home';
 import Account from '../Account/Account.js';
+import Delete from '../Account/Delete.js';
 import Header from '../Header/Header.js';
 import Navbar from '../navbar';
 import Games from '../Games/Games.js';
@@ -63,7 +64,7 @@ function App (props){
 
                         <Route exact path="/login" element={<Login setUser={setUser} setToken={setToken}/>} />
                         <Route exact path="/signup" element={<Signup/>} />
-
+                        <Route exact path="/account/delete" element={<Delete/>}></Route>
                         <Route exact path="/games" element={<Games/>} />
                         <Route exact path="/games/:game_id" element={<Betting/>}></Route>
                         <Route exact path="/coins" element={<GenerateCoins/>}></Route>

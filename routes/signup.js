@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
     
     }
     else{
-        bcrypt.hash(password1, 10, async (err, pass) => {
+        bcrypt.hash(password1, 15, async (err, pass) => {
             if(err){
                 return res.status(500).send(err.message);
             }
