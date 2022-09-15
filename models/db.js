@@ -137,7 +137,7 @@ class Game{
         const {pool} = this.game;
         const participants = await this.getAllBets();
         const winners = participants.filter(item => item.side == side && item.folded != true);
-        const shareForCreator = pool % winners.length;
+        const shareForCreator = pool % winners.length || 0;
         const share = Math.round((pool - shareForCreator) / winners.length);
 
         const bank = new Bank();
@@ -173,7 +173,7 @@ class Game{
         const account = await bank.getAccount(username);
 
         if(new Date().getTime() >= new Date(this.game.expiry_date).getTime()){
-            throw new Error('The game has expired!');
+            throw new Error('The bet has expired!');
         }
 
         if(amount > account.balance){
