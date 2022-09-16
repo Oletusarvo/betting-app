@@ -154,6 +154,10 @@ body{
     background: radial-gradient($primary-color, rgba(black, 0)) !important;
 }
 
+.bg-fade-expired{
+    background: radial-gradient(red, rgba(black, 0)) !important;
+}
+
 .absolute{
     position: absolute;
 }
