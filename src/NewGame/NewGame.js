@@ -20,7 +20,7 @@ function NewGame(props){
 
     return (
         <div className="flex-column fill w-100 pad" id="new-game-page">
-            <div className="container flex-column glass w-100 bg-fade">
+            <div className="container">
                 <div className="align-text-center">
                     <h1>Create new Game</h1>
                 </div>

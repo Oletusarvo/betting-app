@@ -35,7 +35,10 @@ class Header extends React.Component{
                             <Link id="signup-link" className="link" to="/signup">Signup</Link>
                         </>
                         :
-                        <span id="logout-link" onClick={this.logout}>Logout</span>
+                        <>
+                            <span id="logout-link" onClick={this.logout}>Logout</span>
+                        </>
+                        
                     }
                     
                 </div>

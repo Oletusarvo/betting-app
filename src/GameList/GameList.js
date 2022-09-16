@@ -38,7 +38,7 @@ function GameList(props){
             let options = [];
             item.options.split(';').forEach(option => options.push(<option key={`option-${option}`}>{option}</option>));
             const isExpired = new Date().getTime() >= new Date(item.expiry_date).getTime();
-            const div = <div className={`container gamelist-container glass w-100 ${isExpired ? 'bg-fade-expired' : 'bg-fade'}`}  key={item.game_id}>
+            const div = <div className={`gamelist-container container glass ${isExpired && 'bg-expired'}`}  key={item.game_id}>
             <Link to={getDestination(user.username, item.game_id) }>
                 <table>
                     <tbody>

@@ -127,6 +127,7 @@ class Game{
     }
 
     async close(side){
+        await this.isContested();
         const now = new Date().getTime();
         const expiry = new Date(this.game.expiry_date).getTime();
 
@@ -162,6 +163,14 @@ class Game{
             expiry_date,
             increment,
             options
+        }
+    }
+    async isContested(){
+        const bets = await this.getAllBets();
+        for(const bet of bets){
+            if(bet.amount !== this.game.minimum_bet && bet.folded != 1){
+                throw new Error('Game is contested!');
+            }
         }
     }
 

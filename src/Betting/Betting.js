@@ -33,20 +33,24 @@ function Betting(props) {
     else{
         let options = game.options.split(';');
         let renderOptions = [];
+        const isExpired = new Date().getTime() >= new Date(game.expiry_date).getTime();
+        const timeLeft = game.expiry_date != 'When Closed' ? Math.round((new Date(game.expiry_date) - new Date()) / 1000 / 60 / 60 / 24) : NaN;
+        const expiryString =  !Number.isNaN(timeLeft) ? timeLeft < 0 ? "Expired" : timeLeft + " days" : "No Limit";
+
         options.forEach(option => renderOptions.push(
             <option key={`option-${option}`}>{option}</option>
         ));
 
         return (
             <div className="flex-column fill gap-default w-100 center-align pad overflow-y-scroll" id="betting-page">
-            <div className="betting-container container glass bg-fade" id="bet-title">
+            <div className= {"container glass" + (isExpired && " bg-expired")} id="bet-title">
                 <Link id="back-button" to="/games">
                     <img src="../img/arrow.png"></img>
                 </Link>
                 <h3 id="bet-name">{game.game_title}</h3>
             </div>
 
-            <div className="betting-container container glass bg-fade" id="bet-info">
+            <div className={"container glass" + (isExpired && " bg-expired")} id="bet-info">
                 <table>
                     <tbody>
                         <tr>
@@ -81,19 +85,18 @@ function Betting(props) {
                         <tr>
                             <td>Time Left:</td>
                             <td className="align-text-right">
-                                {game.expiry_date != 'When Closed' ? Math.round((new Date(game.expiry_date) - new Date()) / 1000 / 60 / 60 / 24) + ' days' : 'No Limit'}
-                                
+                                {expiryString}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div className="betting-container container glass bg-fade" id="bet-pool">
+            <div className={"container glass" + (isExpired && " bg-expired")} id="bet-pool">
                 <div id="bet-pool-ring" className={bettingState}>
                     <h1>{currency + game.pool.toLocaleString('en')}</h1>
                 </div>
             </div>
-            <div className="betting-container container glass bg-fade" id="bet-controls">
+            <div className={"container glass" + (isExpired && " bg-expired")} id="bet-controls">
                 <form id="betting-form" onSubmit={(e) => submit(e, token, user.username, game.game_id)}>
                     <input type="number" name="amount" placeholder="Bet Amount" min={minBet} defaultValue={minBet} step={game.increment}></input>
                     <select name="side">

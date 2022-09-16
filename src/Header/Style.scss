@@ -19,5 +19,17 @@ header{
         span, div{
             cursor: pointer;
         }
+
+        img{
+            align-self: center;
+        }
+
+        i{
+            &:after{
+                width: 10px;
+                height: 10px;
+                background: red;
+            }
+        }
     }
 }
