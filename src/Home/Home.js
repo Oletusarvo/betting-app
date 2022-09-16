@@ -18,6 +18,7 @@ function Home(props){
                     <h1>Betting App</h1>
                     <br/>
                     <p>
+                        <strong>Notice! This app is intended to be viewed on mobile devices in portrait mode.</strong><br/><br/>
                         Welcome to the betting app! Here you can create bets out of 
                         anything you choose and bid virtual currency in the form of dice.
                         Each new account receives 100 dice for use in betting. While 

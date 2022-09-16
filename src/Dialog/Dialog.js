@@ -1,3 +1,5 @@
+import './Style.scss';
+
 function Dialog({text, options}){
 
     let renderedOptions = [];
@@ -6,7 +8,7 @@ function Dialog({text, options}){
     ));
 
     return (
-        <div className="flex-column gap-s center-all bg-fade glass">
+        <div className="flex-column gap-s center-all dialog pad-l">
             <div id="dialog-text">{text}</div>
             <div id="dialog-buttons" className="flex-row gap-s center-all fill">
                 <select name="bet-side">{renderedOptions}</select>
