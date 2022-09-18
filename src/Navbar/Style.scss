@@ -1,0 +1,30 @@
+@import '../Config';
+
+.navbar{
+    padding: 0.5rem;
+    width: 100%;
+    background: $navbar-color;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+    
+    .nav-item{
+        cursor: pointer;
+        padding: 0.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &.selected{
+            background: lighten($primary-color, 20);
+        }
+
+        &:hover{
+            background: lighten($primary-color, 20);
+        }
+    }
+
+    img{
+        width: 32px;
+        height: 32px;
+    }
+}

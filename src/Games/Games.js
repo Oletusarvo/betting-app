@@ -3,8 +3,8 @@ import GameList from '../GameList/GameList.js';
 
 function Games(props){
     return (
-        <div className="flex-column fill center-align pad w-100 gap-default overflow-y-scroll overflow-x-hide">
-            <h1>All Bets</h1>
+        <div className="flex-column fill pad w-100 gap-default overflow-y-scroll overflow-x-hide">
+            <h1 className="align-text-center">All Bets</h1>
             <GameList/>
         </div>
     );

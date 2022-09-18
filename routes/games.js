@@ -34,7 +34,7 @@ router.post('/', checkAuth, async (req, res) => {
         res.status(200).send();
     }
     catch(err){
-        res.status(500).send(err);
+        res.status(500).send(err.message);
     }
 });
 

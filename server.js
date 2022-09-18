@@ -7,39 +7,51 @@ server.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
 io.on('connection', socket => {
     console.log('New connection!');
 
-    socket.on('receive_game', async game_id => {
+    socket.on('bet_place', async data => {
+        const {username, amount, side, game_id} = JSON.parse(data);
         try{
-            const db = new Database();
-            const game = await db.getGame(game_id);
-            socket.emit('send_game', JSON.stringify(game));
+            const game = new Game();
+            await game.load(game_id);
+            await game.placeBet({
+                username, amount, side, game_id
+            });
+            io.emit('game_update', JSON.stringify(game.data()));
+
+            const bet = await game.getBet(username);
+            socket.emit('bet_update', JSON.stringify(bet));
         }
         catch(err){
             socket.emit('error', err.message);
         }
     });
 
-    socket.on('receive_balance', async data => {
+    socket.on('game_get', async game_id => {
         try{
-            const {username} = data;
-            const bank = new Bank();
-            const acc = await bank.getAccount(username);
-            socket.emit('send_balance', JSON.stringify(acc.balance));
+            const game = new Game();
+            await game.load(game_id);
+            socket.emit('game_update', JSON.stringify(game.data()));
         }
         catch(err){
-            socket.emit('error', err.message);
+            socket.emit('error', JSON.stringify({
+                type : "Game error",
+                message : err.message,
+            }));
         }
     });
 
-    socket.on('send_bet', async data => {
-        const bet = JSON.parse(data);
-        const game = await (new Game()).load(bet.game_id);
-
+    socket.on('bet_get', async data => {
+        const {username, game_id} = JSON.parse(data);
         try{
-            await game.placeBet(bet);
-            io.emit('receive_game', JSON.stringify(game.game));
+            const game = new Game();
+            await game.load(game_id);
+            const bet = await game.getBet(username);
+            socket.emit('bet_update', JSON.stringify(bet));
         }
         catch(err){
-            socket.emit('error', err.message);
+            socket.emit('error', JSON.stringify({
+                type : 'Bet error',
+                message : err.message
+            }));
         }
     });
 });

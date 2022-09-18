@@ -11,7 +11,7 @@ function Home(props){
 
     return (
         <>
-        <div className="flex-column fill center-align w-100 pad overflow-y-scroll overflow-x-hide gap-default" id="home-page">
+        <div className="flex-column fill w-100 pad overflow-y-scroll overflow-x-hide gap-default" id="home-page">
             {
                 props.user === null ? 
                 <div className="container glass">
@@ -57,16 +57,14 @@ function Home(props){
                 </div>
                 :
                 <>  
-                    <h2>Logged in as {username}</h2>
+                    <h2 className="align-text-center">Logged in as {username}</h2>
                     <div className="sep"></div>
-                    <h3>Total Balance:</h3>
-                    <h1><Balance username={username} token={token}/></h1>
+                    <h3 className="align-text-center">Total Balance:</h3>
+                    <h1 className="align-text-center"><Balance username={username} token={token}/></h1>
                     <div className="sep"></div>
-                    <h2>Bets created by you:</h2>
+                    <h2 className="align-text-center">Bets created by you:</h2>
                     <GameList byUser={true}/>
-                    <div>
-                        <Link to="/account/delete">Delete Account</Link>
-                    </div>
+                    <Link to="/account/delete" id="del-link">Delete Account</Link>
                     
                 </>
                 

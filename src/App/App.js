@@ -3,7 +3,7 @@ import {HashRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from '../Home/Home';
 import Delete from '../Account/Delete.js';
 import Header from '../Header/Header.js';
-import Navbar from '../navbar';
+import Navbar from '../Navbar/Navbar.js';
 import Games from '../Games/Games.js';
 import NewGame from '../NewGame/NewGame.js';
 import Login from '../Login/Login.js';

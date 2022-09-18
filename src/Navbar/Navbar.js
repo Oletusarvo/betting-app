@@ -1,5 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import './Style.scss';
+
 const HomeIcon = './img/home.png';
 const AccountIcon = './img/wallet.png';
 const GamesIcon = './img/casino-chip.png';

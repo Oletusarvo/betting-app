@@ -1,24 +1,23 @@
-export function placeBet(socket, bet){
-    if(!socket){
-        throw new Error('Socket is undefined!');
-    }
+export function placeBet(username, bet, game, socket){
+   const amount = bet ? game.minimum_bet - bet.amount : game.minimum_bet;
+   if(amount == 0) return;
+   socket.emit('bet_place', JSON.stringify({
+    amount,
+    game_id : game.game_id,
+    username,
 
-    if(typeof(bet) !== 'object'){
-        throw new Error('Bet must be an object!');
-    }
-
-    socket.emit('place_bet', JSON.stringify(bet));
+   }));
 }
 
-export function fold(game_id, username, token, setBet){
+export function fold(game, bet, token, setGameState){
     const req = new XMLHttpRequest();
     req.open('POST', '/bets/fold', true);
     req.setRequestHeader('Content-Type', 'application/json');
     req.setRequestHeader('auth', token);
 
     const data = {
-        game_id,
-        username,
+        game_id : game.game_id,
+        username : bet.username,
     }
 
     req.send(JSON.stringify(data));
@@ -26,7 +25,10 @@ export function fold(game_id, username, token, setBet){
     req.onload = () => {
         if(req.status === 200){
             const bet = JSON.parse(req.response);
-            setBet(bet);
+            const newState = {
+                game, bet
+            };
+            setGameState(newState);
         }
     }
 }

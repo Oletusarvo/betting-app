@@ -1,17 +1,9 @@
 @import '../Config';
 
 #betting-page{
-    .betting-container{
-        display: flex;
-        flex-flow: row;
-        justify-content: center;
-        background: rgba($primary-color, 0.7);
-        width: 100%;
-        padding: 0.2rem;
-
-        backdrop-filter: blur(6px);
-    }
-
+    width: 100vw;
+    justify-content: center;
+    
     #bet-title{
         display: flex;
         flex-flow: row;
@@ -53,8 +45,8 @@
     #bet-pool-ring{
         border: 0.25rem solid white;
         border-radius: 50%;
-        width: 300px;
-        height: 300px;
+        width: 200px;
+        height: 200px;
 
         transition: border-color 0.2s ease-out;
 

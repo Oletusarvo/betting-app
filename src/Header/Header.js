@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import './Style.scss';
+const bellIcon = './img/bell.png';
 
 class Header extends React.Component{
     constructor(props){
@@ -36,6 +37,9 @@ class Header extends React.Component{
                         </>
                         :
                         <>
+                            <i>
+                                <img src={bellIcon}></img>
+                            </i>
                             <span id="logout-link" onClick={this.logout}>Logout</span>
                         </>
                         

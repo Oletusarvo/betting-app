@@ -34,6 +34,7 @@ function GameList(props){
     useEffect(() => {
         if(!gameList) return;
         let final = [];
+
         gameList.forEach(item => {
             let options = [];
             item.options.split(';').forEach(option => options.push(<option key={`option-${option}`}>{option}</option>));
@@ -44,27 +45,27 @@ function GameList(props){
                     <tbody>
                         <tr>
                             <td>Title:</td>
-                            <td className="align-right">{item.game_title}</td>
+                            <td className="align-text-right">{item.game_title}</td>
                         </tr>
 
                         <tr>
                             <td>Minimum Bet:</td>
-                            <td className="align-right">{currency + item.minimum_bet.toLocaleString('en')}</td>
+                            <td className="align-text-right">{currency + item.minimum_bet.toLocaleString('en')}</td>
                         </tr>
 
                         <tr>
                             <td>Pool:</td>
-                            <td className="align-right">{currency + item.pool.toLocaleString('en')}</td>
+                            <td className="align-text-right">{currency + item.pool.toLocaleString('en')}</td>
                         </tr>
 
                         <tr>
                             <td>Expires:</td>
-                            <td className="align-right">{item.expiry_date}</td>
+                            <td className="align-text-right">{item.expiry_date}</td>
                         </tr>
 
                         <tr>
                             <td>Created By:</td>
-                            <td className="align-right">{item.created_by}</td>
+                            <td className="align-text-right">{item.created_by}</td>
                         </tr>
                     </tbody>
                 </table>

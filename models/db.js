@@ -73,22 +73,27 @@ class Game{
         await this.validateBet(bet);
         const {username, amount} = bet;
         const previousBet = await this.getBet(username);
+        const newAmount = previousBet ? previousBet.amount + amount : amount;
+
+        if(newAmount > this.game.minimum_bet){
+
+            this.game.minimum_bet = newAmount;
+            const callers = (await this.getAllBets()).filter(item => item.username != username);
+            for(const caller of callers){
+                await db('notifications').insert({
+                    username : caller.username,
+                    message : 'Time to call!',
+                    game_id : this.game.game_id,
+                    game_title : this.game.game_title,
+                });
+            }
+        }
 
         if(previousBet){
-            const combinedAmount = previousBet.amount + amount;
-            if(combinedAmount > this.game.minimum_bet){
-                this.game.minimum_bet = combinedAmount;
-            }
-
-            bet.amount = combinedAmount;
-
+            bet.amount = newAmount;
             await db('bets').where({username, game_id : this.game.game_id}).update(bet);
         }
         else{
-            if(amount > this.game.minimum_bet){
-                this.game.minimum_bet = amount;
-            }
-
             await db('bets').insert(bet);
         }
 
@@ -146,6 +151,12 @@ class Game{
 
         for(let winner of winners){
             await bank.deposit(winner.username, share);
+            await db('notifications').insert({
+                username : winner.username,
+                message : `Won ${share} dice!`,
+                game_title : this.game.game_title,
+                game_id : this.game.game_id,
+            })
         }
 
         await db('bets').where({game_id : this.game.game_id}).del();
@@ -198,6 +209,8 @@ class Game{
             const previousSide = previousBet.side;
             const combinedAmount = previousAmount + amount;
 
+            console.log(amount)
+
             if(previousBet.folded){
                 throw new Error('You have folded!');
             }
@@ -225,6 +238,16 @@ class Game{
 class Database{
     async insertGame(game){
         const {game_title, minimum_bet, increment, expiry_date, created_by, available_to, options, type} = game;
+
+        if(expiry_date != ''){
+            const today = new Date();
+            const expiryDay = new Date(expiry_date);
+
+            if(today.getDay() == expiryDay.getDay()){
+                throw new Error('Bet expiry must be at least tomorrow!');
+            }
+        }
+        
         return await db('games').insert({
             game_id : crypto.createHash('SHA256').update(game_title + minimum_bet + increment + expiry_date + available_to + new Date().toDateString()).digest('hex'),
             game_title,
@@ -236,6 +259,25 @@ class Database{
             type,
             options : type === 'Boolean' ? 'Kyllä;Ei' : options,
         });
+    }
+
+    async insertNotification(notification){
+        const {username, message} = notification;
+        return await db('notifications').insert({
+            username,
+            message,
+            game_id,
+            game_title,
+            notification_id : crypto.createHash('SHA256').update(username + message + new Date().getTime()).digest('hex'),
+        });
+    }
+
+    async deleteNotification(notification_id){
+        return await db('notifications').where({notification_id}).del();
+    }
+
+    async getNotifications(username){
+        return await db('notifications').where({username});
     }
 
     async getGame(game_id){

@@ -22,10 +22,10 @@ export function submit(e, username, token){
 
     req.onload = () => {
         if(req.status === 200){
-            location.assign('/#/games'); //May cause user data to become undefined, as it is not reloaded from local storage i think.
+            location.assign('/#/games');
         }
         else{
-            alert(req.response);
+            alert(`Game rejected! Reason: ${req.response}`);
         }
     }
 }
