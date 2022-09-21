@@ -19,22 +19,32 @@ import './Style.scss';
 function App (props){
     const [user, setUser] = useState(() => {
         const data = localStorage.getItem('betting-app-user');
-        if(data){
-            return JSON.parse(data);
-        }
+        if(!data) return null;
 
-        return null;
+        return JSON.parse(data);
     });
 
     const [token, setToken] = useState(() => {
         const data = localStorage.getItem('betting-app-token');
-        if(data) return data;
+        if(!data) return null;
 
-        return null;
+        return data;
     });
 
+    const [socket, setSocket] = useState(() => {
+        if(!token){
+            console.log('No token found. Setting socket without authentification.');
+            return io();
+        } 
 
-    const [socket] = useState(io());
+        console.log('Token found. Setting socket with authentification.');
+        return io({
+            auth: {
+                token
+            }
+        });
+    });
+
     const [currency] = useState('⚄');
 
     useEffect(() => {
@@ -53,7 +63,7 @@ function App (props){
         <Router>
             <div id="app" className="flex-column center-align">
                 <Background/>
-                <AppContext.Provider value={{user, token, socket, currency}}>
+                <AppContext.Provider value={{user, token, socket, currency, setUser, setToken}}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
                     <Routes >
                         <Route path="/" element={

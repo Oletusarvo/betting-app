@@ -39,6 +39,8 @@ class Bank{
     }
 }
 
+const bank = new Bank();
+
 class Game{
     constructor(){
         this.error = {
@@ -146,19 +148,25 @@ class Game{
         const shareForCreator = pool % winners.length || 0;
         const share = Math.round((pool - shareForCreator) / winners.length);
 
-        const bank = new Bank();
         await bank.deposit(this.game.created_by, shareForCreator); //The creator of the bet gets the remainder of what would have been an uneven division.
 
         for(let winner of winners){
             await bank.deposit(winner.username, share);
+            /*
             await db('notifications').insert({
                 username : winner.username,
                 message : `Won ${share} dice!`,
                 game_title : this.game.game_title,
                 game_id : this.game.game_id,
             })
+            */
         }
 
+        
+        await this.clear();
+    }
+
+    async clear(){
         await db('bets').where({game_id : this.game.game_id}).del();
         await db('games').where({game_id : this.game.game_id}).del();
     }
@@ -187,7 +195,6 @@ class Game{
 
     async validateBet(bet){
         const {username, side, amount} = bet;
-        const bank = new Bank();
 
         const previousBet = await this.getBet(username);
         const account = await bank.getAccount(username);
@@ -209,10 +216,12 @@ class Game{
             const previousSide = previousBet.side;
             const combinedAmount = previousAmount + amount;
 
-            console.log(amount)
-
             if(previousBet.folded){
                 throw new Error('You have folded!');
+            }
+
+            if(previousSide !== side){
+                throw new Error('Side switching disallowed!');
             }
             
             if(previousAmount >= this.game.minimum_bet){
@@ -223,9 +232,7 @@ class Game{
                 throw new Error('Amount must be at least the minimum bet amount!');
             }
 
-            if(previousSide !== side){
-                throw new Error('Side switching disallowed!');
-            }
+            
         }
         else{
             if(amount < this.game.minimum_bet){
@@ -235,9 +242,11 @@ class Game{
     }
 }
 
+const game = new Game();
+
 class Database{
     async insertGame(game){
-        const {game_title, minimum_bet, increment, expiry_date, created_by, available_to, options, type} = game;
+        const {game_title, game_id, minimum_bet, increment, expiry_date, created_by, available_to, options, type} = game;
 
         if(expiry_date != ''){
             const today = new Date();
@@ -249,7 +258,7 @@ class Database{
         }
         
         return await db('games').insert({
-            game_id : crypto.createHash('SHA256').update(game_title + minimum_bet + increment + expiry_date + available_to + new Date().toDateString()).digest('hex'),
+            game_id : game_id || crypto.createHash('SHA256').update(game_title + minimum_bet + increment + expiry_date + available_to + new Date().toDateString()).digest('hex'),
             game_title,
             minimum_bet,
             increment,
@@ -259,6 +268,10 @@ class Database{
             type,
             options : type === 'Boolean' ? 'Kyllä;Ei' : options,
         });
+    }
+
+    async deleteGame(game_id){
+        return await db('games').where({game_id}).del();
     }
 
     async insertNotification(notification){
@@ -301,4 +314,6 @@ class Database{
     }
 }
 
-module.exports = {Bank, Database, Game}
+const database = new Database();
+
+module.exports = {bank, database, game}

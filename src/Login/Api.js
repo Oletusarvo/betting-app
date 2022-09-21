@@ -19,7 +19,7 @@ export function submit(e, setUser, setToken){
             const {token, user} = JSON.parse(req.response);
             setUser(user);
             setToken(token);
-            location.assign('/#/');
+            location.assign('/');
         }
         else{
             alert(`Failed to login! Reason: ${req.response}`);

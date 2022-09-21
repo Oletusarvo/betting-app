@@ -22,7 +22,7 @@ function Info(){
 
                     <tr>
                         <td>Your Bet:</td>
-                        <td className="align-text-right"><Bet game={game} bet={bet}/></td>
+                        <td className="align-text-right"><Bet/></td>
                     </tr>
                     <tr>
                         <td>Minimum Bet: </td>

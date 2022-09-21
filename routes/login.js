@@ -1,12 +1,11 @@
 const router = require('express').Router();
-const {Database, Bank} = require('../models/db.js');
+const {bank} = require('../models/db.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 router.post('/', async (req, res) => {
     const {username, password} = req.body;
-    const bank = new Bank();
     const user = await bank.getAccount(username);
 
     if(user === undefined){

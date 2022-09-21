@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Bank} = require('../models/db.js');
+const {bank} = require('../models/db.js');
 const bcrypt = require('bcrypt');
 
 router.post('/', async (req, res) => {
@@ -14,7 +14,6 @@ router.post('/', async (req, res) => {
                 return res.status(500).send(err.message);
             }
 
-            const bank = new Bank();
             try{
                 await bank.addAccount(username, pass);
             }

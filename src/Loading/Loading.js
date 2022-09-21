@@ -8,7 +8,7 @@ class Loading extends React.Component{
 
     render(){
         return(
-            <div className="page" id="loading-page">
+            <div className="flex-column fill w-100 center-all" id="loading-page">
                 <Spinner/>
                 <div id="message"><h3>{this.props.title}</h3></div>
             </div>

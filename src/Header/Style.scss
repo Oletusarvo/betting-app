@@ -1,6 +1,7 @@
 @import '../Config.scss';
 
 header{
+    z-index: 5;
     display: flex;
     flex-flow: row;
     gap: $container-gap;
@@ -20,16 +21,66 @@ header{
             cursor: pointer;
         }
 
-        img{
-            align-self: center;
-        }
+        #notification-button{
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background : none;
+            border: none;
 
-        i{
-            &:after{
-                width: 10px;
-                height: 10px;
+            cursor: pointer;
+
+            #notification-count{
+                font-weight: bold;
+                position: absolute;
+                top: -7px;
+                right: -7px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 background: red;
+                border-radius: 50%;
+                padding: 10px;
+                width: 20px;
+                height: 20px;
+
+                &:after{
+                    content: attr(data-notification-count);
+                }
             }
         }
+    }
+}
+
+#notifications-window{
+    z-index: 4;
+    position: absolute;
+    top: -100vh;
+    display: flex;
+    flex-flow: column;
+    gap: $container-gap;
+    height: 100vh;
+    width: 100%;
+    overflow-y: scroll;
+    background: gray;
+    padding: 5.2rem 1rem;
+    padding-bottom: $navbar-height;
+    transition: all 0.1s ease-out;
+
+    .notifications-header{
+        width: 100%;
+        border-bottom: 1px solid white;
+        background: black;
+    }
+
+    .notification{
+        padding: 0.25rem;
+        justify-content: space-between;
+        background: darkgray;
+    }
+
+    &.show{
+        top: 0;
     }
 }

@@ -3,16 +3,18 @@ import {fold} from './Api';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
 
-function Bet({game, bet}){
+function Bet(){
     const {user, token, currency} = useContext(AppContext);
-    const {setGameState} = useContext(GameContext);
+    const {setGameState, bet, game} = useContext(GameContext);
+
 
     if(bet){
         if(bet.folded){
             return <span>Folded</span>
         }
         else{
-            return <span className="table-field">{`\"${bet.side}\" for ${currency + bet.amount.toLocaleString('en')}`} <button onClick={() => fold(game, bet, token, setGameState)}>Fold</button></span>
+            const foldingEnabled = bet.amount == game.minimum_bet;
+            return <span className="table-field">{`\"${bet.side}\" for ${currency + bet.amount.toLocaleString('en')}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={() => fold(game, bet, token, setGameState)}>Fold</button></span>
         }
     }
     else{

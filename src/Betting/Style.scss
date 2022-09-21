@@ -64,15 +64,13 @@
     }
 
     #bet-controls{
-        form{
-            flex-flow: row;
-            width: 100%;
-            input, button, select{
-                flex: 1;
-                align-self: stretch;
-                width: calc(100% / 3);
-                height: 1.5rem;
-            }
+        flex-flow: row;
+        width: 100%;
+        input, button, select{
+            flex: 1;
+            align-self: stretch;
+            width: calc(100% / 3);
+            height: 1.5rem;
         }
     }
 }

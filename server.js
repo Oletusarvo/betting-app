@@ -1,59 +1,83 @@
 const {server, io} = require('./serverConfig.js');
-const {Database, Game, Bank} = require('./models/db.js');
+const {database, game, bank} = require('./models/db.js');
+const jwt = require('jsonwebtoken');
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
 
-io.on('connection', socket => {
-    console.log('New connection!');
+io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if(token && jwt.verify(token, process.env.SERVER_TOKEN_SECRET, (err, user) => {
+        if(err){
+            next(new Error(`Unauthorized`));
+        }
+        else{
+            next();
+        }
+    }))
+    
+    next(new Error('authentification missing'));
+    
+});
 
-    socket.on('bet_place', async data => {
-        const {username, amount, side, game_id} = JSON.parse(data);
+io.on('connection', async socket => {
+    console.log(`New connection!`);
+
+    socket.on('join_room', async (msg, callback) => {
+        const {game_id, username} = msg;
+
+        //socket.join(game_id);
+
+        await game.load(game_id);
+        const bet = await game.getBet(username);
+
+        callback({
+            newGame: game.data(),
+            newBet: bet
+        });
+    });
+
+    socket.on('bet_place', async (bet, callback) => {
         try{
-            const game = new Game();
-            await game.load(game_id);
-            await game.placeBet({
-                username, amount, side, game_id
-            });
-            io.emit('game_update', JSON.stringify(game.data()));
+            await game.load(bet.game_id);
+            await game.placeBet(bet);
+            const acc = await bank.getAccount(bet.username);
+            const newBet = await game.getBet(bet.username);
+            
+            const gameData = game.data();
+            socket.broadcast.emit('game_update', gameData);
 
-            const bet = await game.getBet(username);
-            socket.emit('bet_update', JSON.stringify(bet));
+            callback({
+                game: gameData,
+                acc,
+                newBet
+            });
+        }
+        catch(err){
+            socket.emit('bet_error', err.message);
+        }
+    });
+
+    socket.on('game_close', async (msg, callback) => {
+
+        try{
+            console.log('Closing...');
+            const {game_id, side, username} = msg;
+            await game.load(game_id);
+            await game.close(side);
+
+            const acc = await bank.getAccount(username);
+            const gameList = await database.getGamesByUser(username);
+
+            callback({
+                acc, gameList
+            });
         }
         catch(err){
             socket.emit('error', err.message);
         }
-    });
-
-    socket.on('game_get', async game_id => {
-        try{
-            const game = new Game();
-            await game.load(game_id);
-            socket.emit('game_update', JSON.stringify(game.data()));
-        }
-        catch(err){
-            socket.emit('error', JSON.stringify({
-                type : "Game error",
-                message : err.message,
-            }));
-        }
-    });
-
-    socket.on('bet_get', async data => {
-        const {username, game_id} = JSON.parse(data);
-        try{
-            const game = new Game();
-            await game.load(game_id);
-            const bet = await game.getBet(username);
-            socket.emit('bet_update', JSON.stringify(bet));
-        }
-        catch(err){
-            socket.emit('error', JSON.stringify({
-                type : 'Bet error',
-                message : err.message
-            }));
-        }
-    });
+        
+    })
 });
 
 io.on('disconnect', () => console.log('Socket disconnected!'));

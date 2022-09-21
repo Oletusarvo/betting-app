@@ -1,19 +1,20 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Link} from 'react-router-dom';
 import GameList  from '../GameList/GameList.js';
 import Balance from '../Balance/Balance.js';
 import './Style.scss';
+import AppContext from '../Contexts/AppContext.js';
 
 function Home(props){
 
     const {username} = props.user ? props.user : {};
-    const {token} = props;
+    const {user} = useContext(AppContext);
 
     return (
         <>
         <div className="flex-column fill w-100 pad overflow-y-scroll overflow-x-hide gap-default" id="home-page">
             {
-                props.user === null ? 
+                user === null ? 
                 <div className="container glass">
                     <h1>Betting App</h1>
                     <br/>
@@ -60,20 +61,17 @@ function Home(props){
                     <h2 className="align-text-center">Logged in as {username}</h2>
                     <div className="sep"></div>
                     <h3 className="align-text-center">Total Balance:</h3>
-                    <h1 className="align-text-center"><Balance username={username} token={token}/></h1>
+                    <h1 className="align-text-center"><Balance/></h1>
                     <div className="sep"></div>
                     <h2 className="align-text-center">Bets created by you:</h2>
                     <GameList byUser={true}/>
                     <Link to="/account/delete" id="del-link">Delete Account</Link>
                     
                 </>
-                
             }
         </div>
         
         </>
-        
-        
     );
 }
 

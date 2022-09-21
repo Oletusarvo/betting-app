@@ -9,26 +9,7 @@ export function closeGame(game_id, token, setGameList){
 
     if(!res) return;
 
-    const req = new XMLHttpRequest();
-    req.open('DELETE', `/games/${game_id}`, true);
-
-    req.setRequestHeader('auth', token);
-    req.setRequestHeader('Content-Type', 'application/json');
-
-    req.send(JSON.stringify({
-        side
-    }));
-
-    req.onload = () =>{
-        if(req.status === 200){
-            setGameList(
-                JSON.parse(req.response)
-            );
-        }
-        else{
-            alert(`Unable to close the game! Reason: ${req.response}`);
-        }
-    }
+    socket.emit
 }
 
 export function getDestination(username, game_id){

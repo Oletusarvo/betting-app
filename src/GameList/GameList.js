@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Link} from 'react-router-dom';
-import {closeGame, getDestination} from './Api';
+import {getDestination} from './Api';
 import AppContext from '../Contexts/AppContext.js';
 import Loading from '../Loading/Loading.js';
 import './Style.scss';
@@ -9,10 +9,34 @@ function GameList(props){
 
     const [renderList, setRenderList] = useState([]);
     const [gameList, setGameList] = useState(null);
-    const {user, token, currency} = useContext(AppContext);
-    const req = new XMLHttpRequest();
+    const {user, token, currency, socket, setUser} = useContext(AppContext);
+
+    function closeGame(game_id){
+        if(typeof(game_id) !== 'string'){
+            throw Error('Game id must be a string!');
+        }
+    
+        const side = document.querySelector(`#side-select-${game_id}`).value;
+    
+        const res = confirm(`You are about to close the game on \'${side}\'. Are you sure?`);
+    
+        if(!res) return;
+
+        const msg = {
+            side,
+            game_id,
+            username: user.username,
+        }
+
+        socket.emit('game_close', msg, (update) => {
+            const {acc, gameList} = update;
+            setUser(acc);
+            setGameList(gameList);
+        });
+    }
 
     useEffect(() => {
+        const req = new XMLHttpRequest();
         if(props.byUser){
             req.open('GET', `/games/by_user/${user.username}`, true);
         }
@@ -21,6 +45,7 @@ function GameList(props){
         }
     
         req.setRequestHeader('auth', token);
+        req.setRequestHeader('Socket_ID', socket.id);
         req.send();
 
         req.onload = () => {
@@ -28,6 +53,12 @@ function GameList(props){
                 const list = JSON.parse(req.response);
                 setGameList(list);
             }
+        }
+
+        socket.on('game_close_error', msg => alert(`Error! ${msg}`));
+
+        return () => {
+            socket.off('game_close_error');
         }
     }, []);
 
@@ -77,7 +108,7 @@ function GameList(props){
                     <select id={`side-select-${item.game_id}`}>
                         {options}
                     </select>
-                    <button onClick={() => closeGame(item.game_id, token, setGameList)}>CLOSE</button>
+                    <button onClick={() => closeGame(item.game_id)}>CLOSE</button>
                 </div> : <></>
             }
             
@@ -88,7 +119,9 @@ function GameList(props){
         });
 
         setRenderList(final);
-    }, [gameList])
+    }, [gameList]);
+
+    
 
     return (
         <>

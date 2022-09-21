@@ -63,6 +63,12 @@ function Header(){
                     </>
                     :
                     <>
+                        <button id="notification-button" onClick={toggleNotifications}>
+                            <i>
+                                <img src={bellIcon}></img>
+                            </i>
+                            <span hidden={notifications.length == 0} data-notification-count={notifications.length} id="notification-count"></span>
+                        </button>
                         <span id="logout-link" onClick={logout}>Logout</span>
                     </>
                     
