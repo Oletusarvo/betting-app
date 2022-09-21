@@ -31,11 +31,9 @@ class Bank{
 
     async deposit(username, amount){
         const acc = await db('accounts').where({username}).first();
-        if(!acc) return false;
 
         acc.balance += amount;
-        await db('accounts').where({username}).update(acc);
-        return true;
+        return await db('accounts').where({username}).update(acc);
     }
 }
 

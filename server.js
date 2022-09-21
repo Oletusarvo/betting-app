@@ -20,13 +20,16 @@ io.use((socket, next) => {
     
 });
 
+const connectedUsers = [];
+
 io.on('connection', async socket => {
     console.log(`New connection!`);
+    connectedUsers[socket.id] = socket;
 
     socket.on('join_room', async (msg, callback) => {
         const {game_id, username} = msg;
 
-        //socket.join(game_id);
+        socket.join(game_id);
 
         await game.load(game_id);
         const bet = await game.getBet(username);
@@ -37,6 +40,10 @@ io.on('connection', async socket => {
         });
     });
 
+    socket.on('leave_room', game_id => {
+        socket.leave(game_id);
+    });
+
     socket.on('bet_place', async (bet, callback) => {
         try{
             await game.load(bet.game_id);
@@ -45,7 +52,7 @@ io.on('connection', async socket => {
             const newBet = await game.getBet(bet.username);
             
             const gameData = game.data();
-            socket.broadcast.emit('game_update', gameData);
+            socket.broadcast.to(bet.game_id).emit('game_update', gameData);
 
             callback({
                 game: gameData,
@@ -69,6 +76,8 @@ io.on('connection', async socket => {
             const acc = await bank.getAccount(username);
             const gameList = await database.getGamesByUser(username);
 
+            socket.broadcast.emit('account_update');
+
             callback({
                 acc, gameList
             });
@@ -77,7 +86,17 @@ io.on('connection', async socket => {
             socket.emit('error', err.message);
         }
         
-    })
+    });
+
+    socket.on('account_get', async (username, callback) => {
+        try{
+            const acc = await bank.getAccount(username);
+            callback(acc);
+        }
+        catch(err){
+            console.log(err);
+        }
+    });
 });
 
 io.on('disconnect', () => console.log('Socket disconnected!'));

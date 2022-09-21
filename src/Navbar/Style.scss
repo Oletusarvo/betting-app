@@ -11,10 +11,14 @@
     
     .nav-item{
         cursor: pointer;
-        padding: 0.1rem;
+        padding: 0.2rem;
         display: flex;
         align-items: center;
         justify-content: center;
+        border: 1px solid white;
+        height: 32px;
+        width: 32px;
+
         &.selected{
             background: lighten($primary-color, 20);
         }
@@ -22,10 +26,16 @@
         &:hover{
             background: lighten($primary-color, 20);
         }
+
+        
     }
 
     img{
         width: 32px;
         height: 32px;
+        
+        &:active{
+            background: lighten($primary-color, 20);
+        }
     }
 }

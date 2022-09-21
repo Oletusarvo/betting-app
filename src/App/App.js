@@ -59,6 +59,14 @@ function App (props){
         }
     }, [token]);
 
+    useEffect(() => {
+        socket.on('account_update', () => {
+            socket.emit('account_get', user.username, update => {
+                setUser(update);
+            });
+        })
+    }, []);
+
     return (
         <Router>
             <div id="app" className="flex-column center-align">

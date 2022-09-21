@@ -44,6 +44,7 @@ function Betting(props) {
         return () => {
             socket.off('game_update');
             socket.off('bet_error');
+            socket.emit('leave_room', game_id);
         }
 
     }, []);
