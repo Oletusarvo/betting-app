@@ -143,10 +143,6 @@ describe('Testing game pool calculation', () => {
 
         let pool = await game.calculatePool();
         expect(pool).toBe(80);
-
-        game.game.pool_reserve = 80;
-        pool = await game.calculatePool();
-        expect(pool).toBe(160);
     });
 });
 
@@ -161,7 +157,7 @@ describe('Testing game closure', () => {
                 amount: 10
             }
         ]));
-
+        
         jest.spyOn(game, 'clear').mockImplementation(() => {});
 
         jest.spyOn(bank, 'deposit').mockImplementation(amount => {});
@@ -175,6 +171,12 @@ describe('Testing game closure', () => {
     test('Game can be closed if expiry date has been reached', async () => {
         game.game.expiry_date = '09-21-2022';
         await expect(game.close()).resolves.not.toThrow();
+    });
+
+    test('A lottery can not be drawn if it does not have bets', async () => {
+        game.game.type = 'Lottery';
+        jest.spyOn(game, 'getAllBets').mockImplementation(() => Promise.resolve([]));
+        await expect(game.close()).rejects.toThrow(/no bets/);
     });
 });
 

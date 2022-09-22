@@ -11,14 +11,21 @@ function GameList(props){
     const [gameList, setGameList] = useState(null);
     const {user, token, currency, socket, setUser} = useContext(AppContext);
 
-    function closeGame(game_id){
+    function closeGame(game_id, type){
         if(typeof(game_id) !== 'string'){
             throw Error('Game id must be a string!');
         }
     
         const side = document.querySelector(`#side-select-${game_id}`).value;
-    
-        const res = confirm(`You are about to close the game on \'${side}\'. Are you sure?`);
+        let res;
+
+        if(type !== 'Lottery'){
+            res = confirm(`You are about to close the game on \'${side}\'. Are you sure?`);
+        }
+        else{
+            res = confirm(`You are about draw the lottery. Are you sure?`);
+        }
+        
     
         if(!res) return;
 
@@ -55,10 +62,10 @@ function GameList(props){
             }
         }
 
-        socket.on('game_close_error', msg => alert(`Error! ${msg}`));
+        socket.on('error', msg => alert(`Error! ${msg}`));
 
         return () => {
-            socket.off('game_close_error');
+            socket.off('error');
         }
     }, []);
 
@@ -108,7 +115,7 @@ function GameList(props){
                     <select hidden={item.type === 'Lottery'} id={`side-select-${item.game_id}`}>
                         {options}
                     </select>
-                    <button onClick={() => closeGame(item.game_id)}>{item.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
+                    <button onClick={() => closeGame(item.game_id, item.type)}>{item.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
                 </div> : <></>
             }
             

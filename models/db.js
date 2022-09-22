@@ -133,6 +133,12 @@ class Game{
 
     async close(side){
         await this.isContested();
+
+        const participants = await this.getAllBets();
+        if(this.game.type === 'Lottery' && participants.length == 0){
+            throw new Error('Cannot draw a lottery containing no bets!');
+        }
+
         const now = new Date().getTime();
         const expiry = new Date(this.game.expiry_date).getTime();
 
@@ -141,7 +147,7 @@ class Game{
         }
         
         const {pool, pool_reserve} = this.game;
-        const participants = await this.getAllBets();
+        
 
         const winners = this.getWinners(participants, side);
         const shareForCreator = this.calculateCreatorShare(winners.length); 
@@ -241,8 +247,6 @@ class Game{
     }
 
     compareRow(row1, row2){
-        console.log(row1, row2);
-
         let matches = 0;
         for(let i = 0; i < row1.length; ++i){
             for(let j = 0; j < row1.length; ++j){
