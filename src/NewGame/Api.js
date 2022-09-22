@@ -14,8 +14,8 @@ export function submit(e, username, token){
         created_by : username,
         expiry_date : form.expiryDate.value,
         type : form.betType.value,
-        options : form.betOptions.value,
-
+        options : form.betOptions.value || null,
+        row_size: form.rowSize.value,
     }
 
     req.send(JSON.stringify(data));

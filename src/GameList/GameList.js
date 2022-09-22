@@ -68,7 +68,7 @@ function GameList(props){
 
         gameList.forEach(item => {
             let options = [];
-            item.options.split(';').forEach(option => options.push(<option key={`option-${option}`}>{option}</option>));
+            item.options?.split(';').forEach(option => options.push(<option key={`option-${option}`}>{option}</option>));
             const isExpired = new Date().getTime() >= new Date(item.expiry_date).getTime();
             const div = <div className={`gamelist-container container glass ${isExpired && 'bg-expired'}`}  key={item.game_id}>
             <Link to={getDestination(user.username, item.game_id) }>
@@ -95,8 +95,8 @@ function GameList(props){
                         </tr>
 
                         <tr>
-                            <td>Created By:</td>
-                            <td className="align-text-right">{item.created_by}</td>
+                            <td>Type:</td>
+                            <td className="align-text-right">{item.type}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -105,7 +105,7 @@ function GameList(props){
             {
                 props.byUser ? 
                 <div className="flex-row fill gap-s">
-                    <select id={`side-select-${item.game_id}`}>
+                    <select hidden={item.type === 'Lotto'} id={`side-select-${item.game_id}`}>
                         {options}
                     </select>
                     <button onClick={() => closeGame(item.game_id)}>CLOSE</button>

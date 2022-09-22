@@ -68,7 +68,6 @@ io.on('connection', async socket => {
     socket.on('game_close', async (msg, callback) => {
 
         try{
-            console.log('Closing...');
             const {game_id, side, username} = msg;
             await game.load(game_id);
             await game.close(side);

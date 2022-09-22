@@ -4,6 +4,6 @@ data
 public/*.html
 public/*.js
 public/*.txt
-*.test.js
+
 notes.txt
 .beta.

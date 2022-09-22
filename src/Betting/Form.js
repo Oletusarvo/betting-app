@@ -16,8 +16,8 @@ function Form(){
     return (
         <div id="bet-controls" className={"container glass gap-s " + (isExpired && " bg-expired")}>
             <select id="bet-options">{renderOptions}</select>
-            <button onClick={bet ? call : placeBet}>{bet ? "Call" : "Bet"}</button>
-            <button onClick={raise}>Raise</button>
+            <button id="bet-button" onClick={bet ? call : placeBet}>{bet ? "Call" : "Bet"}</button>
+            <button id="raise-button" onClick={raise}>Raise</button>
         </div>
     );
 }

@@ -5,7 +5,8 @@ import Header from './Header.js';
 import Info from './Info.js';
 import Pool from './Pool.js';
 import Form from './Form.js';
-import {loadData} from './Api';
+import Ticket from './Lottery/Ticket.js';
+import LotteryInfo from './Lottery/LotteryInfo.js';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
 
@@ -49,7 +50,7 @@ function Betting(props) {
 
     }, []);
 
-    function placeBet(){
+    function placeBet(row = undefined){
         const amount = game.current.minimum_bet;
         if(amount == 0){
             alert('Cannot bet at this time.');
@@ -58,12 +59,13 @@ function Betting(props) {
         const c = confirm(`You are about to bet for ${amount}. Are you sure?`);
         if(!c) return;
 
-        const side = document.querySelector('#bet-options').value;
+        const side = row == undefined ? document.querySelector('#bet-options').value : row;
         const data = {
             amount,
             username : user.username,
             side,
             game_id,
+            type: game.current.type,
         };
 
         socket.emit('bet_place', data, update => {
@@ -96,6 +98,7 @@ function Betting(props) {
             username : user.username,
             side,
             game_id,
+            type: game.current.type,
         };
 
         socket.emit('bet_place', data, update => {
@@ -127,6 +130,7 @@ function Betting(props) {
             username : user.username,
             side : bet.current.side,
             game_id,
+            type: game.current.type,
         };
 
          socket.emit('bet_place', data, update => {
@@ -148,14 +152,27 @@ function Betting(props) {
     }
     else{
         const isExpired = new Date().getTime() >= new Date(state.game.expiry_date).getTime();
-        
+
         return (
             <div className="flex-column fill gap-s w-100 pad overflow-y-scroll" id="betting-page">
                 <GameContext.Provider value={{game: state.game, bet: state.bet, isExpired, setGameState : setState, placeBet, raise, call}}>
                     <Header/>
-                    <Info/>
-                    <Pool/>
-                    <Form/>
+
+                    {
+                        state.game.type === 'Boolean' || state.game.type === 'Multi-Choice' ? 
+                            <>
+                                <Info/>
+                                <Pool/>
+                                <Form/> 
+                            </>
+                         :
+                            <>
+                                <LotteryInfo/>
+                                <Pool/>
+                                <Ticket/>
+                            </>
+                    }
+                   
                 </GameContext.Provider>
             </div>
         );

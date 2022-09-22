@@ -1,5 +1,6 @@
 const db = require('../dbConfig.js');
 const crypto = require('crypto');
+const assert = require('assert');
 
 class Bank{
     //Used to handle user accounts.
@@ -55,7 +56,12 @@ class Game{
         for(let bet of bets){
             total += bet.amount;
         }
+
        return total;
+    }
+
+    calculateCreatorShare(numWinners){
+        return (this.game.pool + this.game.pool_reserve) % numWinners || 0;
     }
 
     /**@private */
@@ -76,22 +82,12 @@ class Game{
         const newAmount = previousBet ? previousBet.amount + amount : amount;
 
         if(newAmount > this.game.minimum_bet){
-
             this.game.minimum_bet = newAmount;
-            const callers = (await this.getAllBets()).filter(item => item.username != username);
-            for(const caller of callers){
-                await db('notifications').insert({
-                    username : caller.username,
-                    message : 'Time to call!',
-                    game_id : this.game.game_id,
-                    game_title : this.game.game_title,
-                });
-            }
         }
 
         if(previousBet){
             bet.amount = newAmount;
-            await db('bets').where({username, game_id : this.game.game_id}).update(bet);
+            await this.updateBet(bet);
         }
         else{
             await db('bets').insert(bet);
@@ -103,6 +99,10 @@ class Game{
         this.game.pool = await this.calculatePool();
 
         await this.update();
+    }
+
+    async updateBet(bet){
+        return await db('bets').where({username: bet.username, game_id: this.game.game_id}).update(bet);
     }
 
     async fold(username){
@@ -140,11 +140,24 @@ class Game{
             throw new Error('Cannot close the game before its expiry date!');
         }
         
-        const {pool} = this.game;
+        const {pool, pool_reserve} = this.game;
         const participants = await this.getAllBets();
-        const winners = participants.filter(item => item.side == side && item.folded != true);
-        const shareForCreator = pool % winners.length || 0;
-        const share = Math.round((pool - shareForCreator) / winners.length);
+
+        const winners = this.getWinners(participants, side);
+        const shareForCreator = this.calculateCreatorShare(winners.length); 
+
+        const combinedPool = pool + pool_reserve;
+        const share = Math.round((combinedPool - shareForCreator) / winners.length);
+
+        //Lottery games will not be cleared if there were no winners.
+        if(this.game.type === 'Lottery' && winners.length === 0){
+            this.game.pool_reserve += await this.calculatePool();
+            this.game.pool = 0;
+            await db('bets').where({game_id: this.game.game_id}).del();
+            await this.update();
+
+            return;
+        }
 
         await bank.deposit(this.game.created_by, shareForCreator); //The creator of the bet gets the remainder of what would have been an uneven division.
 
@@ -160,8 +173,41 @@ class Game{
             */
         }
 
-        
         await this.clear();
+    }
+
+    getWinners(participants, side){
+        if(this.game.type !== 'Lottery'){
+            return participants.filter(item => item.side == side && item.folded != true);
+        }
+        else{
+            const lottoResult = this.generateRow(20);
+            const winners = [];
+
+            for(const item of participants) {
+                const itemRow = item.side.split(',');
+                const matches = this.compareRow(itemRow, lottoResult);
+                if(matches == this.game.row_size){
+                    winners.push(item);
+                }
+            }
+
+            
+            return winners;
+        }
+    }
+
+    generateRow(numShuffles){
+        const numbers = [];
+        for(let n = 1; n <= 40; ++n){
+            numbers.push(n);
+        }
+
+        for(let i = 0; i < numShuffles; ++i){
+            numbers.sort(() => Math.random() < 0.5 ? -1 : 1);
+        }
+
+        return numbers.slice(0, this.game.row_size);
     }
 
     async clear(){
@@ -170,16 +216,19 @@ class Game{
     }
 
     data(){
-        const {game_title, game_id, pool, minimum_bet, created_by, expiry_date, increment, options} = this.game;
+        const {game_title, game_id, pool, minimum_bet, created_by, expiry_date, increment, options, type, row_size, pool_reserve} = this.game;
+
         return {
             game_title,
             game_id,
-            pool,
+            pool: (pool + pool_reserve),
             minimum_bet,
             created_by,
             expiry_date,
             increment,
-            options
+            options,
+            type,
+            row_size,
         }
     }
     async isContested(){
@@ -189,6 +238,21 @@ class Game{
                 throw new Error('Game is contested!');
             }
         }
+    }
+
+    compareRow(row1, row2){
+        console.log(row1, row2);
+
+        let matches = 0;
+        for(let i = 0; i < row1.length; ++i){
+            for(let j = 0; j < row1.length; ++j){
+                if(row1[i] == row2[j]){
+                    matches++;
+                }
+            }
+        }
+
+        return matches;
     }
 
     async validateBet(bet){
@@ -244,7 +308,7 @@ const game = new Game();
 
 class Database{
     async insertGame(game){
-        const {game_title, game_id, minimum_bet, increment, expiry_date, created_by, available_to, options, type} = game;
+        const {game_title, game_id, minimum_bet, increment, expiry_date, created_by, available_to, options, type, row_size} = game;
 
         if(expiry_date != ''){
             const today = new Date();
@@ -265,6 +329,7 @@ class Database{
             available_to,
             type,
             options : type === 'Boolean' ? 'Kyllä;Ei' : options,
+            row_size
         });
     }
 
