@@ -86,7 +86,7 @@ function GameList(props){
 
                         <tr>
                             <td>Pool:</td>
-                            <td className="align-text-right">{currency + item.pool.toLocaleString('en')}</td>
+                            <td className="align-text-right">{currency + (item.pool + item.pool_reserve).toLocaleString('en')}</td>
                         </tr>
 
                         <tr>
@@ -105,10 +105,10 @@ function GameList(props){
             {
                 props.byUser ? 
                 <div className="flex-row fill gap-s">
-                    <select hidden={item.type === 'Lotto'} id={`side-select-${item.game_id}`}>
+                    <select hidden={item.type === 'Lottery'} id={`side-select-${item.game_id}`}>
                         {options}
                     </select>
-                    <button onClick={() => closeGame(item.game_id)}>CLOSE</button>
+                    <button onClick={() => closeGame(item.game_id)}>{item.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
                 </div> : <></>
             }
             
