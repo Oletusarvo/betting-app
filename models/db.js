@@ -158,6 +158,10 @@ class Game{
         //Lottery games will not be cleared if there were no winners.
         if(this.game.type === 'Lottery' && winners.length === 0){
             this.game.pool_reserve += await this.calculatePool();
+
+            await this.addNotification(participants, `Lottery was drawn with no winners. The pool is now ${this.game.pool_reserve} dice.`,
+            );
+
             this.game.pool = 0;
             await db('bets').where({game_id: this.game.game_id}).del();
             await this.update();
@@ -169,17 +173,28 @@ class Game{
 
         for(let winner of winners){
             await bank.deposit(winner.username, share);
-            /*
+            
             await db('notifications').insert({
                 username : winner.username,
                 message : `Won ${share} dice!`,
                 game_title : this.game.game_title,
                 game_id : this.game.game_id,
-            })
-            */
+            });
         }
 
         await this.clear();
+    }
+
+    async addNotification(participants, msg){
+        for(const participant of participants){
+           
+            await db('notifications').insert({
+                game_title: this.game.game_title,
+                game_id: this.game.game_id,
+                message: msg,
+                username: participant.username,
+            });
+        }
     }
 
     getWinners(participants, side){
@@ -352,11 +367,15 @@ class Database{
         });
     }
 
-    async deleteNotification(notification_id){
-        return await db('notifications').where({notification_id}).del();
+    async deleteNotifications(username){
+        return await db('notifications').where({username}).del();
     }
 
-    async getNotifications(username){
+    async getNotifications(username = undefined){
+        if(username === undefined){
+            return await db('notifications');
+        }
+
         return await db('notifications').where({username});
     }
 

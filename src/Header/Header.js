@@ -8,7 +8,7 @@ const bellIcon = './img/bell.png';
 
 function Header(){
 
-    const {user, setUser, setToken, token} = useContext(AppContext);
+    const {user, setUser, setToken, socket} = useContext(AppContext);
     const [notifications, setNotifications] = useState([]);
 
     function logout(){
@@ -30,19 +30,20 @@ function Header(){
     }
 
     useEffect(() => {
-        if(user == null) return;
+        if(!user) return;
 
-        const req = new XMLHttpRequest();
-        req.open('GET', `notifications/${user.username}`);
-        req.setRequestHeader('auth', token);
-        req.send();
+        socket.emit('noti_get', user.username, noti => {
+            setNotifications(noti);
+        });
 
-        req.onload = () => {
-            if(req.status == 200){
-                setNotifications(JSON.parse(req.response));
-            }
+        socket.on('noti_update', noti => {
+            setNotifications(noti.filter(item => item.username === user.username));
+        });
+
+        return () => {
+            socket.off('noti_update');
         }
-    }, []);
+    }, [user]);
 
     return (
         <>
@@ -63,6 +64,12 @@ function Header(){
                     </>
                     :
                     <>
+                        <button id="notification-button" onClick={toggleNotifications}>
+                            <i>
+                                <img src={bellIcon}></img>
+                            </i>
+                            <div hidden={notifications.length == 0} data-notification-count={notifications.length} id="notification-count"></div>
+                        </button>
                         <span id="logout-link" onClick={logout}>Logout</span>
                     </>
                     

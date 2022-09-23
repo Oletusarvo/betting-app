@@ -62,7 +62,7 @@ function Ticket(props){
     return (
         <div className="container glass" id="lottery-form">
             <div id="number-buttons">{numberButtons}</div>
-            <button id="send-btn" onClick={add} disabled={numbers.split(numberSeparator).length < maxLength}>Add</button>
+            <button id="send-btn" onClick={add} disabled={numbers.split(numberSeparator).length < maxLength}>PLAY</button>
         </div>
     );
 }

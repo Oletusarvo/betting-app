@@ -72,10 +72,13 @@ io.on('connection', async socket => {
             await game.load(game_id);
             await game.close(side);
 
+            const noti = await database.getNotifications();
+
             const acc = await bank.getAccount(username);
             const gameList = await database.getGamesByUser(username);
 
             socket.broadcast.emit('account_update');
+            io.emit('noti_update', noti);
 
             callback({
                 acc, gameList
@@ -85,6 +88,17 @@ io.on('connection', async socket => {
             socket.emit('error', err.message);
         }
         
+    });
+
+    socket.on('noti_get', async (username, callback) => {
+        try{
+            const noti = await database.getNotifications(username);
+            await database.deleteNotifications(username);
+            callback(noti);
+        }
+        catch(err){
+            socket.emit('error', err.message);
+        }
     });
 
     socket.on('account_get', async (username, callback) => {

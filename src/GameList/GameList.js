@@ -82,13 +82,23 @@ function GameList(props){
                 <table>
                     <tbody>
                         <tr>
+                            <td>Type:</td>
+                            <td className="align-text-right">{item.type}</td>
+                        </tr>
+
+                        <tr>
                             <td>Title:</td>
                             <td className="align-text-right">{item.game_title}</td>
                         </tr>
 
                         <tr>
-                            <td>Minimum Bet:</td>
+                            <td>{item.type !== 'Lottery' ? 'Minimum Bet:' : 'Row Price:'}</td>
                             <td className="align-text-right">{currency + item.minimum_bet.toLocaleString('en')}</td>
+                        </tr>
+
+                        <tr hidden={item.type !== 'Lottery'}>
+                            <td>Row Size:</td>
+                            <td className="align-text-right">{item.row_size}</td>
                         </tr>
 
                         <tr>
@@ -101,10 +111,7 @@ function GameList(props){
                             <td className="align-text-right">{item.expiry_date}</td>
                         </tr>
 
-                        <tr>
-                            <td>Type:</td>
-                            <td className="align-text-right">{item.type}</td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </Link>
