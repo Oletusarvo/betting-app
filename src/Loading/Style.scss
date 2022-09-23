@@ -1,3 +1,5 @@
+@import '../Config.scss';
+
 @keyframes RingAnimation{
     0% {transform: rotate(0deg) };
     50% {transform: rotate(180deg)};
@@ -7,7 +9,17 @@
 .spinner{
     display: flex;
     flex-flow: column;
-    
+    border: 0.5rem solid white;
+    border-left-color: $primary-color;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+
+    animation: RingAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
     .ring-prong{
         width: 128px;
         height: 128px;
