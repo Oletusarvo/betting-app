@@ -138,9 +138,9 @@ function GameList(props){
     
 
     return (
-        <>
+        <div className="gap-s flex-column">
             {!gameList ? <Loading title={'Loading gamelist...'}/> : renderList}
-        </>
+        </div>
     );
 }
 
