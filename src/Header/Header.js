@@ -10,6 +10,7 @@ function Header(){
 
     const {user, setUser, setToken, socket} = useContext(AppContext);
     const [notifications, setNotifications] = useState([]);
+    const [seenNoti, setSeenNoti] = useState(false);
 
     function logout(){
         localStorage.removeItem('betting-app-token');
@@ -23,6 +24,7 @@ function Header(){
         const notificationsWindow = document.querySelector('#notifications-window');
         if(notificationsWindow.classList.contains('show')){
             notificationsWindow.classList.remove('show');
+            setSeenNoti(true);
         }
         else{
             notificationsWindow.classList.add('show');
@@ -68,7 +70,7 @@ function Header(){
                             <i>
                                 <img src={bellIcon}></img>
                             </i>
-                            <div hidden={notifications.length == 0} data-notification-count={notifications.length} id="notification-count"></div>
+                            <div hidden={seenNoti} data-notification-count={notifications.length} id="notification-count"></div>
                         </button>
                         <span id="logout-link" onClick={logout}>Logout</span>
                     </>

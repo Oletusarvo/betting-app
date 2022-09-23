@@ -60,13 +60,14 @@ function Home(props){
                 </div>
                 :
                 <>  
-                    <h2 className="align-text-center">Logged in as {username}</h2>
-                    <div className="sep"></div>
-                    <h3 className="align-text-center">Total Balance:</h3>
-                    <h1 className="align-text-center"><Balance/></h1>
-                    <div className="sep"></div>
-                    <h2 className="align-text-center">Bets created by you:</h2>
-                    <GameList byUser={true}/>
+                    <div id="home-account-content" className="fill flex-column">
+                        <h2 className="align-text-center">Logged in as {username}</h2>
+                        <h3 className="align-text-center">Total Balance:</h3>
+                        <h1 className="align-text-center"><Balance/></h1>
+                        <h2 className="align-text-center">Bets created by you:</h2>
+                        <GameList byUser={true}/>
+                    </div>
+                    
                     <Link to="/account/delete" id="del-link">Delete Account</Link>
                     
                 </>
