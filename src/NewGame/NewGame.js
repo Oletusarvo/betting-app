@@ -48,7 +48,7 @@ function NewGame(props){
                     <label hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
                     <input hidden={betTypeSelect !== 'Lottery'} name="rowSize" defaultValue="4" min="2" step="1" max="7" type="number" placeholder='Enter preferred row size'></input>
                     
-                    <textarea id="input-bet-options" name="betOptions" placeholder="Multi-choice bet options separated by semi-colon(;)" maxLength={256} disabled={betTypeSelect === 'Multi-Choice' ? false : true}></textarea>
+                    <textarea id="input-bet-options" name="betOptions" placeholder="Multi-choice bet options separated by semi-colon(;)" maxLength={256} disabled={betTypeSelect !== 'Multi-Choice'} required={true}></textarea>
                     <label>Expiry Date:</label>
                     <input name="expiryDate" type="date" placeholder="Enter expiry date"></input>
                     <button type="submit">Create</button>

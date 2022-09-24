@@ -10,7 +10,7 @@ function Form(){
     let options = game.options.split(';');
     let renderOptions = [];
     options.forEach(option => renderOptions.push(
-        <option key={`option-${option}`}>{option}</option>
+        <option key={`option-${option}`} value={option}>{option}</option>
     ));
     
     return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import AppContext from '../Contexts/AppContext.js';
 import {submit} from './Api';
+import './Style.scss';
 
 function Login(props){
 

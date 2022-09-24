@@ -59,7 +59,11 @@ function Betting(props) {
         const c = confirm(`You are about to bet for ${amount}. Are you sure?`);
         if(!c) return;
 
-        const side = row == undefined ? document.querySelector('#bet-options').value : row;
+        const sideSelector = document.querySelector('#bet-options');
+        const selectorValue = sideSelector ? sideSelector.value : null;
+        const side = row || selectorValue;
+
+
         const data = {
             amount,
             username : user.username,
