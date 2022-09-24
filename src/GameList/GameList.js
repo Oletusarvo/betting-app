@@ -82,13 +82,13 @@ function GameList(props){
                 <table>
                     <tbody>
                         <tr>
-                            <td>Type:</td>
-                            <td className="align-text-right">{item.type}</td>
+                            <td>Title:</td>
+                            <td className="align-text-right">{item.game_title}</td>
                         </tr>
 
                         <tr>
-                            <td>Title:</td>
-                            <td className="align-text-right">{item.game_title}</td>
+                            <td>Type:</td>
+                            <td className="align-text-right">{item.type}</td>
                         </tr>
 
                         <tr>

@@ -63,13 +63,16 @@
     }
 
     #bet-controls{
-        flex-flow: row;
+        display: flex;
+        flex-flow: row !important;
         width: 100%;
 
+        align-items: center !important;
+        justify-content: center !important;
+
         input, button, select{
-            flex: 1;
             align-self: stretch;
-            width: calc(100% / 3);
+            flex: 1;
             height: 1.5rem;
         }
     }
