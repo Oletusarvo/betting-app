@@ -16,11 +16,6 @@ function Info(){
             <table>
                 <tbody>
                     <tr>
-                        <td>Your Balance:</td>
-                        <td className="align-text-right"><Balance/></td>
-                    </tr>
-
-                    <tr>
                         <td>Your Bet:</td>
                         <td className="align-text-right"><Bet/></td>
                     </tr>

@@ -14,6 +14,7 @@ import Background from '../Background/Background.js';
 import GenerateCoins from '../GenerateCoins/GenerateCoins.js';
 import AppContext from '../Contexts/AppContext';
 import './Style.scss';
+import AccountHeader from '../AccountHeader/AccountHeader';
 
 
 function App (props){
@@ -73,6 +74,7 @@ function App (props){
                 <Background/>
                 <AppContext.Provider value={{user, token, socket, currency, setUser, setToken}}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
+                    {user ? <AccountHeader/> : null}
                     <Routes >
                         <Route path="/" element={
                             <Home user={user} token={token}/>

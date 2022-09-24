@@ -61,9 +61,6 @@ function Home(props){
                 :
                 <>  
                     <div id="home-account-content" className="fill flex-column">
-                        <h2 className="align-text-center">Logged in as {username}</h2>
-                        <h3 className="align-text-center">Total Balance:</h3>
-                        <h1 className="align-text-center"><Balance/></h1>
                         <h2 className="align-text-center">Bets created by you:</h2>
                         <GameList byUser={true}/>
                     </div>
