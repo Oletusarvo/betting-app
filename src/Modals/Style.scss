@@ -1,0 +1,43 @@
+@import '../Config';
+
+.modal{
+    $border-radius: 5px;
+
+    .slide{
+        border-right: 1px solid black;
+        padding: 5px;
+        color: black;
+        flex: 1;
+    }
+
+    border-radius: 10px;
+    width: 100%;
+
+    header{
+        font-weight: bold;
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+        background: $primary-color;
+        
+    }
+
+    .content{
+        display: flex;
+        flex-flow: row;
+        flex: 1;
+        background: gray;
+        padding: 5px;
+
+    }
+
+    footer{
+        padding: 10px;
+        background: $primary-color;
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+
+        button{
+            width: 100%;
+        }
+    }
+}

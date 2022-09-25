@@ -8,7 +8,7 @@ function AccountHeader(){
     return (
         <div id="account-header" className="flex-row">
             <span>{user.username}</span>
-            <span>Balance: <Balance/></span>
+            <Balance/>
         </div>
     )
 }

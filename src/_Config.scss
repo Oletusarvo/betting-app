@@ -1,4 +1,5 @@
 $primary-color: rgb(0, 107, 156);
+$creator-color: rgb(194, 126, 0);
 $secondary-color: rgb(0, 0, 49);
 $navbar-color: rgb(52, 52, 52);
 $container-item-color : $primary-color;
@@ -160,11 +161,23 @@ body{
 }
 
 .bg-fade{
-    background: radial-gradient($primary-color, rgba(black, 0)) !important;
+    background: radial-gradient($primary-color, rgba($primary-color, 0.1)) !important;
+}
+
+.bg-primary{
+    background: $primary-color;
 }
 
 .bg-expired{
-    background: radial-gradient(rgba(red, 0.8), rgba(black, 0)) !important;
+    background: radial-gradient(red, rgba(red, 0.1)) !important;
+}
+
+.bg-fade-creator{
+    background: radial-gradient($creator-color, rgba($creator-color, 0.1)) !important;
+}
+
+.bg-creator{
+    background: $creator-color;
 }
 
 .absolute{
