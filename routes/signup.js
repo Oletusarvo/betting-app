@@ -13,19 +13,17 @@ router.post('/', async (req, res) => {
             if(err){
                 return res.status(500).send(err.message);
             }
-
-            try{
-                await bank.addAccount(username, pass);
-            }
-            catch(err){
-                return res.status(500).send(err.message);
+            else{
+                try{
+                    await bank.addAccount(username, pass);
+                    return res.status(200).send();
+                }
+                catch(err){
+                    return res.status(500).send(`Account with username ${username} already exists!`);
+                }
             }
         });
     }
-    
-
-    res.status(200).send();
-
 });
 
 module.exports = router;

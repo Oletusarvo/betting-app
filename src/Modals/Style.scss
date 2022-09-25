@@ -2,6 +2,7 @@
 
 .modal{
     $border-radius: 5px;
+    $modal-color: rgb(0, 92, 129);
 
     .slide{
         border-right: 1px solid black;
@@ -17,7 +18,7 @@
         font-weight: bold;
         border-top-left-radius: $border-radius;
         border-top-right-radius: $border-radius;
-        background: $primary-color;
+        background: $modal-color;
         
     }
 
@@ -32,11 +33,18 @@
 
     footer{
         padding: 10px;
-        background: $primary-color;
+        background: $modal-color;
         border-bottom-left-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
 
         button{
+            width: 100%;
+        }
+    }
+
+    form{
+        width: 100%;
+        input, button, select{
             width: 100%;
         }
     }

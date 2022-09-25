@@ -11,6 +11,7 @@ function GameList(props){
     const [renderList, setRenderList] = useState([]);
     const [gameList, setGameList] = useState(null);
     const {user, token, socket} = useContext(AppContext);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const req = new XMLHttpRequest();
@@ -24,11 +25,13 @@ function GameList(props){
         req.setRequestHeader('auth', token);
         req.setRequestHeader('Socket_ID', socket.id);
         req.send();
+        setLoading(true);
 
         req.onload = () => {
             if(req.status === 200){
                 const list = JSON.parse(req.response);
                 setGameList(list);
+                setLoading(false);
             }
         }
 
@@ -53,10 +56,13 @@ function GameList(props){
     }, [gameList]);
 
     
-
+    if(loading){
+        return <Loading title="Loading gamelist..."/>
+    }
+    
     return (
         <div className="gap-m flex-column">
-            {!gameList ? <Loading title={'Loading gamelist...'}/> : renderList}
+            {renderList}
         </div>
     );
 }

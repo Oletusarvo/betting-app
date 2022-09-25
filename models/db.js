@@ -8,18 +8,12 @@ class Bank{
         this.options = options;
     }
 
-    async addAccount(username, password){
-        const acc = await db('accounts').where({username}).first();
-        if(acc){
-           throw new Error(`Account with username ${username} already exists!`);
-        }
-        else{
-            await db('accounts').insert({
-                username,
-                password,
-                balance: 100
-            });
-        }
+    async addAccount(username, password){      
+        await db('accounts').insert({
+            username,
+            password,
+            balance: 100
+        });
     }
 
     async getAccount(username){

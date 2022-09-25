@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import AppContext from '../../Contexts/AppContext.js';
 
 function GameInfo(props){
-    const {game, byUser, destination, setGameList} = props;   
+    const {game, destination, setGameList} = props;   
     const {user, socket, setUser, currency} = useContext(AppContext);
 
     function closeGame(game_id, type){
@@ -41,7 +41,7 @@ function GameInfo(props){
     let options = [];
     game.options?.split(';').forEach(option => options.push(<option key={`option-${option}`}>{option}</option>));
     const isExpired = new Date().getTime() >= new Date(game.expiry_date).getTime();
-    const createdBy = game.created_by === user.username;
+
     return (
         <div className="modal">
             <Link to={destination}>
@@ -77,15 +77,22 @@ function GameInfo(props){
                     </table>
                 </div>
             </Link>
-            {
-                game.created_by === user.username ? 
-                <footer className="flex-row fill gap-s">
-                    <select hidden={game.type === 'Lottery'} id={`side-select-${game.game_id}`}>
-                        {options}
-                    </select>
-                    <button onClick={() => closeGame(game.game_id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
-                </footer> : <></>
-            }
+
+            
+            <footer className="flex-row fill gap-s">
+                {
+                    game.created_by === user.username ? 
+                    <>
+                        <select hidden={game.type === 'Lottery'} id={`side-select-${game.game_id}`}>
+                            {options}
+                        </select>
+                        <button onClick={() => closeGame(game.game_id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
+                    </>
+                    :
+                    null
+                }
+            </footer>
+            
         </div>
     )
 }
