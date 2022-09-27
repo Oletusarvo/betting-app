@@ -84,12 +84,12 @@ body{
 
 .flex-column{
     display: flex;
-    flex-flow: column;
+    flex-flow: column !important;
 }
 
 .flex-row{
     display: flex;
-    flex-flow: row;
+    flex-flow: row !important;
 }
 
 .center-all{

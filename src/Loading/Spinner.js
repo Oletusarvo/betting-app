@@ -2,18 +2,13 @@ import React from 'react';
 const Icon = './img/casino-chip.png';
 import './Style.scss';
 
-class Spinner extends React.Component{
-    constructor(props){
-        super(props);
-    }
+function Spinner(props){
 
-    render(){
-        return(
-            <div className="spinner">
-                
-            </div>
-        )
-    }
+    const {dimensions} = props;
+
+    return(
+        <div className="spinner" style={dimensions && {width: dimensions.width, height: dimensions.height, borderWidth: dimensions.borderWidth}}></div>
+    );
 }
 
 export default Spinner;

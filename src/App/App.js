@@ -11,7 +11,7 @@ import Signup from '../Signup/Signup.js';
 import Unknown from '../unknown';
 import Betting  from '../Betting/Betting.js';
 import Background from '../Background/Background.js';
-import GenerateCoins from '../GenerateCoins/GenerateCoins.js';
+import GenerateDice from '../GenerateDice/GenerateDice.js';
 import AppContext from '../Contexts/AppContext';
 import './Style.scss';
 import AccountHeader from '../AccountHeader/AccountHeader';
@@ -47,6 +47,7 @@ function App (props){
     });
 
     const [currency] = useState('⚄');
+    const [isMining, setIsMining] = useState(false);
 
     useEffect(() => {
         if(user){
@@ -72,7 +73,7 @@ function App (props){
         <Router>
             <div id="app" className="flex-column center-align">
                 <Background/>
-                <AppContext.Provider value={{user, token, socket, currency, setUser, setToken}}>
+                <AppContext.Provider value={{user, token, socket, currency, setUser, setToken, isMining, setIsMining}}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
                     {user ? <AccountHeader/> : null}
                     <Routes >
@@ -85,8 +86,8 @@ function App (props){
                         <Route exact path="/account/delete" element={<Delete/>}></Route>
                         <Route exact path="/games" element={<Games/>} />
                         <Route exact path="/games/:game_id" element={<Betting/>}></Route>
-                        <Route exact path="/coins" element={<GenerateCoins/>}></Route>
                         <Route exact path="/newgame" element={<NewGame/>} />
+                        <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>
                     <Navbar user={user}/>

@@ -90,6 +90,19 @@ io.on('connection', async socket => {
         
     });
 
+    socket.on('coins_generate', async (data, callback) => {
+        const {username, amount} = data;
+        
+        try{
+            await bank.deposit(username, amount);
+            const user = await bank.getAccount(username);
+            callback(user);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+    });
+
     socket.on('noti_get', async (username, callback) => {
         try{
             const noti = await database.getNotifications(username);

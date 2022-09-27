@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import SignupModal from '../Modals/Signup/Signup.js';
+import SignupModal from '../Modals/Signup/SignupModal.js';
 
 import './Style.scss';
 

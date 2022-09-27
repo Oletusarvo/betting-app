@@ -1,4 +1,4 @@
-import DeleteAccountModal from '../Modals/DeleteAccount/DeleteAccount.js';
+import DeleteAccountModal from '../Modals/DeleteAccount/DeleteAccountModal.js';
 
 function Delete(props){
     return(

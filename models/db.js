@@ -126,7 +126,7 @@ class Game{
     }
 
     async close(side){
-        await this.isContested();
+        //await this.isContested();
 
         const participants = await this.getAllBets();
         if(this.game.type === 'Lottery' && participants.length == 0){
@@ -141,7 +141,8 @@ class Game{
         }
         
         const {pool, pool_reserve} = this.game;
-        
+
+        await this.autoFold(participants);
 
         const winners = this.getWinners(participants, side);
         const shareForCreator = this.calculateCreatorShare(winners.length); 
@@ -253,6 +254,19 @@ class Game{
                 throw new Error('Game is contested!');
             }
         }
+    }
+
+    async autoFold(participants){
+        //Folds all bets not meeting the minimum bet.
+        if(this.game.type === 'Lottery') return;
+
+        for(const bet of participants){
+            if(bet.amount != this.game.minimum_bet){
+                bet.folded = true;
+            }
+        }
+
+        return participants;
     }
 
     compareRow(row1, row2){

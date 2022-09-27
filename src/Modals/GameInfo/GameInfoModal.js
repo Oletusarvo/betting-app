@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import { useContext } from 'react';
 import AppContext from '../../Contexts/AppContext.js';
 
-function GameInfo(props){
+function GameInfoModal(props){
     const {game, destination, setGameList} = props;   
     const {user, socket, setUser, currency} = useContext(AppContext);
 
@@ -97,4 +97,4 @@ function GameInfo(props){
     )
 }
 
-export default GameInfo;
+export default GameInfoModal;

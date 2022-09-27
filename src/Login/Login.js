@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginModal from '../Modals/Login/Login.js';
+import LoginModal from '../Modals/Login/LoginModal.js';
 
 import './Style.scss';
 

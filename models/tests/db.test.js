@@ -248,3 +248,25 @@ describe('Testing game winner determination', () => {
     });
 });
 
+describe('Testing auto-folding', () => {
+    test('Bets not meeting the minimum bet get folded', async () => {
+        game.game.type = 'Boolean';
+        game.game.minimum_bet = 20;
+
+        const bets = [
+            {
+                amount: 10,
+                folded: false,
+            },
+
+            {
+                amount: 20,
+                folded: false,
+            }
+        ]
+
+        await game.autoFold(bets);
+        expect(bets[0].folded).toBe(true);
+    });
+})
+

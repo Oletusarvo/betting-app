@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import AppContext from "../../Contexts/AppContext.js";
 import '../Style.scss';
 
-function CreateGame(props){
+function CreateGameModal(props){
 
     const {user, token} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
@@ -89,4 +89,4 @@ function CreateGame(props){
     );
 }
 
-export default CreateGame;
+export default CreateGameModal;

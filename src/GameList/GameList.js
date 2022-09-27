@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import {Link} from 'react-router-dom';
 import {getDestination} from './Api';
 import AppContext from '../Contexts/AppContext.js';
-import GameInfo from '../Modals/GameInfo/GameInfo.js';
+import GameInfoModal from '../Modals/GameInfo/GameInfoModal.js';
 import Loading from '../Loading/Loading.js';
 import './Style.scss';
 
@@ -48,7 +48,7 @@ function GameList(props){
 
         gameList.forEach(item => {
            
-            const div = <GameInfo game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>   
+            const div = <GameInfoModal game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>   
             final.push(div);
         });
 
