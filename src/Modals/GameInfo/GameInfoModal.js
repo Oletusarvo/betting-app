@@ -1,11 +1,19 @@
-import '../Style.scss';
+import './Style.scss';
 import {Link} from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import AppContext from '../../Contexts/AppContext.js';
-
 function GameInfoModal(props){
     const {game, destination, setGameList} = props;   
     const {user, socket, setUser, currency} = useContext(AppContext);
+    const [mustCall, setMustCall] = useState(false);
+
+    useEffect(() => {
+        socket.emit('bet_get', {username: user.username, game_id: game.game_id}, res => {
+            if(!res || res.amount == game.minimum_bet) return;
+
+            setMustCall(true);
+        });
+    }, []);
 
     function closeGame(game_id, type){
         if(typeof(game_id) !== 'string'){
@@ -43,9 +51,9 @@ function GameInfoModal(props){
     const isExpired = new Date().getTime() >= new Date(game.expiry_date).getTime();
 
     return (
-        <div className="modal">
+        <div className="modal game-info-modal">
             <Link to={destination}>
-                <header className="flex-row center-all">{game.game_title}</header>
+                <header className="flex-row center-all">{game.game_title} <div className={`call-badge flex-column center-all ${mustCall && 'show'}`}>CALL!</div></header>
                 <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}>
                     <table>
                         <tbody>

@@ -123,6 +123,18 @@ io.on('connection', async socket => {
             console.log(err);
         }
     });
+
+    socket.on('bet_get', async (data, callback) => {
+        const {username, game_id} = data;
+        try{
+            await game.load(game_id);
+            const bet = await game.getBet(username);
+            callback(bet);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+    })
 });
 
 io.on('disconnect', () => console.log('Socket disconnected!'));

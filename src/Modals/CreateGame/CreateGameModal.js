@@ -71,7 +71,7 @@ function CreateGameModal(props){
                     <input name="minimumBet" type="number" min="1" step="1" placeholder="Enter minimum bet" required={true}></input>
 
                     <label hidden={betTypeSelect === 'Lottery'}>Increment:</label>
-                    <input hidden={betTypeSelect === 'Lottery'} name="increment" type="number" min="1" step="1" defaultValue={1} placeholder="Bet Increment" disabled={betTypeSelect === 'Lottery'}></input>
+                    <input hidden={betTypeSelect === 'Lottery'} name="increment" type="number" min={betTypeSelect === 'Lottery' ? 1 : 0} step="1" defaultValue={1} placeholder="Bet Increment" disabled={betTypeSelect === 'Lottery'}></input>
                     
                     <label hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
                     <input hidden={betTypeSelect !== 'Lottery'} name="rowSize" defaultValue="4" min="2" step="1" max="7" type="number" placeholder='Enter preferred row size'></input>
