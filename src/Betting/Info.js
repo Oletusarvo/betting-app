@@ -12,7 +12,7 @@ function Info(){
     const expiryString =  !Number.isNaN(timeLeft) ? timeLeft < 0 ? "Expired" : timeLeft + " days" : "No Limit";
 
     return (
-        <div className={"container glass " + (isExpired && "bg-expired")} id="bet-info">
+        <div className={"container glass bg-fade " + (isExpired && "bg-expired")} id="bet-info">
             <table>
                 <tbody>
                     <tr>

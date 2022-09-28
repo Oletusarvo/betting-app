@@ -30,6 +30,7 @@ function GameList(props){
         req.onload = () => {
             if(req.status === 200){
                 const list = JSON.parse(req.response);
+                list.sort((a, b) => b.pool - a.pool);
                 setGameList(list);
                 setLoading(false);
             }

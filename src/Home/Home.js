@@ -15,7 +15,7 @@ function Home(props){
         <div className="flex-column fill w-100 pad overflow-y-scroll overflow-x-hide gap-default" id="home-page">
             {
                 user === null ? 
-                <div className="container glass">
+                <div className="container glass bg-fade">
                     <h1>Betting App</h1>
                     <br/>
                     <p>

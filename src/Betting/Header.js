@@ -8,7 +8,7 @@ function Header(){
     const {isExpired, game} = useContext(GameContext);
 
     return (
-        <div className= {"container glass" + (isExpired && " bg-expired")} id="bet-title">
+        <div className= {"container glass bg-fade " + (isExpired && " bg-expired")} id="bet-title">
             <Link id="back-button" to="/games">
                 <img src="../img/arrow.png"></img>
             </Link>

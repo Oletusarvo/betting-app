@@ -8,7 +8,7 @@ function LotteryInfo(){
     const {currency} = useContext(AppContext);
 
     return (
-        <div className="container glass">
+        <div className="container glass bg-fade">
             <table>
                 <tbody>
                     <tr>

@@ -15,7 +15,7 @@ function Balance(props){
         if(difference == 0) return;
 
         const balance = document.querySelector(`#${id}`);
-        
+
         if(difference > 0){
             balance.classList.add('flash-green');
         }
@@ -34,6 +34,7 @@ function Balance(props){
 
         setTimeout(() => {
             setShowGain(false);
+
         }, 1500);
 
     }, [user]);
@@ -41,7 +42,7 @@ function Balance(props){
     return (
         <div className="flex-row gap-s">
             <span className="balance" id={id}>{currency + user.balance.toLocaleString('en')}</span>
-            <span hidden={showGain == false} style={{color: gain > 0 ? 'limegreen' : 'red'}}>{gain}</span>
+            <span className="gain" hidden={showGain == false} style={{color: gain > 0 ? 'limegreen' : 'red'}}>{gain}</span>
             {
                 isMining ? <Loading dimensions={{width: "1rem", height: "1rem", borderWidth: "2px"}}/> : null
             }

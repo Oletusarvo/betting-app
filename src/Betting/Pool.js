@@ -8,7 +8,7 @@ function Pool(){
     const {currency} = useContext(AppContext);
 
     return (
-        <div className={"container glass " + (isExpired && "bg-expired")} id="bet-pool">
+        <div className={"container glass bg-fade " + (isExpired && "bg-expired")} id="bet-pool">
             <div id="bet-pool-ring" className={getBettingState(bet, game.minimum_bet)}>
                 <h1>{currency + game.pool.toLocaleString('en')}</h1>
             </div>

@@ -53,7 +53,11 @@ function GameInfoModal(props){
     return (
         <div className="modal game-info-modal">
             <Link to={destination}>
-                <header className="flex-row center-all">{game.game_title} <div className={`call-badge flex-column center-all ${mustCall && 'show'}`}>CALL!</div></header>
+                <header className={`flex-row center-all`}>
+                    {game.game_title} 
+                    <div className={`call-badge flex-column center-all ${mustCall && 'show'}`}>CALL!</div>
+                </header>
+
                 <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}>
                     <table>
                         <tbody>
@@ -91,10 +95,10 @@ function GameInfoModal(props){
                 {
                     game.created_by === user.username ? 
                     <>
-                        <select hidden={game.type === 'Lottery'} id={`side-select-${game.game_id}`}>
+                        <select disabled={!isExpired} hidden={game.type === 'Lottery'} id={`side-select-${game.game_id}`}>
                             {options}
                         </select>
-                        <button onClick={() => closeGame(game.game_id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
+                        <button disabled={!isExpired && game.type !== 'Lottery'} onClick={() => closeGame(game.game_id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
                     </>
                     :
                     null
