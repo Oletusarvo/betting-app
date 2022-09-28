@@ -7,14 +7,13 @@ function GenerateDiceModal(props){
     const {socket, user, setIsMining, setUser, isMining} = useContext(AppContext);
 
     function mine(amount){
-        const miningTime = 1000; //Time in milliseconds it takes to generate a die.
+        const miningTime = 15000; //Time in milliseconds it takes to generate a die.
         setIsMining(true);    
         console.log(amount);
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 setIsMining(false);
-                console.log('Nonii-i')
                 resolve();
             }, amount * miningTime);
         });
@@ -36,8 +35,8 @@ function GenerateDiceModal(props){
             <header className="flex-row center-all">Generate Dice</header>
             <div className="content glass flex-column gap-s bg-fade">
                 <p>
-                    Use this form to get more dice to use. Each dice takes one second to produce. For example,
-                    it will take one minute to produce 60 dice.
+                    Use this form to get more dice to use. Each dice takes 15 seconds to produce. For example,
+                    it will take one minute to produce 4 dice.
                 </p>
                 <br/>
                 <form onSubmit={submit}>

@@ -16,6 +16,10 @@ import AppContext from '../Contexts/AppContext';
 import './Style.scss';
 import AccountHeader from '../AccountHeader/AccountHeader';
 
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').then(() => console.log('Service worker registered!'))
+    .catch(err => console.log('Service worker not registered!'));
+}
 
 function App (props){
     const [user, setUser] = useState(() => {
