@@ -3,8 +3,8 @@
     "short_name": "Betting App",
     "start_url": "./index.html",
     "display": "standalone",
-    "background_color": "#FFFF",
-    "theme_color": "#343434",
+    "background_color": "#000031",
+    "theme_color": "#003583",
     "orientation": "portrait-primary",
     "icons": [
         {
