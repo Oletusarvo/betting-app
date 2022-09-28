@@ -78,7 +78,7 @@ function GameInfoModal(props){
                             
                             <tr>
                                 <td>Pool:</td>
-                                <td className="align-text-right">{currency + game.pool.toLocaleString('en')}</td>
+                                <td className="align-text-right">{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</td>
                             </tr>
                             
                             <tr>

@@ -48,7 +48,6 @@ function GameList(props){
         let final = [];
 
         gameList.forEach(item => {
-           
             const div = <GameInfoModal key={item.game_id} game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>   
             final.push(div);
         });
