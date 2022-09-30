@@ -46,6 +46,7 @@ class Game{
     async calculatePool(){
         const bets = await this.getAllBets();
         let total = 0;
+        
         for(let bet of bets){
             total += bet.amount;
         }
@@ -70,6 +71,7 @@ class Game{
 
     async placeBet(bet){
         await this.validateBet(bet);
+
         const {username, amount} = bet;
         const previousBet = await this.getBet(username);
         const newAmount = previousBet ? previousBet.amount + amount : amount;
@@ -79,7 +81,7 @@ class Game{
         }
 
         if(previousBet){
-            bet.amount = newAmount;
+            bet.amount = newAmount - tax;
             await this.updateBet(bet);
         }
         else{

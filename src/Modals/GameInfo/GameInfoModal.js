@@ -3,8 +3,10 @@ import {Link} from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import AppContext from '../../Contexts/AppContext.js';
 function GameInfoModal(props){
-    const {game, destination, setGameList} = props;   
+    const {destination, setGameList} = props;   
     const {user, socket, setUser, currency} = useContext(AppContext);
+
+    const [game, setGame] = useState(props.game);
     const [mustCall, setMustCall] = useState(false);
     const [isFolded, setIsFolded] = useState(false);
 
@@ -15,6 +17,16 @@ function GameInfoModal(props){
             if(res.amount < game.minimum_bet) setMustCall(true);
             if(res.folded) setIsFolded(true);
         });
+
+        socket.on('game_update', data => {
+            if(game.game_id != data.game_id) return;
+
+            setGame(data);
+        });
+
+        return () => {
+            socket.off('game_update');
+        }
     }, []);
 
     function closeGame(game_id, type){
@@ -44,7 +56,7 @@ function GameInfoModal(props){
         socket.emit('game_close', msg, (update) => {
             const {acc, gameList} = update;
             setUser(acc);
-            setGameList(gameList);
+            setGameList(gameList.sort((a, b) => (b.pool + b.pool_reserve) - (a.pool - a.pool_reserve)));
         });
     }
 
@@ -68,6 +80,12 @@ function GameInfoModal(props){
                                 <td>Type:</td>
                                 <td className="align-text-right">{game.type}</td>
                             </tr>
+
+                            <tr>
+                                <td>Pool:</td>
+                                <td className="align-text-right">{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</td>
+                            </tr>
+
                             {
                                 game.type === 'Lottery' && <tr>
                                     <td>Row Size:</td>
@@ -79,10 +97,7 @@ function GameInfoModal(props){
                                 <td className="align-text-right">{currency + game.minimum_bet.toLocaleString('en')}</td>
                             </tr>
                             
-                            <tr>
-                                <td>Pool:</td>
-                                <td className="align-text-right">{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</td>
-                            </tr>
+                            
                             
                             <tr>
                                 <td>Expires:</td>

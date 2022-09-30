@@ -15,9 +15,9 @@ function Form(){
     
     return (
         <div id="bet-controls" className={"container glass gap-s bg-fade " + (isExpired && " bg-expired")}>
-            <select id="bet-options">{renderOptions}</select>
-            <button id="bet-button" onClick={bet ? call : placeBet}>{bet ? "Call" : "Bet"}</button>
-            <button id="raise-button" onClick={raise}>Raise</button>
+            <select id="bet-options" disabled={bet.folded}>{renderOptions}</select>
+            <button id="bet-button" onClick={bet ? call : placeBet} disabled={bet.folded}>{bet ? "Call" : "Bet"}</button>
+            <button id="raise-button" onClick={raise} disabled={game.increment == 0 || bet.folded}>Raise</button>
         </div>
     );
 }
