@@ -2,7 +2,13 @@
 .game-info-modal{
     position: relative;
 
+    a{
+        width: 100%;
+    }
+
     header{
+
+        z-index: 0;
         .badge{
             visibility: hidden;
             position: absolute;
@@ -30,6 +36,38 @@
             color: white;
             &.show{
                 visibility: visible;
+            }
+        }
+
+        transition: border-radius 0.3s ease-out;
+        &.round{
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+    }
+
+    .content{
+        z-index: 0;
+        max-height: 0px;
+        padding: 0px !important;
+
+        transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+
+        table{
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-out, visibility 0.3s ease-out, max-height 0.3s ease-out;
+            max-height: 0px;
+        }
+
+        &.open{
+            max-height: 500px;
+            padding: 5px !important;
+
+            table{
+                visibility: visible;
+                opacity: 1;
+                max-height: 500px;
             }
         }
     }

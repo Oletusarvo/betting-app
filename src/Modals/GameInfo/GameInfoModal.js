@@ -24,6 +24,22 @@ function GameInfoModal(props){
             setGame(data);
         });
 
+        const header = document.querySelector(`#header-${game.game_id}`);
+        header.addEventListener('click', () => {
+
+            const body = document.querySelector(`#content-${game.game_id}`);
+            const footer = document.querySelector(`#footer-${game.game_id}`);
+
+            if(body.classList.contains('open')){
+                body.classList.remove('open');
+                footer.classList.remove('open');
+            }
+            else{
+                body.classList.add('open');
+                footer.classList.add('open');
+            }
+        });
+
         return () => {
             socket.off('game_update');
         }
@@ -66,50 +82,49 @@ function GameInfoModal(props){
 
     return (
         <div className="modal game-info-modal">
-            <Link to={destination}>
-                <header className={`flex-row center-all`}>
-                    {game.game_title} 
-                    <div id="call-badge" className={`badge flex-column center-all ${!isFolded && mustCall && 'show'}`}>CALL!</div>
-                    <div id="folded-badge" className={`badge flex-column center-all ${isFolded && 'show'}`}>FOLDED</div>
-                </header>
-
-                <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Type:</td>
-                                <td className="align-text-right">{game.type}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Pool:</td>
-                                <td className="align-text-right">{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</td>
-                            </tr>
-
-                            {
-                                game.type === 'Lottery' && <tr>
-                                    <td>Row Size:</td>
-                                    <td className="align-text-right">{game.row_size}</td>
+            <header className={`flex-row center-all`} id={`header-${game.game_id}`}>
+                {game.game_title} 
+                <div id="call-badge" className={`badge flex-column center-all ${!isFolded && mustCall && 'show'}`}>CALL!</div>
+                <div id="folded-badge" className={`badge flex-column center-all ${isFolded && 'show'}`}>FOLDED</div>
+            </header>
+                <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}  id={`content-${game.game_id}`}>
+                    <Link to={destination}>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Type:</td>
+                                    <td className="align-text-right">{game.type}</td>
                                 </tr>
-                            }
-                            <tr>
-                                <td>{game.type === "Lottery" ? "Row Price:" : "Minimum Bet:"}</td>
-                                <td className="align-text-right">{currency + game.minimum_bet.toLocaleString('en')}</td>
-                            </tr>
-                            
-                            
-                            
-                            <tr>
-                                <td>Expires:</td>
-                                <td className="align-text-right">{game.expiry_date}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                                <tr>
+                                    <td>Pool:</td>
+                                    <td className="align-text-right">{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</td>
+                                </tr>
+
+                                {
+                                    game.type === 'Lottery' && <tr>
+                                        <td>Row Size:</td>
+                                        <td className="align-text-right">{game.row_size}</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>{game.type === "Lottery" ? "Row Price:" : "Minimum Bet:"}</td>
+                                    <td className="align-text-right">{currency + game.minimum_bet.toLocaleString('en')}</td>
+                                </tr>
+                                
+                                
+                                
+                                <tr>
+                                    <td>Expires:</td>
+                                    <td className="align-text-right">{game.expiry_date}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </Link>
                 </div>
-            </Link>
 
             
-            <footer className="flex-row fill gap-s">
+            <footer className="flex-row fill gap-s" id={`footer-${game.game_id}`}>
                 {
                     game.created_by === user.username ? 
                     <>

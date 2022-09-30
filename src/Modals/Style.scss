@@ -14,6 +14,7 @@
     border-radius: 10px;
     width: 100%;
 
+
     header{
         font-weight: bold;
         border-top-left-radius: $border-radius;
@@ -32,8 +33,8 @@
     }
 
     footer{
-        padding: 10px;
-        background: $modal-color;
+        padding: 5px;
+        background: darken($modal-color, 5);
         border-bottom-left-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
 
