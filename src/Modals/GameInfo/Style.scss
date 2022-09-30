@@ -8,6 +8,7 @@
 
     header{
 
+        user-select: none;
         z-index: 0;
         .badge{
             visibility: hidden;
@@ -20,29 +21,51 @@
             border-radius: 50%;
             color: black;
             font-size: 10pt;
-        }
 
-        #call-badge{
-            background: yellow;
-            
             &.show{
                 visibility: visible;
             }
         }
 
-        #folded-badge{
+        .call-badge{
+            background: yellow;
+            
+            
+        }
+
+        .folded-badge{
             background: darkred;
             font-size: 7pt;
             color: white;
-            &.show{
-                visibility: visible;
-            }
+        }
+
+        .bet-badge{
+            background: green;
+            color: white;
         }
 
         transition: border-radius 0.3s ease-out;
         &.round{
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
+        }
+
+        .header-arrow{
+            z-index: 1;
+            position: absolute;
+            
+            top: 21px;
+            left: 10px;
+            clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+            height: 15px;
+            width: 15px;
+            background: white;
+
+            transition: transform 0.2s ease-out;
+
+            &.open{
+                transform: rotate(180deg);
+            }
         }
     }
 

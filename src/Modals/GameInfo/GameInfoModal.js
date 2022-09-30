@@ -7,6 +7,7 @@ function GameInfoModal(props){
     const {user, socket, setUser, currency} = useContext(AppContext);
 
     const [game, setGame] = useState(props.game);
+    const [bet, setBet] = useState(null);
     const [mustCall, setMustCall] = useState(false);
     const [isFolded, setIsFolded] = useState(false);
 
@@ -16,6 +17,8 @@ function GameInfoModal(props){
 
             if(res.amount < game.minimum_bet) setMustCall(true);
             if(res.folded) setIsFolded(true);
+
+            setBet(res);
         });
 
         socket.on('game_update', data => {
@@ -29,14 +32,17 @@ function GameInfoModal(props){
 
             const body = document.querySelector(`#content-${game.game_id}`);
             const footer = document.querySelector(`#footer-${game.game_id}`);
+            //const arrow = document.querySelector(`#header-arrow-${game.game_id}`);
 
             if(body.classList.contains('open')){
                 body.classList.remove('open');
                 footer.classList.remove('open');
+                //arrow.classList.remove('open');
             }
             else{
                 body.classList.add('open');
                 footer.classList.add('open');
+                //arrow.classList.add('open');
             }
         });
 
@@ -84,8 +90,9 @@ function GameInfoModal(props){
         <div className="modal game-info-modal">
             <header className={`flex-row center-all`} id={`header-${game.game_id}`}>
                 {game.game_title} 
-                <div id="call-badge" className={`badge flex-column center-all ${!isFolded && mustCall && 'show'}`}>CALL!</div>
-                <div id="folded-badge" className={`badge flex-column center-all ${isFolded && 'show'}`}>FOLDED</div>
+                <div className={`badge call-badge flex-column center-all ${!isFolded && mustCall && 'show'}`}>CALL!</div>
+                <div className={`badge folded-badge flex-column center-all ${isFolded && 'show'}`}>FOLDED</div>
+                <div className={`badge bet-badge flex-column center-all ${!isFolded && bet && 'show'}`}>BET</div>
             </header>
                 <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}  id={`content-${game.game_id}`}>
                     <Link to={destination}>
