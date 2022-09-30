@@ -37,17 +37,17 @@ function GameInfoModal(props){
 
             const body = document.querySelector(`#content-${game.game_id}`);
             const footer = document.querySelector(`#footer-${game.game_id}`);
-            //const arrow = document.querySelector(`#header-arrow-${game.game_id}`);
+            const header = document.querySelector(`#header-${game.game_id}`);
 
             if(body.classList.contains('open')){
                 body.classList.remove('open');
                 footer.classList.remove('open');
-                //arrow.classList.remove('open');
+                header.classList.remove('open');
             }
             else{
                 body.classList.add('open');
                 footer.classList.add('open');
-                //arrow.classList.add('open');
+                header.classList.add('open');
             }
         });
 

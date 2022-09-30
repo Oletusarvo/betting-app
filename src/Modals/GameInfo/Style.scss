@@ -1,3 +1,4 @@
+@import '../Style.scss';
 
 .game-info-modal{
     position: relative;
@@ -10,6 +11,7 @@
 
         user-select: none;
         z-index: 0;
+
         .badge{
             position: absolute;
             top:-8px;
@@ -43,10 +45,10 @@
             color: white;
         }
 
-        transition: border-radius 0.3s ease-out;
-        &.round{
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
+        transition: background 0.3s ease-out;
+
+        &.open{
+            background: lighten($modal-color, 10);
         }
 
         .header-arrow{

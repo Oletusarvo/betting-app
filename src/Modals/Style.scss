@@ -1,8 +1,10 @@
 @import '../Config';
 
+$border-radius: 5px;
+$modal-color: $primary-color;
+
 .modal{
-    $border-radius: 5px;
-    $modal-color: $primary-color;
+    
 
     .slide{
         border-right: 1px solid black;
