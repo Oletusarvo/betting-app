@@ -6,12 +6,14 @@ function GameInfoModal(props){
     const {game, destination, setGameList} = props;   
     const {user, socket, setUser, currency} = useContext(AppContext);
     const [mustCall, setMustCall] = useState(false);
+    const [isFolded, setIsFolded] = useState(false);
 
     useEffect(() => {
         socket.emit('bet_get', {username: user.username, game_id: game.game_id}, res => {
-            if(!res || res.amount == game.minimum_bet) return;
+            if(!res) return;
 
-            setMustCall(true);
+            if(res.amount < game.minimum_bet) setMustCall(true);
+            if(res.folded) setIsFolded(true);
         });
     }, []);
 
@@ -55,7 +57,8 @@ function GameInfoModal(props){
             <Link to={destination}>
                 <header className={`flex-row center-all`}>
                     {game.game_title} 
-                    <div className={`call-badge flex-column center-all ${mustCall && 'show'}`}>CALL!</div>
+                    <div id="call-badge" className={`badge flex-column center-all ${!isFolded && mustCall && 'show'}`}>CALL!</div>
+                    <div id="folded-badge" className={`badge flex-column center-all ${isFolded && 'show'}`}>FOLDED</div>
                 </header>
 
                 <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}>

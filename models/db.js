@@ -1,6 +1,5 @@
 const db = require('../dbConfig.js');
 const crypto = require('crypto');
-const assert = require('assert');
 
 class Bank{
     //Used to handle user accounts.
@@ -203,12 +202,12 @@ class Game{
             for(const item of participants) {
                 const itemRow = item.side.split(',');
                 const matches = this.compareRow(itemRow, lottoResult);
+
                 if(matches == this.game.row_size){
                     winners.push(item);
                 }
             }
 
-            
             return winners;
         }
     }
@@ -223,7 +222,7 @@ class Game{
             numbers.sort(() => Math.random() < 0.5 ? -1 : 1);
         }
 
-        return numbers.slice(0, this.game.row_size);
+        return numbers.slice(0, this.game.draw_size).sort((a, b) => a - b);
     }
 
     async clear(){
@@ -272,7 +271,7 @@ class Game{
     compareRow(row1, row2){
         let matches = 0;
         for(let i = 0; i < row1.length; ++i){
-            for(let j = 0; j < row1.length; ++j){
+            for(let j = 0; j < row2.length; ++j){
                 if(row1[i] == row2[j]){
                     matches++;
                 }
