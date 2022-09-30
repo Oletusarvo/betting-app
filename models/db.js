@@ -81,7 +81,7 @@ class Game{
         }
 
         if(previousBet){
-            bet.amount = newAmount - tax;
+            bet.amount = newAmount
             await this.updateBet(bet);
         }
         else{

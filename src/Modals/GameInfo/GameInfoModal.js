@@ -2,6 +2,10 @@ import './Style.scss';
 import {Link} from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import AppContext from '../../Contexts/AppContext.js';
+import BetBadge from './Badges/BetBadge.js';
+import CallBadge from './Badges/CallBadge';
+import FoldedBadge from './Badges/FoldedBadge';
+
 function GameInfoModal(props){
     const {destination, setGameList} = props;   
     const {user, socket, setUser, currency} = useContext(AppContext);
@@ -25,6 +29,7 @@ function GameInfoModal(props){
             if(game.game_id != data.game_id) return;
 
             setGame(data);
+            if(res.amount < game.minimum_bet) setMustCall(true);
         });
 
         const header = document.querySelector(`#header-${game.game_id}`);
@@ -90,9 +95,7 @@ function GameInfoModal(props){
         <div className="modal game-info-modal">
             <header className={`flex-row center-all`} id={`header-${game.game_id}`}>
                 {game.game_title} 
-                <div className={`badge call-badge flex-column center-all ${!isFolded && mustCall && 'show'}`}>CALL!</div>
-                <div className={`badge folded-badge flex-column center-all ${isFolded && 'show'}`}>FOLDED</div>
-                <div className={`badge bet-badge flex-column center-all ${!isFolded && bet && 'show'}`}>BET</div>
+                {!isFolded && mustCall ? <CallBadge/> : isFolded ? <FoldedBadge/> : bet ? <BetBadge/> : null}
             </header>
                 <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}  id={`content-${game.game_id}`}>
                     <Link to={destination}>
