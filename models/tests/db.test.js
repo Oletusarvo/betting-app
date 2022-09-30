@@ -201,7 +201,7 @@ describe('Testing game creator share calculation', () => {
 describe('Testing game lottery generation', () => {
     test('GenerateRow returns rows of correct length', () => {
         game.game = {
-            row_size: 4
+            draw_size: 4
         }
         const row = game.generateRow(20);
         expect(row.length).toBe(4);
@@ -213,17 +213,33 @@ describe('Testing game lottery generation', () => {
         }
 
         const row = game.generateRow(20);
-        console.log(row);
         expect(row).not.toEqual([1, 2, 3, 4]);
     });
 });
 
 describe('Testing game lottery match counting', () => {
     test('CompareRow returns correct number of matches', () => {
-        const row1 = [1, 2, 3, 4];
+        let row1 = [1, 2, 3, 4];
         const row2 = [1, 2, 3, 4];
-        const matches = game.compareRow(row1, row2);
+
+        let matches = game.compareRow(row1, row2);
         expect(matches).toBe(4);
+
+        row1 = [1, 2, 4, 5];
+        matches = game.compareRow(row1, row2);
+        expect(matches).toBe(3);
+
+        row1 = [1, 2, 5, 6];
+        matches = game.compareRow(row1, row2);
+        expect(matches).toBe(2);
+
+        row1 = [1, 5, 6, 7];
+        matches = game.compareRow(row1, row2);
+        expect(matches).toBe(1);
+
+        row1 = [5, 6, 7, 8];
+        matches = game.compareRow(row1, row2);
+        expect(matches).toBe(0);
     });
 });
 
@@ -249,7 +265,7 @@ describe('Testing game winner determination', () => {
 });
 
 describe('Testing auto-folding', () => {
-    test('Bets not meeting the minimum bet get folded', async () => {
+    test('Bets not meeting the minimum bet get folded', () => {
         game.game.type = 'Boolean';
         game.game.minimum_bet = 20;
 
@@ -265,7 +281,7 @@ describe('Testing auto-folding', () => {
             }
         ]
 
-        await game.autoFold(bets);
+        game.autoFold(bets);
         expect(bets[0].folded).toBe(true);
     });
 })

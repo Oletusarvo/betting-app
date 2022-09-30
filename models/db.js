@@ -11,7 +11,7 @@ class Bank{
         await db('accounts').insert({
             username,
             password,
-            balance: 100
+            balance: 10000,
         });
     }
 
@@ -255,7 +255,7 @@ class Game{
         }
     }
 
-    async autoFold(participants){
+    autoFold(participants){
         //Folds all bets not meeting the minimum bet.
         if(this.game.type === 'Lottery') return;
 
