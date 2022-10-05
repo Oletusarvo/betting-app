@@ -7,8 +7,6 @@ import Loading from '../Loading/Loading.js';
 import './Style.scss';
 
 function GameList(props){
-
-    const [renderList, setRenderList] = useState([]);
     const [gameList, setGameList] = useState(null);
     const {user, token, socket} = useContext(AppContext);
     const [loading, setLoading] = useState(false);
@@ -17,6 +15,9 @@ function GameList(props){
         const req = new XMLHttpRequest();
         if(props.byUser){
             req.open('GET', `/games/by_user/${user.username}`, true);
+        }
+        else if(props.query && props.query.length){
+            req.open('GET', `/games/?game_title=${props.query}`);
         }
         else{
             req.open('GET', '/games/', true);
@@ -41,28 +42,26 @@ function GameList(props){
         return () => {
             socket.off('error');
         }
-    }, []);
+    }, [props]);
 
-    useEffect(() => {
-        if(!gameList) return;
-        let final = [];
-
-        gameList.forEach(item => {
-            const div = <GameInfoModal key={item.game_id} game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>   
-            final.push(div);
-        });
-
-        setRenderList(final);
-    }, [gameList]);
-
-    
     if(loading){
         return <Loading title="Loading gamelist..."/>
     }
     
+    if(!gameList) return null;
+    
     return (
         <div className="gap-m flex-column">
-            {renderList}
+            {
+                props.byUser ? 
+                gameList.filter(item => item.created_by === user.username).map(item => {
+                    return <GameInfoModal key={item.game_id} game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>
+                })
+                :
+                gameList.map(item => {
+                    return <GameInfoModal key={item.game_id} game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>
+                })
+            }
         </div>
     );
 }

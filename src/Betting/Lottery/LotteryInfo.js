@@ -13,7 +13,7 @@ function LotteryInfo(){
                 <tbody>
                     <tr>
                         <td>Row Size:</td>
-                        <td className="align-text-right">{game.row_size}</td>
+                        <td className="align-text-right">{game.lotto_row_size}</td>
                     </tr>
                     <tr>
                         <td>Row Price:</td>

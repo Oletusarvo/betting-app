@@ -71,6 +71,10 @@ header{
     padding-bottom: $navbar-height;
     transition: all 0.1s ease-out;
 
+    .cyan-text{
+        color: cyan;
+    }
+    
     .notifications-header{
         width: 100%;
         border-bottom: 1px solid white;
@@ -83,6 +87,7 @@ header{
         background: darkgray;
     }
 
+ 
     &.show{
         top: 0;
     }

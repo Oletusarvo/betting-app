@@ -6,11 +6,10 @@ import Notifications from './Notifications.js';
 import './Style.scss';
 const bellIcon = './img/bell.png';
 
-function Header(){
+function Header(props){
 
     const {user, setUser, setToken, socket} = useContext(AppContext);
-    const [notifications, setNotifications] = useState([]);
-    const [seenNoti, setSeenNoti] = useState(false);
+    const [notes, setNotes] = useState([]);
 
     function logout(){
         localStorage.removeItem('betting-app-token');
@@ -24,32 +23,30 @@ function Header(){
         const notificationsWindow = document.querySelector('#notifications-window');
         if(notificationsWindow.classList.contains('show')){
             notificationsWindow.classList.remove('show');
-            setSeenNoti(true);
         }
         else{
             notificationsWindow.classList.add('show');
         }
     }
 
-    useEffect(() => {
+    useState(() => {
         if(!user) return;
 
-        socket.emit('noti_get', user.username, noti => {
-            setNotifications(noti);
-        });
+        socket.emit('notes_get', user.username, data => {
+            if(!data) return;
 
-        socket.on('noti_update', noti => {
-            setNotifications(noti.filter(item => item.username === user.username));
+            setNotes(data);
         });
 
         return () => {
-            socket.off('noti_update');
+            socket.off('account_update');
         }
+        
     }, [user]);
 
     return (
         <>
-            <Notifications notifications={notifications}/>
+            
             <header>
             <div id="app-name">
                 <Link to="/#/">
@@ -70,17 +67,13 @@ function Header(){
                             <i>
                                 <img src={bellIcon}></img>
                             </i>
-                            <div hidden={seenNoti} data-notification-count={notifications.length} id="notification-count"></div>
+                            <div data-notification-count={notes.length} id="notification-count"></div>
                         </button>
                         <span id="logout-link" onClick={logout}>Logout</span>
                     </>
-                    
                 }
-                
             </div>
         </header>
-
-
         </>
         
     );

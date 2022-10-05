@@ -83,6 +83,7 @@ function GameInfoModal(props){
         socket.emit('game_close', msg, (update) => {
             const {acc, gameList} = update;
             setUser(acc);
+            
             setGameList(gameList.sort((a, b) => (b.pool + b.pool_reserve) - (a.pool - a.pool_reserve)));
         });
     }
@@ -114,7 +115,7 @@ function GameInfoModal(props){
                                 {
                                     game.type === 'Lottery' && <tr>
                                         <td>Row Size:</td>
-                                        <td className="align-text-right">{game.row_size}</td>
+                                        <td className="align-text-right">{game.lotto_row_size}</td>
                                     </tr>
                                 }
                                 <tr>

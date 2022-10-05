@@ -1,10 +1,22 @@
 const router = require('express').Router();
 const {database, bank, game} = require('../models/db.js');
+const db = require('../dbConfig');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 const processBet = require('../middleware/processBet.js').processBet;
-
+const crypto = require('crypto');
 router.get('/', async (req, res) => {
-    const gamelist = await database.getAllGames();
+    const {game_title} = req.query;
+
+    let gamelist;
+    const allGames = await db('games');
+    if(game_title){
+        const re = new RegExp(game_title.toLowerCase());
+        gamelist = allGames.filter(game => re.test(game.game_title.toLowerCase()));
+    }
+    else{
+        gamelist = allGames;
+    }
+    
     res.status(200).send(JSON.stringify(gamelist));
 });
 

@@ -6,7 +6,7 @@ import GameContext from '../../Contexts/GameContext';
 function Ticket(props){
     const {placeBet, game} = useContext(GameContext);
     const [numbers, setNumbers] = useState("");
-    const maxLength = game.row_size;
+    const maxLength = game.lotto_row_size;
     const numberSeparator = ', ';
 
     function reset(){

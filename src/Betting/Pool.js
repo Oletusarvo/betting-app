@@ -10,7 +10,7 @@ function Pool(){
     return (
         <div className={"container glass bg-fade " + (isExpired && "bg-expired")} id="bet-pool">
             <div id="bet-pool-ring" className={getBettingState(bet, game.minimum_bet)}>
-                <h1>{currency + game.pool.toLocaleString('en')}</h1>
+                <h1>{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</h1>
             </div>
         </div>
     );

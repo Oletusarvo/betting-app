@@ -88,7 +88,6 @@ class Game{
             await db('bets').insert(bet);
         }
 
-        const bank = new Bank();
         await bank.deposit(username, -amount);
 
         this.game.pool = await this.calculatePool();
@@ -145,7 +144,8 @@ class Game{
 
         await this.autoFold(participants);
 
-        const winners = this.getWinners(participants, side);
+        const results = this.getResults(participants, side);
+        const winners = this.game.type === 'Lottery' ? results.filter(item => item.matches === this.game.lotto_row_size) : results;
         const shareForCreator = this.calculateCreatorShare(winners.length); 
 
         const combinedPool = pool + pool_reserve;
@@ -154,14 +154,9 @@ class Game{
         //Lottery games will not be cleared if there were no winners.
         if(this.game.type === 'Lottery' && winners.length === 0){
             this.game.pool_reserve += await this.calculatePool();
-
-            await this.addNotification(participants, `Lottery was drawn with no winners. The pool is now ${this.game.pool_reserve} dice.`,
-            );
-
             this.game.pool = 0;
             await db('bets').where({game_id: this.game.game_id}).del();
             await this.update();
-
             return;
         }
 
@@ -193,24 +188,28 @@ class Game{
         }
     }
 
-    getWinners(participants, side){
+    getResults(participants, side){
         if(this.game.type !== 'Lottery'){
             return participants.filter(item => item.side == side && item.folded != true);
         }
         else{
             const lottoResult = this.generateRow(20);
-            const winners = [];
+            const results = [];
 
+            //console.log(`Lottery result: ${lottoResult}`);
             for(const item of participants) {
                 const itemRow = item.side.split(',');
                 const matches = this.compareRow(itemRow, lottoResult);
 
-                if(matches == this.game.row_size){
-                    winners.push(item);
-                }
+                console.log(`${item.username}: ${matches} matches.`);
+                results.push({
+                    username: item.username,
+                    matches,
+                    row: itemRow,
+                });
             }
 
-            return winners;
+            return results;
         }
     }
 
@@ -233,7 +232,7 @@ class Game{
     }
 
     data(){
-        const {game_title, game_id, pool, minimum_bet, created_by, expiry_date, increment, options, type, row_size, pool_reserve} = this.game;
+        const {game_title, game_id, pool, minimum_bet, created_by, expiry_date, increment, options, type, lotto_row_size, pool_reserve} = this.game;
 
         return {
             game_title,
@@ -245,7 +244,7 @@ class Game{
             increment,
             options,
             type,
-            row_size,
+            lotto_row_size,
         }
     }
     async isContested(){
@@ -336,7 +335,7 @@ const game = new Game();
 
 class Database{
     async insertGame(game){
-        const {game_title, game_id, minimum_bet, increment, expiry_date, created_by, available_to, options, type, row_size} = game;
+        const {game_title, game_id, minimum_bet, increment, expiry_date, created_by, available_to, options, type, lotto_row_size} = game;
 
         if(expiry_date != ''){
             const today = new Date();
@@ -357,7 +356,7 @@ class Database{
             available_to,
             type,
             options : type === 'Boolean' ? 'Kyllä;Ei' : options,
-            row_size
+            lotto_row_size
         });
     }
 

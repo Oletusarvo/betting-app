@@ -68,7 +68,7 @@ function App (props){
     useEffect(() => {
         socket.on('account_update', () => {
             socket.emit('account_get', user.username, update => {
-                setUser(update);
+                setUser(update.user);
             });
         })
     }, []);

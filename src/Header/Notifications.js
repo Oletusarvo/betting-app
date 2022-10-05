@@ -1,22 +1,20 @@
+import { useContext } from 'react';
 import './Style.scss';
 
-function Notifications({notifications}){
-    let render = [];
-    notifications.forEach(item => {
-        render.push(
-            <div className="notification flex-row center-align w-100">
-                <span>
-                    <h4>{`${item.game_title}: ${item.message}`}</h4>
-                </span>
-                <button>Dismiss</button>
-            </div>
-        );
-    });
-
+function Notifications({notes}){
     return(
-        <div id="notifications-window"> 
-            {render}
-        </div>
+        <ul id="notifications-window" className="flex-column center-align w-100"> 
+            {
+                notes && notes.map(item => {
+                    return (
+                        <li>
+                            <span className="cyan-text">{item.game_title}</span>
+                            <span>{item.message}</span>
+                        </li>
+                    );
+                })
+            }
+        </ul>
     );
 }
 

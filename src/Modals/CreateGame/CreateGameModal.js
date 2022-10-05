@@ -37,7 +37,7 @@ function CreateGameModal(props){
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
             options : form.betOptions.value || null,
-            row_size: form.rowSize.value,
+            lotto_row_size: form.rowSize.value,
         }
     
         req.send(JSON.stringify(data));
@@ -61,7 +61,6 @@ function CreateGameModal(props){
                     <select name="betType" id="select-bet-type" onChange={updateSelection}>
                         <option>Boolean</option>
                         <option>Multi-Choice</option>
-                        <option>Lottery</option>
                     </select>
 
                     <label>Title:</label>
