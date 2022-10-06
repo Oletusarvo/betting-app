@@ -80,7 +80,7 @@ function GameInfoModal(props){
             username: user.username,
         }
 
-        socket.emit('game_close', msg, (update) => {
+        socket.emit('game_close', msg, update => {
             const {acc, gameList} = update;
             setUser(acc);
             
