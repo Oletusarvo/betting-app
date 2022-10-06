@@ -11,8 +11,9 @@ function Balance(props){
     const previousBalance = useRef(user.balance);
 
     useEffect(() => {
-        console.log(`User changed`);
+        
         const difference = user.balance - previousBalance.current;
+        console.log(`User changed, difference in balance: ${difference}`);
         if(difference == 0) return;
 
         const balance = document.querySelector(`#${id}`);
