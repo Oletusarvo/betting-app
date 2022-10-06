@@ -78,12 +78,12 @@ io.on('connection', async socket => {
             await game.load(game_id);
             await game.close(side);
 
-            const {balance} = await db('accounts').where({username}).first();
+            const acc = await db('accounts').where({username}).first();
             const gameList = await db('games');
 
             socket.broadcast.emit('account_update');
             callback({
-                acc: {balance, username}, 
+                acc, 
                 gameList,
             });
         }
