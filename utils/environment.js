@@ -14,14 +14,14 @@ class Account{
     }
 
     verifyAmount(amount){
-        return amount <= this.data.balance;
+        return amount < 0 && Math.abs(amount) <= this.data.balance;
     }
 
     async deposit(amount){
-        if(amount < 0 && !this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
+        if(!this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
         this.data.balance += amount;
+        console.log(`Balance before db update: ${this.data.balance}`);
         await this.update();
-        console.log(`Balance of ${this.data.username}: ${this.data.balance}`);
     }
 }
 
