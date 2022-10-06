@@ -14,7 +14,7 @@ class Account{
     }
 
     verifyAmount(amount){
-        return amount < 0 && Math.abs(amount) <= this.data.balance;
+        return amount < 0 ? Math.abs(amount) <= this.data.balance : true;
     }
 
     async deposit(amount){
@@ -178,7 +178,11 @@ class SelectionGame extends Game{
         console.log(winners);
 
         for(const winner of winners){
-            await this.accountDeposit(winner.username, winner.reward);
+            const {username, reward} = winner;
+            if(reward != 0) {
+                console.log(`Depositing reward of ${reward} to ${username}`);
+                await this.accountDeposit(username, reward);
+            }
         }
 
         await super.close();
