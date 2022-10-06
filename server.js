@@ -83,7 +83,8 @@ io.on('connection', async socket => {
 
             socket.broadcast.emit('account_update');
             callback({
-                acc: {balance, username}, gameList
+                acc: {balance, username}, 
+                gameList,
             });
         }
         catch(err){
