@@ -29,7 +29,6 @@ class Game{
         this.bets = [...data.bets];
         delete data.bets;
         this.data = data;
-        console.log(this.data);
     }
 
     static async loadGame(id){
@@ -160,7 +159,7 @@ class Game{
 
     async notify(targetUsername, message){
         const {id, title} = this.data;
-        await db('notifications').insert({
+        await db('notes').insert({
             game_id: id,
             game_title: title,
             message,

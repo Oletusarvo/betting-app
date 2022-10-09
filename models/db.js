@@ -66,4 +66,16 @@ module.exports = new class {
     async deleteAccount(username){
         await db('accounts').where({username}).del();
     }
+
+    async addNote(note){
+        await db('notes').insert(note);
+    }
+
+    async getNotes(username){
+        return await db('notes').where({username});
+    }
+
+    async deleteNote(id){
+        await db('notes').where({id}).delete();
+    }
 };
