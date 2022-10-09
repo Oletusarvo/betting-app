@@ -36,7 +36,7 @@ function CreateGameModal(props){
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
-            options : form.betOptions.value || null,
+            options : form.betOptions.value,
             lotto_row_size: form.rowSize.value,
         }
     

@@ -1,4 +1,4 @@
-const db = require('../dbConfig.js');
+const db = require('../dbConfig');
 
 class Account{
     constructor(data){
@@ -6,7 +6,7 @@ class Account{
     }
 
     async load(username){
-        return this.data = await db('accounts').where({username}).first();
+        this.data = await db('accounts').where({username}).first();
     }
 
     async update(){
@@ -68,10 +68,8 @@ class Game{
                 await db('bets').where({game_id, username}).update(bet);
             else{
                 await db('bets').insert(bet);
-            }
-                
+            }    
         }
-
         await db('games').where({id: this.data.id}).update(this.data);
     }
 
@@ -157,7 +155,7 @@ class Game{
 
     async close(){
         const {id} = this.data;
-        await db('games').where({id}).del();
+        await db('games').where({id}).delete();
     }
 
     async notify(targetUsername, message){

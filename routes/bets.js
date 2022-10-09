@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const {Game} = require('../utils/environment');
 const { checkAuth } = require('../middleware/checkAuth');
 const { processBet } = require('../middleware/processBet');
 
@@ -7,7 +8,7 @@ const {game} = require('../models/db.js');
 router.get('/', checkAuth, async (req, res) => {
     try{
         const {username, id} = req.query;
-        const game = await (new Game()).load(id);
+        const game = await Game.loadGame(id);
         const bet = await game.getBet(username);
         res.status(200).send(JSON.stringify(bet));
     }
@@ -41,7 +42,7 @@ router.post('/', checkAuth, async (req, res) => {
 router.post('/fold', checkAuth, async (req, res) => {
     try{
         const {username, id} = req.body;
-        await game.load(id);
+        const game = await Game.loadGame(id);
         const bet = await game.fold(username);
         res.status(200).send(JSON.stringify(bet));
     }

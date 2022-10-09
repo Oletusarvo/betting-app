@@ -1,5 +1,4 @@
 const {server, io} = require('./serverConfig.js');
-//const {database, game, bank} = require('./models/db.js');
 const jwt = require('jsonwebtoken');
 
 const PORT = process.env.PORT || 3000;

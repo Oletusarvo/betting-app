@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const {database, bank, game} = require('../models/db.js');
-const db = require('../dbConfig');
+const db = require('../models/db.js');
+const {Game} = require('../utils/environment');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 const processBet = require('../middleware/processBet.js').processBet;
 const crypto = require('crypto');
@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     const {game_title} = req.query;
 
     let gamelist;
-    const allGames = await db('games');
+    const allGames = await db.getGames();
     if(game_title){
         const re = new RegExp(game_title.toLowerCase());
         gamelist = allGames.filter(game => re.test(game.game_title.toLowerCase()));
@@ -23,12 +23,11 @@ router.get('/', async (req, res) => {
 router.get('/data', checkAuth, async (req, res) => {
     try{
         const {username, id} = req.query;
-        await game.load(id);
+        const game = await Game.loadGame(id);
         const bet = await game.getBet(username);
-        const gameData = game.data();
 
         res.status(200).send(JSON.stringify({
-            game: gameData, bet
+            game: game.data, bet
         }));
     }
     catch(err){
@@ -40,7 +39,7 @@ router.get('/data', checkAuth, async (req, res) => {
 router.get('/by_user/:id', checkAuth, async (req, res) => {
     try{
         const username = req.params.id;
-        const gamelist = await database.getGamesByUser(username);
+        const gamelist = await db.getGamesByUser(username);
         res.status(200).send(JSON.stringify(gamelist));
     }
     catch(err){
@@ -50,15 +49,14 @@ router.get('/by_user/:id', checkAuth, async (req, res) => {
 
 router.get('/:id', checkAuth, async (req, res) => {
     const id = req.params.id;
-    await game.load(id);
-    
+    const game = await Game.loadGame(id);
     res.status(200).send(JSON.stringify(game));
 });
 
 router.post('/', checkAuth, async (req, res) => {
     try{
         const data = req.body;
-        await database.insertGame(data);
+        await db.addGame(data);
         res.status(200).send();
     }
     catch(err){
@@ -71,7 +69,7 @@ router.delete('/:id', checkAuth, async (req, res) => {
         const id = req.params.id;
         const {side} = req.body;
 
-        await game.load(id);
+        const game = await Game.loadGame(id);
         await game.close(side);
 
         const list = await database.getGamesByUser(req.user.username);

@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const {bank} = require('../models/db');
+const db = require('../models/db');
 const {checkAuth} = require('../middleware/checkAuth');
 
 router.get('/:username', checkAuth, async (req, res) => {
     const username = req.params.username;
-    const account = await bank.getAccount(username);
+    const account = await db.getAccount(username);
     res.status(200).send(JSON.stringify(account));
 });
 
@@ -17,7 +17,7 @@ router.delete('/:username', checkAuth, async (req, res) => {
             throw new Error('Passwords do not match!');
         }
         
-        await bank.deleteAccount(username);
+        await db.deleteAccount(username);
         res.status(200).send();
     }
     catch(err){

@@ -1,12 +1,11 @@
 const router = require('express').Router();
-const {bank} = require('../models/db.js');
+const db = require('../models/db.js');
 const bcrypt = require('bcrypt');
 
 router.post('/', async (req, res) => {
     const {username, password1, password2} = req.body;
     if(password1 !== password2){
         return res.status(403).send('Passwords do not match!');
-    
     }
     else{
         bcrypt.hash(password1, 15, async (err, pass) => {
@@ -15,7 +14,7 @@ router.post('/', async (req, res) => {
             }
             else{
                 try{
-                    await bank.addAccount(username, pass);
+                    await db.addAccount(username, pass);
                     return res.status(200).send();
                 }
                 catch(err){
