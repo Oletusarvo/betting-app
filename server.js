@@ -1,6 +1,5 @@
 const {server, io} = require('./serverConfig.js');
 const jwt = require('jsonwebtoken');
-
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
 
@@ -21,7 +20,7 @@ io.use((socket, next) => {
 
 const connectedUsers = [];
 const {Game, Account} = require('./utils/environment.js');
-const db = require('./dbConfig');
+const db = require('./models/db');
 
 io.on('connection', async socket => {
     console.log(`New connection!`);
@@ -106,7 +105,7 @@ io.on('connection', async socket => {
 
     socket.on('notes_get', async (username, callback) => {
         try{
-            const notes = [];
+            const notes = await db.getNotes(username);
             callback(notes);
         }
         catch(err){

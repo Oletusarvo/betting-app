@@ -8,21 +8,12 @@ exports.up = function(knex) {
     tbl.increments('id');
 
     tbl.string('username')
-    .notNullable()
     .references('username')
     .inTable('accounts')
     .onDelete('CASCADE')
     .onUpdate('CASCADE');
 
-    tbl.string('game_title')
-    .notNullable()
-    .references('title')
-    .inTable('games')
-    .onDelete('CASCADE')
-    .onUpdate('CASCADE');
-
     tbl.string('game_id')
-    .notNullable()
     .references('id')
     .inTable('games')
     .onDelete('CASCADE')
