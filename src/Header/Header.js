@@ -8,16 +8,8 @@ const bellIcon = './img/bell.png';
 
 function Header(props){
 
-    const {user, setUser, setToken, socket} = useContext(AppContext);
+    const {user, socket, logout} = useContext(AppContext);
     const [notes, setNotes] = useState([]);
-
-    function logout(){
-        localStorage.removeItem('betting-app-token');
-        localStorage.removeItem('betting-app-user');
-        setUser(null);
-        setToken(null);
-        location.assign('/');
-    }
 
     function toggleNotifications(){
         const notificationsWindow = document.querySelector('#notifications-window');

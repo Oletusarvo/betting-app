@@ -60,12 +60,12 @@ class Game{
 
     /**@private */
     async update(){
-        await db('games').where({game_id : this.game.game_id}).update(this.game);
-        await this.load(this.game.game_id);
+        await db('games').where({id : this.game.id}).update(this.game);
+        await this.load(this.game.id);
     }
 
-    async load(game_id){
-        this.game = await db('games').where({game_id}).first();
+    async load(id){
+        this.game = await db('games').where({id}).first();
         return this;
     }
 
@@ -96,17 +96,17 @@ class Game{
     }
 
     async updateBet(bet){
-        return await db('bets').where({username: bet.username, game_id: this.game.game_id}).update(bet);
+        return await db('bets').where({username: bet.username, game_id: this.game.id}).update(bet);
     }
 
     async fold(username){
-        const previousBet = await db('bets').where({game_id : this.game.game_id, username}).first();
+        const previousBet = await db('bets').where({game_id : this.game.id, username}).first();
         if(previousBet){
             if(previousBet.folded){
                 throw new Error('You have already folded!');
             }
 
-            await db('bets').where({game_id : this.game.game_id, username}).update({
+            await db('bets').where({game_id : this.game.id, username}).update({
                 folded : true
             });
         }
@@ -114,15 +114,15 @@ class Game{
             throw new Error('No bet to fold!');
         }
 
-        return await db('bets').where({username, game_id : this.game.game_id}).first();
+        return await db('bets').where({username, game_id : this.game.id}).first();
     }
 
     async getBet(username){
-        return await db('bets').where({game_id : this.game.game_id, username}).first();
+        return await db('bets').where({game_id : this.game.id, username}).first();
     }
 
     async getAllBets(){
-        return await db('bets').where({game_id : this.game.game_id});
+        return await db('bets').where({game_id : this.game.id});
     }
 
     async close(side){
@@ -155,7 +155,7 @@ class Game{
         if(this.game.type === 'Lottery' && winners.length === 0){
             this.game.pool_reserve += await this.calculatePool();
             this.game.pool = 0;
-            await db('bets').where({game_id: this.game.game_id}).del();
+            await db('bets').where({game_id: this.game.id}).del();
             await this.update();
             return;
         }
@@ -168,8 +168,8 @@ class Game{
             await db('notifications').insert({
                 username : winner.username,
                 message : `Won ${share} dice!`,
-                game_title : this.game.game_title,
-                game_id : this.game.game_id,
+                title : this.game.title,
+                id : this.game.id,
             });
         }
 
@@ -180,8 +180,8 @@ class Game{
         for(const participant of participants){
            
             await db('notifications').insert({
-                game_title: this.game.game_title,
-                game_id: this.game.game_id,
+                title: this.game.title,
+                id: this.game.id,
                 message: msg,
                 username: participant.username,
             });
@@ -227,16 +227,16 @@ class Game{
     }
 
     async clear(){
-        await db('bets').where({game_id : this.game.game_id}).del();
-        await db('games').where({game_id : this.game.game_id}).del();
+        await db('bets').where({game_id : this.game.id}).del();
+        await db('games').where({id : this.game.id}).del();
     }
 
     data(){
-        const {game_title, game_id, pool, minimum_bet, created_by, expiry_date, increment, options, type, lotto_row_size, pool_reserve} = this.game;
+        const {title, id, pool, minimum_bet, created_by, expiry_date, increment, options, type, lotto_row_size, pool_reserve} = this.game;
 
         return {
-            game_title,
-            game_id,
+            title,
+            id,
             pool: (pool + pool_reserve),
             minimum_bet,
             created_by,
@@ -335,7 +335,7 @@ const game = new Game();
 
 class Database{
     async insertGame(game){
-        const {game_title, game_id, minimum_bet, increment, expiry_date, created_by, available_to, options, type, lotto_row_size} = game;
+        const {title, id, minimum_bet, increment, expiry_date, created_by, available_to, options, type, lotto_row_size} = game;
 
         if(expiry_date != ''){
             const today = new Date();
@@ -347,8 +347,8 @@ class Database{
         }
         
         return await db('games').insert({
-            game_id : game_id || crypto.createHash('SHA256').update(game_title + minimum_bet + increment + expiry_date + available_to + new Date().toDateString()).digest('hex'),
-            game_title,
+            id : id || crypto.createHash('SHA256').update(title + minimum_bet + increment + expiry_date + available_to + new Date().toDateString()).digest('hex'),
+            title,
             minimum_bet,
             increment,
             expiry_date : expiry_date == '' ? 'When Closed' : expiry_date,
@@ -360,8 +360,8 @@ class Database{
         });
     }
 
-    async deleteGame(game_id){
-        return await db('games').where({game_id}).del();
+    async deleteGame(id){
+        return await db('games').where({id}).del();
     }
 
     async insertNotification(notification){
@@ -369,8 +369,8 @@ class Database{
         return await db('notifications').insert({
             username,
             message,
-            game_id,
-            game_title,
+            id,
+            title,
             notification_id : crypto.createHash('SHA256').update(username + message + new Date().getTime()).digest('hex'),
         });
     }
@@ -387,12 +387,12 @@ class Database{
         return await db('notifications').where({username});
     }
 
-    async getGame(game_id){
-        return await db('games').where({game_id}).first();
+    async getGame(id){
+        return await db('games').where({id}).first();
     }
 
     async updateGame(game){
-        return await db('games').where({game_id : game.game_id}).update(game);
+        return await db('games').where({id : game.id}).update(game);
     }
 
     async getGamesByUser(username){

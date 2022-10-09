@@ -12,7 +12,7 @@ function Header(){
             <Link id="back-button" to="/games">
                 <img src="../img/arrow.png"></img>
             </Link>
-            <h3 id="bet-name">{game.game_title}</h3>
+            <h3 id="bet-name">{game.title}</h3>
         </div>
     );
 }

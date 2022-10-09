@@ -8,7 +8,7 @@ export function submit(e, username, token){
 
     const form = document.querySelector('#new-game-form');
     const data = {
-        game_title : form.title.value,
+        title : form.title.value,
         minimum_bet : form.minimumBet.valueAsNumber,
         increment : form.increment.valueAsNumber,
         created_by : username,

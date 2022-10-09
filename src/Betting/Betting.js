@@ -13,7 +13,7 @@ import GameContext from '../Contexts/GameContext.js';
 import './Style.scss';
 
 function Betting(props) {
-    const {game_id} = useParams();
+    const {id} = useParams();
     const {user, socket, setUser} = useContext(AppContext);
 
     const game = useRef(0);
@@ -21,7 +21,7 @@ function Betting(props) {
     const [state, setState] = useState();
 
     useEffect(() => {
-        socket.emit('join_room', {game_id, username: user.username}, gameData => {
+        socket.emit('join_room', {id, username: user.username}, gameData => {
             const {newGame, newBet} = gameData;
             game.current = newGame;
             bet.current = newBet;
@@ -33,6 +33,8 @@ function Betting(props) {
         });
 
         socket.on('game_update', data => {
+            if(data.id !== game.current.id) return;
+            
             game.current = data;
             setState({
                 bet: bet.current,
@@ -45,7 +47,7 @@ function Betting(props) {
         return () => {
             socket.off('game_update');
             socket.off('bet_error');
-            socket.emit('leave_room', game_id);
+            socket.emit('leave_room', id);
         }
 
     }, []);
@@ -66,10 +68,11 @@ function Betting(props) {
             amount,
             username : user.username,
             side: side,
-            game_id,
+            game_id: id,
             type: game.current.type,
         };
 
+        console.log(data.game_id);
         socket.emit('bet_place', data, update => {
             const {acc, game, newBet} = update;
             
@@ -99,7 +102,7 @@ function Betting(props) {
             amount,
             username : user.username,
             side,
-            game_id,
+            game_id: id,
             type: game.current.type,
         };
 
@@ -131,7 +134,7 @@ function Betting(props) {
             amount,
             username : user.username,
             side : bet.current.side,
-            game_id,
+            game_id: id,
             type: game.current.type,
         };
 

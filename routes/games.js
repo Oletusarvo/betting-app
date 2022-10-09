@@ -22,8 +22,8 @@ router.get('/', async (req, res) => {
 
 router.get('/data', checkAuth, async (req, res) => {
     try{
-        const {username, game_id} = req.query;
-        await game.load(game_id);
+        const {username, id} = req.query;
+        await game.load(id);
         const bet = await game.getBet(username);
         const gameData = game.data();
 
@@ -49,8 +49,8 @@ router.get('/by_user/:id', checkAuth, async (req, res) => {
 });
 
 router.get('/:id', checkAuth, async (req, res) => {
-    const game_id = req.params.id;
-    await game.load(game_id);
+    const id = req.params.id;
+    await game.load(id);
     
     res.status(200).send(JSON.stringify(game));
 });

@@ -13,6 +13,8 @@ describe('Placing bets', () => {
         });
 
         jest.spyOn(game, 'accountDeposit').mockImplementation(() => null);
+        jest.spyOn(game, 'notify').mockImplementation(() => null);
+        jest.spyOn(game, 'update').mockImplementation(() => null);
     });
 
     test('Bets accepted are included', async () => {
@@ -21,7 +23,7 @@ describe('Placing bets', () => {
             amount: 10,
         }
         await game.placeBet(bet);
-        expect(game.data.bets.includes(bet)).toBeTruthy();
+        expect(game.bets.includes(bet)).toBeTruthy();
     });
 
     test('Bets rejected are not included', async () => {
@@ -30,7 +32,7 @@ describe('Placing bets', () => {
             amount: 9,
         }
         await expect(game.placeBet(bet)).rejects.toThrow();
-        expect(game.data.bets.includes(bet)).toBeFalsy();
+        expect(game.bets.includes(bet)).toBeFalsy();
     });
 
     test('Bets with insufficent amount are rejected', async () => {

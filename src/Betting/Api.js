@@ -5,7 +5,7 @@ export function fold(game, bet, token, setGameState){
     req.setRequestHeader('auth', token);
 
     const data = {
-        game_id : game.game_id,
+        id : game.id,
         username : bet.username,
     }
 
@@ -34,10 +34,10 @@ export function getBettingState(bet, minimum_bet){
     }
 }
 
-export function loadBet(username, game_id, token){
+export function loadBet(username, id, token){
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();
-        req.open('GET', `/bets/?username=${username}&game_id=${game_id}`, true);
+        req.open('GET', `/bets/?username=${username}&id=${id}`, true);
         req.setRequestHeader('auth', token);
 
         req.onload = () => {
@@ -62,10 +62,10 @@ export function loadBet(username, game_id, token){
     });
 }
 
-export function loadGame(game_id, token){
+export function loadGame(id, token){
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();
-        req.open('GET', `/games/${game_id}`);
+        req.open('GET', `/games/${id}`);
         req.setRequestHeader('auth', token);
         req.onload = () => {
             if(req.status === 200){
@@ -89,10 +89,10 @@ export function loadGame(game_id, token){
     })
 }
 
-export function loadData(username, game_id, token){
+export function loadData(username, id, token){
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();
-        req.open('GET', `/games/data?username=${username}&game_id=${game_id}`);
+        req.open('GET', `/games/data?username=${username}&id=${id}`);
         req.setRequestHeader('auth', token);
         
         req.send();
