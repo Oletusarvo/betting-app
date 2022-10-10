@@ -2,7 +2,7 @@ node_modules
 .env
 data
 public/*.html
-main.bundle.js
+public/main.bundle.js
 public/*.txt
 
 notes.txt
