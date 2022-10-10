@@ -33,6 +33,4 @@ app.use('/notifications', notificationsRouter);
 const coinsRouter = require('./routes/coins.js');
 app.use('/coins', coinsRouter);
 
-
-
 module.exports = {io, server};
