@@ -1,9 +1,6 @@
 const db = require('../dbConfig');
 const crypto = require('crypto');
 
-const enableForeignKeys = async () => await db.raw('PRAGMA foreign_keys = ON');
-//enableForeignKeys();
-
 module.exports = new class {
     async addGame(game){
         game.id = crypto.createHash('SHA256').update(game + new Date().getTime()).digest('hex');
