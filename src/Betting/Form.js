@@ -3,9 +3,7 @@ import AppContext from "../Contexts/AppContext.js";
 import GameContext from "../Contexts/GameContext.js";
 
 function Form(){
-    const {user, token, socket} = useContext(AppContext);
     const {isExpired, game, bet, placeBet, raise, call} = useContext(GameContext);
-    const minBet = bet ? game.minimum_bet - bet.amount : game.minimum_bet;
     
     let options = game.options.split(';');
     let renderOptions = [];

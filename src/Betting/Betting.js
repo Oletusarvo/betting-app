@@ -72,7 +72,6 @@ function Betting(props) {
             type: game.current.type,
         };
 
-        console.log(data.game_id);
         socket.emit('bet_place', data, update => {
             const {acc, game, newBet} = update;
             

@@ -1,4 +1,5 @@
 const {Game} = require('../../environment.js');
+const db = require('../../../models/db');
 
 describe('Placing bets', () => {
     let game = null;
@@ -12,9 +13,9 @@ describe('Placing bets', () => {
             pool: 10
         });
 
-        jest.spyOn(game, 'accountDeposit').mockImplementation(() => null);
-        jest.spyOn(game, 'notify').mockImplementation(() => null);
-        jest.spyOn(game, 'update').mockImplementation(() => null);
+        jest.spyOn(game, 'accountDeposit').mockImplementation(() => Promise.resolve(null));
+        jest.spyOn(game, 'notify').mockImplementation(() => Promise.resolve(null));
+        jest.spyOn(game, 'update').mockImplementation(() => Promise.resolve(null));
     });
 
     test('Bets accepted are included', async () => {

@@ -1,3 +1,0 @@
-const numParticipants = 2;
-
-
