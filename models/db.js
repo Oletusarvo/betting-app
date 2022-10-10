@@ -2,7 +2,7 @@ const db = require('../dbConfig');
 const crypto = require('crypto');
 
 const enableForeignKeys = async () => await db.raw('PRAGMA foreign_keys = ON');
-enableForeignKeys();
+//enableForeignKeys();
 
 module.exports = new class {
     async addGame(game){
