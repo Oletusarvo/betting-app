@@ -1,4 +1,4 @@
-const db = require('../dbConfig');
+const db = require('../models/db');
 
 class Account{
     constructor(data){
@@ -6,11 +6,11 @@ class Account{
     }
 
     async load(username){
-        this.data = await db('accounts').where({username}).first();
+        this.data = await db.getAccount(username);
     }
 
     async update(){
-        await db('accounts').where({username: this.data.username}).update(this.data);
+        await db.updateAccount(this.data);
     }
 
     verifyAmount(amount){
@@ -32,8 +32,8 @@ class Game{
     }
 
     static async loadGame(id){
-        const data = await db('games').where({id}).first();
-        const bets = await db('bets').where({game_id: id});
+        const data = await db.getGame(id);
+        const bets = await db.getBets(id);
         data.bets = bets;
 
         switch(data.type){
@@ -50,26 +50,26 @@ class Game{
     }
 
     async load(id){
-        this.data = await db('games').where({id}).first();
-        this.bets = await db('bets').where({game_id: id});
+        this.data = await db.getGame(id);
+        this.bets = await db.getBets(id);
         return this.data;
     }
 
     async getSavedBet(username){
-        return await db('bets').where({game_id: this.data.id, username}).first();
+        return await db.getBet(username, this.data.id);
     }
 
     async update(){
         for(const bet of this.bets){
             const {username, game_id} = bet;
-            const savedBet = await db('bets').where({game_id, username}).first();
+            const savedBet = await db.getBet(username, game_id);
             if(savedBet) 
-                await db('bets').where({game_id, username}).update(bet);
+                await db.updateBet(bet);
             else{
-                await db('bets').insert(bet);
+                await db.addBet(bet);
             }    
         }
-        await db('games').where({id: this.data.id}).update(this.data);
+        await db.updateGame(this.data);
     }
 
     calculatePool(){
@@ -153,13 +153,12 @@ class Game{
     }
 
     async close(){
-        const {id} = this.data;
-        await db('games').where({id}).delete();
+        await db.deleteGame(this.data.id);
     }
 
     async notify(targetUsername, message){
         const {id, title} = this.data;
-        await db('notes').insert({
+        await db.addNote({
             game_id: id,
             game_title: title,
             message,
@@ -233,7 +232,7 @@ class LottoGame extends Game{
             this.data.pool_reserve += this.data.pool;
             this.data.pool = 0;
             this.bets = [];
-            await db('bets').where({game_id: this.data.id}).del();
+            await db.deleteBets(this.data.id);
             this.update();
             return;
         }
@@ -311,14 +310,4 @@ class HexLottoGame extends Game{
     }
 }
 
-class Model{
-    async loadGame(id){
-        const gameData = await db('games').where({id}).first();
-        const {type} = gameData;
-        return type === 'Boolean' || type === 'Multi-Choice' ? new SideGame(gameData) : new LottoGame(gameData);
-    }
-
-
-}
-
-module.exports = {SelectionGame, Game, LottoGame, HexLottoGame, Account, Model};
+module.exports = {SelectionGame, Game, LottoGame, HexLottoGame, Account};

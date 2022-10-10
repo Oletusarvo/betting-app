@@ -37,13 +37,21 @@ module.exports = new class {
         await db('bets').insert(bet);
     }
     
-    async getBet(game_id){
-        return await db('bets').where({game_id}).first();
+    async getBet(username, game_id){
+        return await db('bets').where({username, game_id}).first();
     }
 
     async updateBet(bet){
-        const {game_id} = bet;
-        await db('bets').where({game_id}).update(bet)
+        const {game_id, username} = bet;
+        await db('bets').where({username, game_id}).update(bet)
+    }
+
+    async deleteBets(game_id){
+        await db('bets').where({game_id}).delete();
+    }
+
+    async getBets(game_id){
+        return await db('bets').where({game_id});
     }
 
     async addAccount(username, password){
