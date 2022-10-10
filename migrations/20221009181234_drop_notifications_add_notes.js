@@ -19,6 +19,10 @@ exports.up = function(knex) {
     .onDelete('CASCADE')
     .onUpdate('CASCADE');
 
+    tbl.string('game_title')
+    .notNullable()
+    .defaultTo('Unknown');
+
     tbl.string('message').notNullable();
   })
 };

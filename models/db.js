@@ -25,7 +25,7 @@ module.exports = new class {
     }
     
     async deleteGame(id){
-        await db('games').where({id})
+        await db('games').where({id}).delete();
     }
 
     async updateGame(game){

@@ -50,7 +50,7 @@ io.on('connection', async socket => {
 
             socket.broadcast.emit('game_update', game.data);
 
-            const {balance} = await db('accounts').where({username}).first();
+            const {balance} = await db.getAccount(username);
             const newBet = game.getBet(username);
 
             callback({
@@ -72,10 +72,9 @@ io.on('connection', async socket => {
             await game.close(side);
 
             socket.broadcast.emit('account_update');
-            const {balance} = await db('accounts').where({username}).first();
-            const gameList = await db('games');
+            const {balance} = await db.getAccount(username)
+            const gameList = await db.getGames();
 
-            
             callback({
                 acc: {balance, username}, 
                 gameList,
@@ -115,7 +114,7 @@ io.on('connection', async socket => {
 
     socket.on('account_get', async (username, callback) => {
         try{
-            const {balance} = await db('accounts').where({username}).first();
+            const {balance} = await db.getAccount(username);
             const acc = {username, balance};
             //const notes = await database.getNotifications(username);
             callback({user: acc, notes: []});
