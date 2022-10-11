@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Link} from 'react-router-dom';
 import {getDestination} from './Api';
 import AppContext from '../Contexts/AppContext.js';
 import GameInfoModal from '../Modals/GameInfo/GameInfoModal.js';

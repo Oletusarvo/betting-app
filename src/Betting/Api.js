@@ -34,61 +34,6 @@ export function getBettingState(bet, minimum_bet){
     }
 }
 
-export function loadBet(username, id, token){
-    return new Promise((resolve, reject) => {
-        const req = new XMLHttpRequest();
-        req.open('GET', `/bets/?username=${username}&id=${id}`, true);
-        req.setRequestHeader('auth', token);
-
-        req.onload = () => {
-            if(req.status === 200){
-                if(req.response == ""){
-                    resolve(null);
-                } 
-                else{
-                    const res = JSON.parse(req.response);
-                    resolve(res);
-                }
-            }
-            else{
-                reject({
-                    statusCode : req.status,
-                    reason: req.response
-                });
-            }
-        }
-
-        req.send();
-    });
-}
-
-export function loadGame(id, token){
-    return new Promise((resolve, reject) => {
-        const req = new XMLHttpRequest();
-        req.open('GET', `/games/${id}`);
-        req.setRequestHeader('auth', token);
-        req.onload = () => {
-            if(req.status === 200){
-                const data = JSON.parse(req.response);
-                if(!data){
-                    reject(`Unable to load game data!`);
-                }
-                else{
-                    resolve(data);
-                }
-            }
-            else{
-                reject({
-                    statusCode : req.status,
-                    reason: req.response
-                });
-            }
-        }
-
-        req.send();
-    })
-}
-
 export function loadData(username, id, token){
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();

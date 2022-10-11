@@ -1,5 +1,4 @@
-import { useContext, useEffect } from "react";
-import AppContext from "../Contexts/AppContext.js";
+import { useContext } from "react";
 import GameContext from "../Contexts/GameContext.js";
 
 function Form(){
