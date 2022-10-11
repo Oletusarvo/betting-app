@@ -1,6 +1,5 @@
 import './Style.scss';
 import {useState, useContext} from 'react';
-import AppContext from '../../Contexts/AppContext';
 import GameContext from '../../Contexts/GameContext';
 
 function Ticket(){

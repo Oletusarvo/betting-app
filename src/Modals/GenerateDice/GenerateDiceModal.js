@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import AppContext from "../../Contexts/AppContext";
-import Loading from '../../Loading/Loading.js';
 
 function GenerateDiceModal(){
 

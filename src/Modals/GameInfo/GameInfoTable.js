@@ -1,6 +1,3 @@
-import { useContext } from "react"
-import AppContext from "../../Contexts/AppContext"
-
 function GameInfoTable({game, currency}){
     return (
         <table>

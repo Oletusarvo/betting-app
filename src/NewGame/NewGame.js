@@ -1,4 +1,3 @@
-import React, {useState, useContext, useEffect} from 'react';
 import CreateGameModal from '../Modals/CreateGame/CreateGameModal.js';
 import './Style.scss';
 

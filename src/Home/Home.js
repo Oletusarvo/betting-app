@@ -1,13 +1,11 @@
 import React, {useContext} from 'react';
 import {Link} from 'react-router-dom';
 import GameList  from '../GameList/GameList.js';
-import Balance from '../Balance/Balance.js';
 import './Style.scss';
 import AppContext from '../Contexts/AppContext.js';
 
-function Home(props){
+function Home(){
 
-    const {username} = props.user ? props.user : {};
     const {user} = useContext(AppContext);
 
     return (

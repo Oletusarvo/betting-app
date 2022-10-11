@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import AppContext from '../Contexts/AppContext';
-import Notifications from './Notifications.js';
 
 import './Style.scss';
 const bellIcon = './img/bell.png';
