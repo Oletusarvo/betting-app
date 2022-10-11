@@ -4,7 +4,7 @@ import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
 
 function Bet(){
-    const {user, token, currency} = useContext(AppContext);
+    const {token, currency} = useContext(AppContext);
     const {setGameState, bet, game} = useContext(GameContext);
 
     function fold(){
