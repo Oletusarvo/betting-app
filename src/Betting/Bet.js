@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import {fold} from './Api';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
 
