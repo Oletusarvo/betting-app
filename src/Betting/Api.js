@@ -33,22 +33,3 @@ export function getBettingState(bet, minimum_bet){
         return 'set';
     }
 }
-
-export function loadData(username, id, token){
-    return new Promise((resolve, reject) => {
-        const req = new XMLHttpRequest();
-        req.open('GET', `/games/data?username=${username}&id=${id}`);
-        req.setRequestHeader('auth', token);
-        
-        req.send();
-
-        req.onload = () => {
-            if(req.status === 200){
-                resolve(JSON.parse(req.response));
-            }
-            else{
-                reject(req.response);
-            }
-        }
-    });
-}
