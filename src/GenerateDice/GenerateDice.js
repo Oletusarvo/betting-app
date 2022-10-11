@@ -1,6 +1,6 @@
 import GenerateDiceModal from '../Modals/GenerateDice/GenerateDiceModal.js';
 
-function GenerateDice(props){
+function GenerateDice(){
     return(
         <div className="flex-column fill center-all pad w-100">
             <GenerateDiceModal/>

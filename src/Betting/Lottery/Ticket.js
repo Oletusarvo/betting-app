@@ -3,7 +3,7 @@ import {useState, useContext} from 'react';
 import AppContext from '../../Contexts/AppContext';
 import GameContext from '../../Contexts/GameContext';
 
-function Ticket(props){
+function Ticket(){
     const {placeBet, game} = useContext(GameContext);
     const [numbers, setNumbers] = useState("");
     const maxLength = game.lotto_row_size;

@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import GameList from '../GameList/GameList.js';
 import './Style.scss';
 
-function Games(props){
+function Games(){
 
     const [query, setQuery] = useState('');
 

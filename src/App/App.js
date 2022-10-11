@@ -23,7 +23,7 @@ if('serviceWorker' in navigator){
 
 const storage = sessionStorage;
 
-function App (props){
+function App (){
     const [user, setUser] = useState(() => {
         const data = storage.getItem('betting-app-user');
         if(!data) return null;

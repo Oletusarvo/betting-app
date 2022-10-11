@@ -6,7 +6,7 @@ import Notifications from './Notifications.js';
 import './Style.scss';
 const bellIcon = './img/bell.png';
 
-function Header(props){
+function Header(){
 
     const {user, socket, logout} = useContext(AppContext);
     const [notes, setNotes] = useState([]);

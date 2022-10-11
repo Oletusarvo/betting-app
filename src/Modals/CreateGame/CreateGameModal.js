@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import AppContext from "../../Contexts/AppContext.js";
 import '../Style.scss';
 
-function CreateGameModal(props){
+function CreateGameModal(){
 
     const {user, token} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');

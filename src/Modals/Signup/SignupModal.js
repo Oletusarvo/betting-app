@@ -3,7 +3,7 @@ import {useState} from 'react';
 
 import '../Style.scss';
 
-function SignupModal(props){
+function SignupModal(){
 
     const [loading, setLoading] = useState(false);
 

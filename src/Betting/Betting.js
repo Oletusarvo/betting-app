@@ -12,7 +12,7 @@ import GameContext from '../Contexts/GameContext.js';
 
 import './Style.scss';
 
-function Betting(props) {
+function Betting() {
     const {id} = useParams();
     const {user, socket, setUser} = useContext(AppContext);
 
