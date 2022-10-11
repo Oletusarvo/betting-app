@@ -1,4 +1,4 @@
-const db = require('../dbConfig.js');
+const db = require('../models/db');
 
 class Account{
     constructor(data){
@@ -6,11 +6,11 @@ class Account{
     }
 
     async load(username){
-        return this.data = await db('accounts').where({username}).first();
+        this.data = await db.getAccount(username);
     }
 
     async update(){
-        await db('accounts').where({username: this.data.username}).update(this.data);
+        await db.updateAccount(this.data);
     }
 
     verifyAmount(amount){
@@ -20,19 +20,23 @@ class Account{
     async deposit(amount){
         if(!this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
         this.data.balance += amount;
-        console.log(`Balance before db update: ${this.data.balance}`);
         await this.update();
     }
 }
 
 class Game{
     constructor(data = null){
+        this.bets = [...data.bets];
+        delete data.bets;
         this.data = data;
-        this.bets = [];
     }
 
-    static createGame(type, data = null){
-        switch(type){
+    static async loadGame(id){
+        const data = await db.getGame(id);
+        const bets = await db.getBets(id);
+        data.bets = bets;
+
+        switch(data.type){
             case 'Boolean':
             case 'Multi-Choice':
                 return new SelectionGame(data);
@@ -45,23 +49,27 @@ class Game{
         }
     }
 
-    async load(game_id){
-        this.data = await db('games').where({game_id}).first();
-        this.bets = await db('bets').where({game_id});
+    async load(id){
+        this.data = await db.getGame(id);
+        this.bets = await db.getBets(id);
         return this.data;
+    }
+
+    async getSavedBet(username){
+        return await db.getBet(username, this.data.id);
     }
 
     async update(){
         for(const bet of this.bets){
             const {username, game_id} = bet;
-            const savedBet = await db('bets').where({game_id, username}).first();
+            const savedBet = await db.getBet(username, game_id);
             if(savedBet) 
-                await db('bets').where({game_id, username}).update(bet);
-            else
-                await db('bets').insert(bet);
+                await db.updateBet(bet);
+            else{
+                await db.addBet(bet);
+            }    
         }
-
-        await db('games').where({game_id: this.data.game_id}).update(this.data);
+        await db.updateGame(this.data);
     }
 
     calculatePool(){
@@ -71,15 +79,18 @@ class Game{
     }
 
     amountIsValid(amount){
-        return amount == this.data.minimum_bet || amount == this.data.minimum_bet + this.data.increment;
+        const {minimum_bet, increment} = this.data;
+        return amount == minimum_bet || amount == minimum_bet + increment;
     }
 
     calculateCreatorShare(numWinners){
-        return (this.data.pool + this.data.pool_reserve) % (numWinners || 1);
+        const {pool, pool_reserve} = this.data;
+        return (pool + pool_reserve) % (numWinners || 1);
     }
 
     calculateReward(numWinners, creatorShare){
-        return (this.data.pool + this.data.pool_reserve - creatorShare) / (numWinners || 1);
+        const {pool, pool_reserve} = this.data;
+        return (pool + pool_reserve - creatorShare) / (numWinners || 1);
     }
 
     isExpired(){
@@ -102,6 +113,11 @@ class Game{
 
     checkClose(){
         if(!this.isExpired) throw new Error('Cannot close before expiry date!');
+    }   
+
+    getMustCall(){
+        //Returns the participants who have not bid the minimum bet.
+        return this.bets.filter(item => !item.folded && item.amount < this.data.minimum_bet);
     }
 
     async accountDeposit(username, amount){
@@ -129,17 +145,25 @@ class Game{
         if(previousBet) this.updateBet(bet); else this.bets.push(bet);
         
         this.data.pool = this.calculatePool();
+
+        const mustCall = this.getMustCall();
+        for(const participant of mustCall) await this.notify(participant.username, `The minimum bet has been raised. Time to call or fold!`);
+
         await this.update();
     }
 
     async close(){
-        const {game_id} = this.data;
-        await db('games').where({game_id}).del();
-        await db('bets').where({game_id}).del();
+        await db.deleteGame(this.data.id);
     }
 
-    async notify(participants){
-
+    async notify(targetUsername, message){
+        const {id, title} = this.data;
+        await db.addNote({
+            game_id: id,
+            game_title: title,
+            message,
+            username: targetUsername
+        });
     }
 }
 
@@ -149,7 +173,7 @@ class SelectionGame extends Game{
     }
 
     isContested(){
-        const mustCall = this.bets.filter(bet => bet.amount < this.data.minimum_bet && !bet.folded);
+        const mustCall = super.getMustCall();
         return mustCall.length;
     }
 
@@ -175,13 +199,12 @@ class SelectionGame extends Game{
         });
 
         winners.push({ username: this.data.created_by, reward: creatorReward, });
-        console.log(winners);
 
         for(const winner of winners){
             const {username, reward} = winner;
             if(reward != 0) {
-                console.log(`Depositing reward of ${reward} to ${username}`);
                 await this.accountDeposit(username, reward);
+                await super.notify(username, `You won ${reward} dice!`);
             }
         }
 
@@ -209,7 +232,7 @@ class LottoGame extends Game{
             this.data.pool_reserve += this.data.pool;
             this.data.pool = 0;
             this.bets = [];
-            await db('bets').where({game_id: this.data.game_id}).del();
+            await db.deleteBets(this.data.id);
             this.update();
             return;
         }
@@ -287,14 +310,4 @@ class HexLottoGame extends Game{
     }
 }
 
-class Model{
-    async loadGame(game_id){
-        const gameData = await db('games').where({game_id}).first();
-        const {type} = gameData;
-        return type === 'Boolean' || type === 'Multi-Choice' ? new SideGame(gameData) : new LottoGame(gameData);
-    }
-
-
-}
-
-module.exports = {SelectionGame, Game, LottoGame, HexLottoGame, Account, Model};
+module.exports = {SelectionGame, Game, LottoGame, HexLottoGame, Account};

@@ -2,7 +2,6 @@ import { useContext } from "react";
 import AppContext from "../Contexts/AppContext";
 import GameContext from "../Contexts/GameContext";
 import Bet from './Bet.js';
-import Balance from '../Balance/Balance.js';
 
 function Info(){
 

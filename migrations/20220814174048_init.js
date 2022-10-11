@@ -3,18 +3,12 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.createTable('bets', tbl => {
-    tbl.string('username')
-    .notNullable();
+  return knex.schema.createTable('games', tbl => {
+    tbl.string('game_id')
+    .notNullable()
+    .unique()
+    .primary();
 
-    tbl.string('game_id').notNullable();
-
-    tbl.float('amount').defaultTo(0);
-    tbl.boolean('folded').defaultTo(false);
-    tbl.timestamps(true, true);
-  })
-  .createTable('games', tbl => {
-    tbl.string('game_id').notNullable().unique();
     tbl.string('game_title', 50).notNullable();
     tbl.float('pool').defaultTo(0);
     tbl.float('minimum_bet').defaultTo(0.01);
@@ -24,7 +18,28 @@ exports.up = function(knex) {
     tbl.string('username').notNullable();
     tbl.string('password').notNullable();
     tbl.float('balance').defaultTo(0);
-  });
+  })
+  .createTable('bets', tbl => {
+    tbl.string('username')
+    .notNullable()
+    .unique()
+    .primary()
+    .references('username')
+    .inTable('accounts')
+    .onDelete('CASCADE')
+    .onUpdate('CASCADE');
+
+    tbl.string('game_id')
+    .notNullable()
+    .references('game_id')
+    .inTable('games')
+    .onDelete('CASCADE')
+    .onUpdate('CASCADE');
+
+    tbl.float('amount').defaultTo(0);
+    tbl.boolean('folded').defaultTo(false);
+    tbl.timestamps(true, true);
+  })
 };
 
 /**
@@ -32,5 +47,8 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('bets').dropTableIfExists('games').dropTableIfExists('accounts');
+  return knex.schema
+  .dropTableIfExists('bets')
+  .dropTableIfExists('games')
+  .dropTableIfExists('accounts');
 };

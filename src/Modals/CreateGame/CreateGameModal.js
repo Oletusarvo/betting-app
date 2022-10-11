@@ -30,13 +30,13 @@ function CreateGameModal(props){
     
         const form = document.querySelector('#new-game-form');
         const data = {
-            game_title : form.title.value,
+            title : form.title.value,
             minimum_bet : form.minimumBet.valueAsNumber,
             increment : form.increment.valueAsNumber,
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
-            options : form.betOptions.value || null,
+            options : form.betOptions.value,
             lotto_row_size: form.rowSize.value,
         }
     

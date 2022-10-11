@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {HashRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from '../Home/Home';
-import Delete from '../Account/Delete.js';
+import DeleteAccount from '../DeleteAccount/DeleteAccount.js';
 import Header from '../Header/Header.js';
 import Navbar from '../Navbar/Navbar.js';
 import Games from '../Games/Games.js';
@@ -21,16 +21,18 @@ if('serviceWorker' in navigator){
     .catch(err => console.log('Service worker not registered!'));
 }
 
+const storage = sessionStorage;
+
 function App (props){
     const [user, setUser] = useState(() => {
-        const data = localStorage.getItem('betting-app-user');
+        const data = storage.getItem('betting-app-user');
         if(!data) return null;
 
         return JSON.parse(data);
     });
 
     const [token, setToken] = useState(() => {
-        const data = localStorage.getItem('betting-app-token');
+        const data = storage.getItem('betting-app-token');
         if(!data) return null;
 
         return data;
@@ -50,18 +52,26 @@ function App (props){
         });
     });
 
+    function logout(){
+        storage.removeItem('betting-app-token');
+        storage.removeItem('betting-app-user');
+        setUser(null);
+        setToken(null);
+        location.assign('/');
+    }
+
     const [currency] = useState('⚄');
     const [isMining, setIsMining] = useState(false);
 
     useEffect(() => {
         if(user){
-            localStorage.setItem('betting-app-user', JSON.stringify(user));
+            storage.setItem('betting-app-user', JSON.stringify(user));
         }
     }, [user]);
 
     useEffect(() => {
         if(token){
-            localStorage.setItem('betting-app-token', token);
+            storage.setItem('betting-app-token', token);
         }
     }, [token]);
 
@@ -70,14 +80,22 @@ function App (props){
             socket.emit('account_get', user.username, update => {
                 setUser(update.user);
             });
+        });
+
+        socket.on('notes_update', notes => {
+            setNotes(notes);
         })
+
+        return () => {
+            socket.off('account_update');
+        }
     }, []);
 
     return (
         <Router>
             <div id="app" className="flex-column center-align">
                 <Background/>
-                <AppContext.Provider value={{user, token, socket, currency, setUser, setToken, isMining, setIsMining}}>
+                <AppContext.Provider value={{user, token, socket, currency, setUser, setToken, isMining, setIsMining, logout}}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
                     {user ? <AccountHeader/> : null}
                     <Routes >
@@ -87,9 +105,9 @@ function App (props){
 
                         <Route exact path="/login" element={<Login setUser={setUser} setToken={setToken}/>} />
                         <Route exact path="/signup" element={<Signup/>} />
-                        <Route exact path="/account/delete" element={<Delete/>}></Route>
+                        <Route exact path="/account/delete" element={<DeleteAccount/>}></Route>
                         <Route exact path="/games" element={<Games/>} />
-                        <Route exact path="/games/:game_id" element={<Betting/>}></Route>
+                        <Route exact path="/games/:id" element={<Betting/>}></Route>
                         <Route exact path="/newgame" element={<NewGame/>} />
                         <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
                         <Route path="*" element={<Unknown/>}/>

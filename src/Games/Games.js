@@ -14,7 +14,7 @@ function Games(props){
         <div className="flex-column fill pad w-100 gap-m overflow-y-scroll overflow-x-hide" id="games-page">
             <header className="w-100" id="games-page-header">
                 <h1 className="flex-row center-all">All Bets</h1>
-                <input type="search" placeholder="Search for games..." onInput={search}></input>
+                <input type="search" placeholder="Search for bets..." onInput={search}></input>
             </header>
             
             <GameList query={query}/>

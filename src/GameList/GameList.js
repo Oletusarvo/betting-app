@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Link} from 'react-router-dom';
 import {getDestination} from './Api';
 import AppContext from '../Contexts/AppContext.js';
 import GameInfoModal from '../Modals/GameInfo/GameInfoModal.js';
@@ -17,7 +16,7 @@ function GameList(props){
             req.open('GET', `/games/by_user/${user.username}`, true);
         }
         else if(props.query && props.query.length){
-            req.open('GET', `/games/?game_title=${props.query}`);
+            req.open('GET', `/games/?title=${props.query}`);
         }
         else{
             req.open('GET', '/games/', true);
@@ -55,11 +54,11 @@ function GameList(props){
             {
                 props.byUser ? 
                 gameList.filter(item => item.created_by === user.username).map(item => {
-                    return <GameInfoModal key={item.game_id} game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>
+                    return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
                 })
                 :
                 gameList.map(item => {
-                    return <GameInfoModal key={item.game_id} game={item} destination={getDestination(user.username, item.game_id)} setGameList={setGameList}/>
+                    return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
                 })
             }
         </div>

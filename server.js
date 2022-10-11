@@ -1,7 +1,5 @@
 const {server, io} = require('./serverConfig.js');
-//const {database, game, bank} = require('./models/db.js');
 const jwt = require('jsonwebtoken');
-
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
 
@@ -21,20 +19,18 @@ io.use((socket, next) => {
 });
 
 const connectedUsers = [];
-const {SideGame, LottoGame, Game, Account} = require('./utils/environment.js');
-const db = require('./dbConfig');
+const {Game, Account} = require('./utils/environment.js');
+const db = require('./models/db');
 
 io.on('connection', async socket => {
     console.log(`New connection!`);
     connectedUsers[socket.id] = socket;
 
     socket.on('join_room', async (msg, callback) => {
-        const {game_id, username} = msg;
+        const {id, username} = msg;
 
-        socket.join(game_id);
-        const {type} = await db('games').where({game_id}).first();
-        const game = Game.createGame(type);
-        await game.load(game_id);
+        socket.join(id);
+        const game = await Game.loadGame(id);
         
         callback({
             newGame: game.data,
@@ -42,20 +38,19 @@ io.on('connection', async socket => {
         });
     });
 
-    socket.on('leave_room', game_id => {
-        socket.leave(game_id);
+    socket.on('leave_room', id => {
+        socket.leave(id);
     });
 
     socket.on('bet_place', async (bet, callback) => {
         try{
-            const {game_id, username, type} = bet;
-            const game = Game.createGame(type);
-            await game.load(game_id);
+            const {game_id, username} = bet;
+            const game = await Game.loadGame(game_id);
             await game.placeBet(bet);
 
             socket.broadcast.emit('game_update', game.data);
 
-            const {balance} = await db('accounts').where({username}).first();
+            const {balance} = await db.getAccount(username);
             const newBet = game.getBet(username);
 
             callback({
@@ -72,17 +67,14 @@ io.on('connection', async socket => {
     socket.on('game_close', async (msg, callback) => {
 
         try{
-            const {game_id, side, username} = msg;
-            const {type} = await db('games').where({game_id}).first();
-            const game = Game.createGame(type);
-            await game.load(game_id);
+            const {id, side, username} = msg;
+            const game = await Game.loadGame(id);
             await game.close(side);
 
             socket.broadcast.emit('account_update');
-            const {balance} = await db('accounts').where({username}).first();
-            const gameList = await db('games');
+            const {balance} = await db.getAccount(username)
+            const gameList = await db.getGames();
 
-            
             callback({
                 acc: {balance, username}, 
                 gameList,
@@ -112,7 +104,7 @@ io.on('connection', async socket => {
 
     socket.on('notes_get', async (username, callback) => {
         try{
-            const notes = [];
+            const notes = await db.getNotes(username);
             callback(notes);
         }
         catch(err){
@@ -122,7 +114,7 @@ io.on('connection', async socket => {
 
     socket.on('account_get', async (username, callback) => {
         try{
-            const {balance} = await db('accounts').where({username}).first();
+            const {balance} = await db.getAccount(username);
             const acc = {username, balance};
             //const notes = await database.getNotifications(username);
             callback({user: acc, notes: []});
@@ -133,11 +125,9 @@ io.on('connection', async socket => {
     });
 
     socket.on('bet_get', async (data, callback) => {
-        const {username, game_id} = data;
+        const {username, id} = data;
         try{
-            const {type} = await db('games').where({game_id});
-            const game = Game.createGame(type);
-            await game.load(game_id);
+            const game = await Game.loadGame(id);
             const bet = game.getBet(username);
             callback(bet);
         }

@@ -1,6 +1,6 @@
 import DeleteAccountModal from '../Modals/DeleteAccount/DeleteAccountModal.js';
 
-function Delete(props){
+function DeleteAccount(){
     return(
         <div className="flex-column fill center-all pad w-100">
             <DeleteAccountModal/>
@@ -8,4 +8,4 @@ function Delete(props){
     )
 }
 
-export default Delete;
+export default DeleteAccount;
