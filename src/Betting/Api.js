@@ -22,14 +22,3 @@ export function fold(game, bet, token, setGameState){
     }
 }
 
-export function getBettingState(bet, minimum_bet){
-    if(bet == undefined){
-        return 'entry';
-    }
-    else if(bet && !bet.folded && Math.round(bet.amount) < Math.round(minimum_bet)){
-        return 'call';
-    }
-    else{
-        return 'set';
-    }
-}
