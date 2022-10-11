@@ -4,8 +4,8 @@ import Forbidden from '../forbidden';
 import Balance from '../Balance/Balance.js';
 import AppContext from '../Contexts/AppContext.js';
 
-function Account(props){
-    const {user, token} = useContext(AppContext);
+function Account(){
+    const {user} = useContext(AppContext);
 
     if(user === null){
         return <Forbidden/>

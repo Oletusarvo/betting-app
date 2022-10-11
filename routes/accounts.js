@@ -11,7 +11,6 @@ router.get('/:username', checkAuth, async (req, res) => {
 router.delete('/:username', checkAuth, async (req, res) => {
     const username = req.params.username;
     const {password1, password2} = req.body;
-
     try{
         if(password1 !== password2){
             throw new Error('Passwords do not match!');

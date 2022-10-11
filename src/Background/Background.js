@@ -1,6 +1,6 @@
 import React from 'react';
 import './Style.scss';
-const DieIcon = './img/die.png';
+const DieIcon = './img/bg.png';
 
 function BackgroundDie(props){
     return (

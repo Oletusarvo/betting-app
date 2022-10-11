@@ -7,7 +7,6 @@ router.post('/', checkAuth, async (req, res) => {
     const n = Math.floor(Math.random() * 0xff) ^ (new Date().getTime() & 0xff) ^ parseInt(process.env.SERVER_COIN_SECRET, 16);
     const reward = 10000;
     const {guess} = req.body;
-    console.log(n);
 
     if(guess == n){
         const bank = new Bank();

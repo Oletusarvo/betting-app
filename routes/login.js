@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
                 balance : user.balance
             }
         }
-        
         res.status(200).send(JSON.stringify(payload));
     }
     else{
