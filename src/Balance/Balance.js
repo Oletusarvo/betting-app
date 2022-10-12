@@ -41,7 +41,7 @@ function Balance(props){
 
     return (
         <div className="flex-row gap-s">
-            <span className="balance" id={id}>{currency + user.balance.toLocaleString('en')}</span>
+            <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{currency + user.balance.toLocaleString('en')}</span>
             <span className="gain" hidden={showGain == false} style={{color: gain > 0 ? 'limegreen' : 'red'}}>{gain}</span>
             {
                 isMining ? <Loading dimensions={{width: "1rem", height: "1rem", borderWidth: "2px"}}/> : null

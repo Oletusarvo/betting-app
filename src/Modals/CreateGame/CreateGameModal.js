@@ -39,7 +39,13 @@ function CreateGameModal(){
             options : form.betOptions.value,
             lotto_row_size: form.rowSize.value,
         }
-    
+        
+        const balance = Math.abs(user.balance);
+        if(data.increment > balance || data.minimum_bet > balance){
+            alert('Maximum increment or minimum bet can only be as much as your absolute balance!');
+            return;
+        }
+        
         req.send(JSON.stringify(data));
     
         req.onload = () => {
