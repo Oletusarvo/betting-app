@@ -65,7 +65,11 @@ function CreateGameModal(){
                     </select>
 
                     <label>Title:</label>
-                    <input name="title" placeholder="Enter game title" required={true} maxLength={50}></input>
+                    <input 
+                        name="title" 
+                        placeholder="Enter game title" 
+                        required={true} 
+                        maxLength={50}></input>
 
                     <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Minimum Bet:'}</label>
                     <input 
@@ -91,11 +95,28 @@ function CreateGameModal(){
                         disabled={betTypeSelect === 'Lottery'}></input>
                     
                     <label hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
-                    <input hidden={betTypeSelect !== 'Lottery'} name="rowSize" defaultValue="4" min="1" step="1" max="7" type="number" placeholder='Enter preferred row size'></input>
+                    <input 
+                        hidden={betTypeSelect !== 'Lottery'} 
+                        name="rowSize" 
+                        defaultValue="4" 
+                        min="1" 
+                        step="1" 
+                        max="7" 
+                        type="number" 
+                        placeholder='Enter preferred row size'></input>
                     
-                    <textarea id="input-bet-options" name="betOptions" placeholder="Multi-choice bet options separated by semi-colon(;)" maxLength={256} disabled={betTypeSelect !== 'Multi-Choice'} required={true}></textarea>
+                    <textarea 
+                        id="input-bet-options" 
+                        name="betOptions" 
+                        placeholder="Multi-choice bet options separated by semi-colon(;)" 
+                        maxLength={256} 
+                        disabled={betTypeSelect !== 'Multi-Choice'} 
+                        required={true}></textarea>
                     <label>Expiry Date:</label>
-                    <input name="expiryDate" type="date" placeholder="Enter expiry date"></input>
+                    <input 
+                        name="expiryDate" 
+                        type="date" 
+                        placeholder="Enter expiry date"></input>
                     <button type="submit">Create</button>
                 </form>
             </div>
