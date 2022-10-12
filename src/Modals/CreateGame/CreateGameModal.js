@@ -39,13 +39,7 @@ function CreateGameModal(){
             options : form.betOptions.value,
             lotto_row_size: form.rowSize.value,
         }
-        
-        const balance = Math.abs(user.balance);
-        if(data.increment > balance || data.minimum_bet > balance){
-            alert('Maximum increment or minimum bet can only be as much as your absolute balance!');
-            return;
-        }
-        
+
         req.send(JSON.stringify(data));
     
         req.onload = () => {
@@ -58,6 +52,7 @@ function CreateGameModal(){
         }
     }
 
+    const maxTransfer = Math.abs(Math.floor(user.balance / 2));
     return (
         <div className="modal">
             <header>Create New Game</header>
@@ -73,10 +68,27 @@ function CreateGameModal(){
                     <input name="title" placeholder="Enter game title" required={true} maxLength={50}></input>
 
                     <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Minimum Bet:'}</label>
-                    <input name="minimumBet" type="number" min="1" step="1" placeholder="Enter minimum bet" required={true} defaultValue={1}></input>
+                    <input 
+                        name="minimumBet" 
+                        type="number" 
+                        min="1" 
+                        max={maxTransfer}
+                        step="1" 
+                        placeholder="Enter minimum bet" 
+                        required={true} 
+                        defaultValue={1}
+                       ></input>
                     
                     <label hidden={betTypeSelect === 'Lottery'}>Increment:</label>
-                    <input hidden={betTypeSelect === 'Lottery'} name="increment" type="number" min={betTypeSelect === 'Lottery' ? 1 : 0} step="1" defaultValue={1} placeholder="Bet Increment" disabled={betTypeSelect === 'Lottery'}></input>
+                    <input 
+                        hidden={betTypeSelect === 'Lottery'} 
+                        name="increment" 
+                        type="number" 
+                        min={betTypeSelect === 'Lottery' ? 1 : 0} 
+                        max={maxTransfer}
+                        step="1" defaultValue={1} 
+                        placeholder="Bet Increment" 
+                        disabled={betTypeSelect === 'Lottery'}></input>
                     
                     <label hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
                     <input hidden={betTypeSelect !== 'Lottery'} name="rowSize" defaultValue="4" min="1" step="1" max="7" type="number" placeholder='Enter preferred row size'></input>
