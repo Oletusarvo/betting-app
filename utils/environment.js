@@ -18,7 +18,7 @@ class Account{
     }
 
     async deposit(amount){
-        if(!this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
+        //if(!this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
         this.data.balance += amount;
         await this.update();
     }
