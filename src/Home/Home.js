@@ -20,9 +20,7 @@ function Home(){
                         <strong>Notice! This app is intended to be viewed on mobile devices in portrait mode.</strong><br/><br/>
                         Welcome to the betting app! Here you can create bets out of 
                         anything you choose and bid virtual currency in the form of dice. One hundred dice has the arbitrary value of 1 of whatever currency you choose.
-                        Each new account receives 10,000 dice for use in betting. While 
-                        creating an account, it is recommended to use passwords you don't normally use anywhere else.
-                        The passwords are encrypted in the database, but it is not a bad idea to be safe.
+                        Each new account receives 10,000 dice for use in betting.
                     </p>
                     <br/>
                     <h2>Bets</h2>
@@ -48,7 +46,9 @@ function Home(){
                     
                         The betting window for each bet can be accessed through first navigating to the game list window
                         through the casino-chip icon on the navbar and then tapping/clicking on the listing of the 
-                        bet you want to participate in. <br/>
+                        bet you want to participate in. <br/><br/>
+
+                        A bet can only be closed by the user who made it.
                     </p>
                     <br/>
                 
