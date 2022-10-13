@@ -34,7 +34,7 @@ function Home(){
                     <br/>
                     <p>
                         <strong>Boolean</strong> bets can have an outcome of either true or false. Simple.<br/><br/>
-                        <strong>Multi-Choice</strong> bets can have multiple outcomes that the user is free to define.<br/><br/>
+                        <strong>Multi-Choice</strong> bets have one outcome out of a list that the user is free to define.<br/><br/>
                         <strike><strong>Lottery</strong> bets let a user enter a single row of numbers, which gets compared to a randomly generated <br/>
                         row of equal length when the game is closed. Whoever has a row fully matching the generated row wins the pool.</strike>
                     </p>
