@@ -3,7 +3,6 @@ node_modules
 data
 public/*.html
 public/*.txt
-public/main.bundle.js
 
 notes.txt
 .beta.
