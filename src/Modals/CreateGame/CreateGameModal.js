@@ -3,6 +3,7 @@ import AppContext from "../../Contexts/AppContext.js";
 import OptionToken from "./OptionToken/OptionToken.js";
 import CreateGameContext from "../../Contexts/CreateGameContex.js";
 import '../Style.scss';
+import './Style.scss';
 
 function CreateGameModal(){
 
@@ -24,9 +25,12 @@ function CreateGameModal(){
     }
 
     function addOption(e){
-        const option = document.querySelector('#option-input').value;
+        const input = document.querySelector('#option-input');
+        const option = input.value;
+        const optionAsLowerCase = option.toLowerCase();
+        if(option == "" || options.find(item => item.toLowerCase() === optionAsLowerCase)) return;
         setOptions([...options, option]);
-        console.log(options);
+        input.value = null;
     }
 
     function submit(e){
@@ -45,7 +49,7 @@ function CreateGameModal(){
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
-            options : form.betOptions.value,
+            options : options.join(';'),
             lotto_row_size: form.rowSize.value,
         }
 
@@ -63,7 +67,10 @@ function CreateGameModal(){
 
     function deleteOption(content){
         const i = options.findIndex(item => item === content);
-        if(i != -1) options.splice(i, 1);
+        if(i != -1) {
+            options.splice(i, 1);
+            setOptions(options);
+        }
     }
 
     const maxTransfer = Math.abs(Math.floor(user.balance / 2));
@@ -124,16 +131,22 @@ function CreateGameModal(){
                             {
                                 options.map(item => {
                                     return (
-                                        <OptionToken content={item} key={`option-token-${item}`}/>
+                                        <OptionToken deleteOption={() => deleteOption(item)} content={item} key={`option-token-${item}`}/>
                                     )
                                 })
                             }
                         </div>
-
-                        <span className="flex-row gap-s center-align" hidden={betTypeSelect !== 'Multi-Choice'}>
-                            <input id="option-input" type="text" placeholder="Type an option..." ></input>
-                            <button type="button" onClick={addOption}>Add</button>
-                        </span>
+                        
+                        {
+                            betTypeSelect === 'Multi-Choice' ? 
+                             <div id="options-input" className="flex-row gap-s center-align" hidden={betTypeSelect !== 'Multi-Choice'}>
+                                <input id="option-input" type="text" placeholder="Type an option..." ></input>
+                                <button type="button" onClick={addOption}>Add</button>
+                            </div>
+                            : 
+                            null
+                        }
+                       
 
                         <label>Expiry Date:</label>
                         <input 
