@@ -5,9 +5,11 @@ module.exports = {
     entry: './src/index.js',
     watch: true,
     mode: 'development',
+
     output : {
         path: path.resolve(__dirname, 'public/'),
-        filename : 'main.bundle.js'
+        filename : 'main.bundle.js',
+        scriptType: 'text/javascript',
     },
 
     plugins: [
@@ -15,7 +17,6 @@ module.exports = {
             template: './src/index.html'
         }),
     ],
-
 
     module : {
         rules : [

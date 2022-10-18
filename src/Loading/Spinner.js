@@ -1,5 +1,4 @@
 import React from 'react';
-const Icon = './img/casino-chip.png';
 import './Style.scss';
 
 function Spinner(props){

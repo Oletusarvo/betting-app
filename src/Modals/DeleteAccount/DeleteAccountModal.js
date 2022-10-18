@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import AppContext from "../../Contexts/AppContext";
 import Loading from "../../Loading/Loading.js";
 
-function DeleteAccountModal(props){
+function DeleteAccountModal(){
 
     const {user, token} = useContext(AppContext);
     const [loading, setLoading] = useState(false);

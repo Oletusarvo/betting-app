@@ -1,9 +1,8 @@
-import React, {useEffect} from 'react';
 import SignupModal from '../Modals/Signup/SignupModal.js';
 
 import './Style.scss';
 
-function Signup(props){
+function Signup(){
     return(
         <div className="flex-column fill w-100 pad center-all" id="signup-page">
             <SignupModal/>

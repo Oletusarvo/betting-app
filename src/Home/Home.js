@@ -1,13 +1,11 @@
 import React, {useContext} from 'react';
 import {Link} from 'react-router-dom';
 import GameList  from '../GameList/GameList.js';
-import Balance from '../Balance/Balance.js';
 import './Style.scss';
 import AppContext from '../Contexts/AppContext.js';
 
-function Home(props){
+function Home(){
 
-    const {username} = props.user ? props.user : {};
     const {user} = useContext(AppContext);
 
     return (
@@ -22,9 +20,7 @@ function Home(props){
                         <strong>Notice! This app is intended to be viewed on mobile devices in portrait mode.</strong><br/><br/>
                         Welcome to the betting app! Here you can create bets out of 
                         anything you choose and bid virtual currency in the form of dice. One hundred dice has the arbitrary value of 1 of whatever currency you choose.
-                        Each new account receives 10,000 dice for use in betting. While 
-                        creating an account, it is recommended to use passwords you don't normally use anywhere else.
-                        The passwords are encrypted in the database, but it is not a bad idea to be safe.
+                        Each new account receives 10,000 dice for use in betting.
                     </p>
                     <br/>
                     <h2>Bets</h2>
@@ -36,7 +32,7 @@ function Home(props){
                     <br/>
                     <p>
                         <strong>Boolean</strong> bets can have an outcome of either true or false. Simple.<br/><br/>
-                        <strong>Multi-Choice</strong> bets can have multiple outcomes that the user is free to define.<br/><br/>
+                        <strong>Multi-Choice</strong> bets have one outcome out of a list that the user is free to define.<br/><br/>
                         <strike><strong>Lottery</strong> bets let a user enter a single row of numbers, which gets compared to a randomly generated <br/>
                         row of equal length when the game is closed. Whoever has a row fully matching the generated row wins the pool.</strike>
                     </p>
@@ -50,7 +46,9 @@ function Home(props){
                     
                         The betting window for each bet can be accessed through first navigating to the game list window
                         through the casino-chip icon on the navbar and then tapping/clicking on the listing of the 
-                        bet you want to participate in. <br/>
+                        bet you want to participate in. <br/><br/>
+
+                        A bet can only be closed by the user who made it.
                     </p>
                     <br/>
                 

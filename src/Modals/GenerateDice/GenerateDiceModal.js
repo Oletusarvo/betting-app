@@ -1,8 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import AppContext from "../../Contexts/AppContext";
-import Loading from '../../Loading/Loading.js';
 
-function GenerateDiceModal(props){
+function GenerateDiceModal(){
 
     const {socket, user, setIsMining, setUser, isMining} = useContext(AppContext);
 
