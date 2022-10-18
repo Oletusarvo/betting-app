@@ -4,8 +4,9 @@ function OptionToken({content, deleteOption}){
     //const {deleteOption} = useContext(CreateGameContext);
 
     return (
-        <div className="option-token flex-column center-all pad">
+        <div className="option-token flex-row center-all pad gap-s">
             <span>{content}</span>
+            <DeleteButton deleteOption={deleteOption}/>
         </div>
     );
 }

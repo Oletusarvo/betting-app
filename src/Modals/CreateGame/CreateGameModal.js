@@ -68,8 +68,9 @@ function CreateGameModal(){
     function deleteOption(content){
         const i = options.findIndex(item => item === content);
         if(i != -1) {
-            options.splice(i, 1);
-            setOptions(options);
+            const newOptions = [...options];
+            newOptions.splice(i, 1);
+            setOptions(newOptions);
         }
     }
 
