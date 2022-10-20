@@ -158,12 +158,14 @@ class Game{
 
     async notify(targetUsername, message){
         const {id, title} = this.data;
-        await db.addNote({
+        const note = {
             game_id: id,
             game_title: title,
             message,
             username: targetUsername
-        });
+        };
+
+        await db.addNote(note);
     }
 }
 
@@ -204,7 +206,7 @@ class SelectionGame extends Game{
             const {username, reward} = winner;
             if(reward != 0) {
                 await this.accountDeposit(username, reward);
-                await super.notify(username, `You won ${reward} dice!`);
+                await this.notify(username, `You won ${reward} dice!`);
             }
         }
 

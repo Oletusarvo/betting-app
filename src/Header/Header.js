@@ -24,6 +24,7 @@ function Header(){
         if(!user) return;
 
         socket.emit('notes_get', user.username, data => {
+            console.log(data);
             if(!data) return;
 
             setNotes(data);

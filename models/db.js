@@ -73,6 +73,7 @@ module.exports = new class {
     }
 
     async addNote(note){
+        console.log('Adding note ' + note);
         await db('notes').insert(note);
     }
 
