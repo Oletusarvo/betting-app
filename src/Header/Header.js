@@ -8,6 +8,7 @@ function Header(){
 
     const {user, socket, logout, notes} = useContext(AppContext);
 
+    const numUnseenNotes = notes ? notes.reduce((acc, cur) => acc += cur.seen == false, 0) : 0;
     return (
         <>
             <header>
@@ -30,7 +31,7 @@ function Header(){
                             <i>
                                 <img src={bellIcon}></img>
                             </i>
-                            <div data-notification-count={notes ? notes.reduce((acc, cur) => acc += cur.seen == false, 0) : 0} id="notification-count"></div>
+                            <div className={numUnseenNotes == 0 ? 'hidden' : ''} data-notification-count={numUnseenNotes} id="notification-count"></div>
                         </Link>
                         <span id="logout-link" onClick={logout}>Logout</span>
                     </>
