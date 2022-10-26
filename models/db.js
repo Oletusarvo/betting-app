@@ -73,7 +73,6 @@ module.exports = new class {
     }
 
     async addNote(note){
-        console.log('Adding note ' + note);
         await db('notes').insert(note);
     }
 
@@ -83,5 +82,9 @@ module.exports = new class {
 
     async deleteNote(id){
         await db('notes').where({id}).delete();
+    }
+
+    async updateNote(note){
+        await db('notes').where({id: note.id}).update(note);
     }
 };

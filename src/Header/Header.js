@@ -1,44 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import AppContext from '../Contexts/AppContext';
-
 import './Style.scss';
 const bellIcon = './img/bell.png';
 
 function Header(){
 
-    const {user, socket, logout} = useContext(AppContext);
-    const [notes, setNotes] = useState([]);
-
-    function toggleNotifications(){
-        const notificationsWindow = document.querySelector('#notifications-window');
-        if(notificationsWindow.classList.contains('show')){
-            notificationsWindow.classList.remove('show');
-        }
-        else{
-            notificationsWindow.classList.add('show');
-        }
-    }
-
-    useState(() => {
-        if(!user) return;
-
-        socket.emit('notes_get', user.username, data => {
-            console.log(data);
-            if(!data) return;
-
-            setNotes(data);
-        });
-
-        return () => {
-            socket.off('account_update');
-        }
-        
-    }, [user]);
+    const {user, socket, logout, notes} = useContext(AppContext);
 
     return (
         <>
-            
             <header>
             <div id="app-name">
                 <Link to="/#/">
@@ -55,12 +26,12 @@ function Header(){
                     </>
                     :
                     <>
-                        <button id="notification-button" onClick={toggleNotifications}>
+                        <Link to="/notes" id="notification-button">
                             <i>
                                 <img src={bellIcon}></img>
                             </i>
-                            <div data-notification-count={notes.length} id="notification-count"></div>
-                        </button>
+                            <div data-notification-count={notes ? notes.reduce((acc, cur) => acc += cur.seen == false, 0) : 0} id="notification-count"></div>
+                        </Link>
                         <span id="logout-link" onClick={logout}>Logout</span>
                     </>
                 }

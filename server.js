@@ -73,6 +73,7 @@ io.on('connection', async socket => {
             const game = await Game.loadGame(id);
             await game.close(side);
 
+            game.sendNotes(io);
             socket.broadcast.emit('account_update');
             const {balance} = await db.getAccount(username)
             const gameList = await db.getGames();
@@ -116,6 +117,18 @@ io.on('connection', async socket => {
         catch(err){
             socket.emit('error', err.message);
         }
+    });
+
+    socket.on('note_delete', async id => {
+        await db.deleteNote(id);
+    });
+
+    socket.on('notes_seen', async notes => {
+        for(const note of notes){
+            note.seen = true;
+            await db.updateNote(note);
+        }
+        
     });
 
     socket.on('account_get', async (username, callback) => {

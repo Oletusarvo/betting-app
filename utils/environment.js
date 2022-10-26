@@ -29,6 +29,7 @@ class Game{
         this.bets = [...data.bets];
         delete data.bets;
         this.data = data;
+        this.notes = [];
     }
 
     static async loadGame(id){
@@ -158,14 +159,20 @@ class Game{
 
     async notify(targetUsername, message){
         const {id, title} = this.data;
+
         const note = {
-            game_id: id,
             game_title: title,
             message,
             username: targetUsername
         };
 
+        this.notes.push(note);
         await db.addNote(note);
+    }
+
+    sendNotes(socket){
+        socket.emit('notes_update', this.notes);
+        this.notes = [];
     }
 }
 
