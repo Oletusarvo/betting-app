@@ -60,7 +60,7 @@ function Home(){
                 :
                 <>  
                     <div id="home-account-content" className="fill flex-column">
-                        <h2 className="align-text-center">Bets created by you:</h2>
+                        <h2>Bets created by you:</h2>
                         <GameList byUser={true}/>
                     </div>
                     
