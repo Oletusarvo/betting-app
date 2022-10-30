@@ -51,7 +51,7 @@ io.on('connection', async socket => {
             await game.placeBet(bet);
 
             socket.broadcast.emit('game_update', game.data);
-
+            game.sendNotes(io);
             const {balance} = await db.getAccount(username);
             const newBet = game.getBet(username);
 
@@ -155,6 +155,11 @@ io.on('connection', async socket => {
         catch(err){
             console.log(err.message);
         }
+    });
+
+    socket.on('users_get', async callback => {
+        const users = (await db.getUsers()).map(user => {return {username: user.username, balance: user.balance}});
+        callback(users);
     });
 });
 

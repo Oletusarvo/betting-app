@@ -17,6 +17,7 @@ function Notes(props){
     const renderNotes = [...notes];
     return (
         <div className="flex-column fill pad w-100 gap-m overflow-y-scroll overflow-x-hide" id="notes-page">
+            <h1>Notifications</h1>
             <ul>
                 {
                     renderNotes.sort((a, b) => b.id - a.id).map(item => {

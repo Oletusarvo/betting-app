@@ -87,4 +87,8 @@ module.exports = new class {
     async updateNote(note){
         await db('notes').where({id: note.id}).update(note);
     }
+
+    async getUsers(){
+        return await db('accounts');
+    }
 };

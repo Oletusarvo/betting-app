@@ -13,6 +13,7 @@ import Betting  from '../Betting/Betting.js';
 import Background from '../Background/Background.js';
 import GenerateDice from '../GenerateDice/GenerateDice.js';
 import Notes from '../Notes/Notes.js';
+import Users from '../Users/Users.js';
 import AppContext from '../Contexts/AppContext';
 import './Style.scss';
 import AccountHeader from '../AccountHeader/AccountHeader';
@@ -98,11 +99,12 @@ function App (){
             });
         });
 
-        socket.on('note_update', data => {
+        socket.on('notes_update', data => {
             if(!data || !user) return;
             const myNotes = data.filter(item => item.username === user.username);
-            const newNotes = notes.concat(myNotes);
-            localStorage.setItem(`${notesKey}-${user.username}`, newNotes);
+            const currentNotes = [...notes];
+            const newNotes = currentNotes.concat(myNotes);
+            localStorage.setItem(`${notesKey}-${user.username}`, JSON.stringify(newNotes));
             setNotes(newNotes);
         });
 
@@ -142,6 +144,7 @@ function App (){
                         <Route exact path="/newgame" element={<NewGame/>} />
                         <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
                         <Route exact path="/notes" element={<Notes/>}></Route>
+                        <Route exact path="/users" element={<Users/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>
                     <Navbar user={user}/>

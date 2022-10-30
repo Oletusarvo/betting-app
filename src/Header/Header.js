@@ -6,7 +6,7 @@ const bellIcon = './img/bell.png';
 
 function Header(){
 
-    const {user, socket, logout, notes} = useContext(AppContext);
+    const {user, logout, notes} = useContext(AppContext);
 
     const numUnseenNotes = notes ? notes.reduce((acc, cur) => acc += cur.seen == false, 0) : 0;
     return (
