@@ -1,5 +1,9 @@
 #games-page{
     #games-page-header{
+        padding: 0;
         background: none !important;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
     }
 }
