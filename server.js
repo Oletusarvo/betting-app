@@ -132,9 +132,7 @@ io.on('connection', async socket => {
 
     socket.on('account_get', async (username, callback) => {
         try{
-            const {balance} = await db('accounts').where({username}).first();
-            const acc = {username, balance};
-            //const notes = await database.getNotifications(username);
+            const acc = await db.select('username', 'balance').from('accounts').where({username}).first();
             callback({user: acc, notes: []});
         }
         catch(err){
