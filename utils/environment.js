@@ -20,7 +20,7 @@ class Account{
     async deposit(amount){
         //if(!this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
         this.data.balance += amount;
-        await db('accounts').where({username}).increment('balance', amount);
+        await db('accounts').where({username: this.data.username}).increment('balance', amount);
     }
 }
 
@@ -207,12 +207,9 @@ class SelectionGame extends Game{
 
         winners.push({ username: this.data.created_by, reward: creatorReward, });
 
-        console.log(winners, `Creator reward: ${creatorReward}`);
-
         for(const winner of winners){
             const {username, reward} = winner;
             if(reward != 0) {
-                console.log(`Reward: ${reward}`);
                 await this.accountDeposit(username, reward);
                 await this.notify(username, `You won ${reward} dice!`);
             }
