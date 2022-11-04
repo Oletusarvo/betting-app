@@ -75,11 +75,11 @@ io.on('connection', async socket => {
 
             game.sendNotes(io);
             socket.broadcast.emit('account_update');
-            const {balance} = await db('accounts').where({username})
+            const acc = await db.select('username', 'balance').from('accounts').where({username}).first();
             const gameList = await db('games');
-
+            
             callback({
-                acc: {balance, username}, 
+                acc, 
                 gameList,
             });
         }
@@ -125,8 +125,7 @@ io.on('connection', async socket => {
 
     socket.on('notes_seen', async notes => {
         for(const note of notes){
-            note.seen = true;
-            await db('notes').where({id: note.id}).set('seen', true);
+            await db.select('seen').from('notes').where({id: note.id}).update({seen: true});
         }
         
     });

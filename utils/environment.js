@@ -10,7 +10,7 @@ class Account{
     }
 
     async update(){
-        await db('accounts').where({username: this.data.username}).update(this.data);
+        await db.select('balance').from('accounts').where({username: this.data.username}).update({balance: this.data.balance});
     }
 
     verifyAmount(amount){
@@ -61,9 +61,10 @@ class Game{
     }
 
     async update(){
+        //Updates database entries.
         for(const bet of this.bets){
             const {username} = bet;
-            const savedBet = this.getSavedBet(username);
+            const savedBet = await this.getSavedBet(username);
             if(savedBet) 
                 await db('bets').where({username, game_id: this.data.id}).update(bet);
             else{
@@ -104,12 +105,9 @@ class Game{
        return this.bets && this.bets.find(bet => bet.username === username);
     }
 
-    updateBet(bet){
-        const index = this.bets.findIndex(item => item.username === bet.username);
-        if(index == -1) return;
-        const newBet = this.getBet(bet.username);
-        newBet.amount += bet.amount;
-        this.bets.splice(index, 1, newBet);
+    updateBet(previousBet, bet){
+        if(!previousBet) return;
+        previousBet.amount += bet.amount;
     }
 
     checkClose(){
@@ -143,7 +141,7 @@ class Game{
 
         if(amount > this.data.minimum_bet) this.data.minimum_bet = amount;
 
-        if(previousBet) this.updateBet(bet); else this.bets.push(bet);
+        if(previousBet) this.updateBet(previousBet, bet); else this.bets.push(bet);
         
         this.data.pool = this.calculatePool();
 
@@ -209,9 +207,12 @@ class SelectionGame extends Game{
 
         winners.push({ username: this.data.created_by, reward: creatorReward, });
 
+        console.log(winners, `Creator reward: ${creatorReward}`);
+
         for(const winner of winners){
             const {username, reward} = winner;
             if(reward != 0) {
+                console.log(`Reward: ${reward}`);
                 await this.accountDeposit(username, reward);
                 await this.notify(username, `You won ${reward} dice!`);
             }
