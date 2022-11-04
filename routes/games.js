@@ -5,16 +5,7 @@ const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 
 router.get('/', async (req, res) => {
     const {title} = req.query;
-    let gamelist;
-    const allGames = await db.getGames();
-    if(title){
-        const re = new RegExp(title.toLowerCase());
-        gamelist = allGames.filter(game => re.test(game.title.toLowerCase()));
-    }
-    else{
-        gamelist = allGames;
-    }
-    
+    const gamelist = await db('games').whereLike('title', `%${title}%`);
     res.status(200).send(JSON.stringify(gamelist));
 });
 

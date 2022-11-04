@@ -20,7 +20,7 @@ io.use((socket, next) => {
 
 const connectedUsers = [];
 const {Game, Account} = require('./utils/environment.js');
-const db = require('./models/db');
+const db = require('./dbConfig');
 
 io.on('connection', async socket => {
     console.log(`New connection!`);
@@ -52,12 +52,12 @@ io.on('connection', async socket => {
 
             socket.broadcast.emit('game_update', game.data);
             game.sendNotes(io);
-            const {balance} = await db.getAccount(username);
+            const acc = await db.select('username', 'balance').from('accounts').where({username}).first();
             const newBet = game.getBet(username);
 
             callback({
                 game: game.data,
-                acc: {balance, username},
+                acc,
                 newBet
             });
         }
@@ -75,8 +75,8 @@ io.on('connection', async socket => {
 
             game.sendNotes(io);
             socket.broadcast.emit('account_update');
-            const {balance} = await db.getAccount(username)
-            const gameList = await db.getGames();
+            const {balance} = await db('accounts').where({username})
+            const gameList = await db('games');
 
             callback({
                 acc: {balance, username}, 
@@ -111,7 +111,7 @@ io.on('connection', async socket => {
         if(username === 'demo') return;
 
         try{
-            const notes = await db.getNotes(username);
+            const notes = await db('notes').where({username});
             callback(notes);
         }
         catch(err){
@@ -120,20 +120,20 @@ io.on('connection', async socket => {
     });
 
     socket.on('note_delete', async id => {
-        await db.deleteNote(id);
+        await db('notes').where({id}).del();
     });
 
     socket.on('notes_seen', async notes => {
         for(const note of notes){
             note.seen = true;
-            await db.updateNote(note);
+            await db('notes').where({id: note.id}).set('seen', true);
         }
         
     });
 
     socket.on('account_get', async (username, callback) => {
         try{
-            const {balance} = await db.getAccount(username);
+            const {balance} = await db('accounts').where({username}).first();
             const acc = {username, balance};
             //const notes = await database.getNotifications(username);
             callback({user: acc, notes: []});
@@ -158,7 +158,7 @@ io.on('connection', async socket => {
     });
 
     socket.on('users_get', async callback => {
-        const users = (await db.getUsers()).map(user => {return {username: user.username, balance: user.balance}});
+        const users = await db.select('username').from('accounts').orderBy('username', 'asc');
         callback(users);
     });
 });

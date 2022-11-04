@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('../models/db.js');
+const db = require('../dbConfig');
 const bcrypt = require('bcrypt');
 
 router.post('/', async (req, res) => {
@@ -14,7 +14,11 @@ router.post('/', async (req, res) => {
             }
             else{
                 try{
-                    await db.addAccount(username, pass);
+                    await db('accounts').insert({
+                        username,
+                        password: pass
+                    });
+                    
                     return res.status(200).send();
                 }
                 catch(err){
