@@ -1,11 +1,19 @@
 const router = require('express').Router();
-const db = require('../models/db.js');
+const db = require('../dbConfig.js');
 const {Game} = require('../utils/environment');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 
 router.get('/', async (req, res) => {
     const {title} = req.query;
-    const gamelist = await db('games').whereLike('title', `%${title}%`);
+
+    let gamelist = [];
+    if(title == undefined){
+        gamelist = await db('games');
+    }
+    else{
+        gamelist = await db('games').whereLike('title', `%${title}%`);
+    }
+   
     res.status(200).send(JSON.stringify(gamelist));
 });
 
@@ -28,7 +36,7 @@ router.get('/data', checkAuth, async (req, res) => {
 router.get('/by_user/:id', checkAuth, async (req, res) => {
     try{
         const username = req.params.id;
-        const gamelist = await db.getGamesByUser(username);
+        const gamelist = await db('games').where({created_by: username});
         res.status(200).send(JSON.stringify(gamelist));
     }
     catch(err){
