@@ -24,7 +24,6 @@ const db = require('./dbConfig');
 
 io.on('connection', async socket => {
     console.log(`New connection!`);
-    connectedUsers[socket.id] = socket;
 
     socket.on('join_room', async (msg, callback) => {
         const {id, username} = msg;
@@ -124,10 +123,8 @@ io.on('connection', async socket => {
     });
 
     socket.on('notes_seen', async notes => {
-        for(const note of notes){
-            await db.select('seen').from('notes').where({id: note.id}).update({seen: true});
-        }
-        
+        const ids = notes.map(note => note.id);
+        await db.select('seen').from('notes').whereIn('id', ids).update({seen: true});
     });
 
     socket.on('account_get', async (username, callback) => {
