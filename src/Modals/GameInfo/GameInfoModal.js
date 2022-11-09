@@ -103,7 +103,7 @@ function GameInfoModal(props){
 
             <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}  id={`content-${game.id}`}>
                 <Link to={destination}>
-                    <GameInfoTable game={game} currency={currency}/>
+                    <GameInfoTable game={game}/>
                 </Link>
             </div>
             

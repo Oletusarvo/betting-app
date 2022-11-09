@@ -17,6 +17,7 @@ import Users from '../Users/Users.js';
 import AppContext from '../Contexts/AppContext';
 import './Style.scss';
 import AccountHeader from '../AccountHeader/AccountHeader';
+import Currency from '../currency';
 
 if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').then(() => console.log('Service worker registered!'))
@@ -95,6 +96,7 @@ function App (){
     useEffect(() => {
         socket.on('account_update', () => {
             socket.emit('account_get', user.username, update => {
+                if(!update) return;
                 setUser(update.user);
             });
         });
@@ -128,7 +130,20 @@ function App (){
         <Router>
             <div id="app" className="flex-column center-align">
                 <Background/>
-                <AppContext.Provider value={{user, token, socket, currency, notes, deleteNote, setNotes, setUser, setToken, isMining, setIsMining, logout}}>
+                <AppContext.Provider value={{
+                    user, 
+                    token, 
+                    socket, 
+                    currency, 
+                    notes, 
+                    deleteNote, 
+                    setNotes, 
+                    setUser, 
+                    setToken, 
+                    isMining, 
+                    setIsMining, 
+                    logout,
+                    currencyPrecision: 100}}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
                     {user ? <AccountHeader/> : null}
                     <Routes >

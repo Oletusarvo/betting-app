@@ -14,7 +14,7 @@ import './Style.scss';
 
 function Betting() {
     const {id} = useParams();
-    const {user, socket, setUser} = useContext(AppContext);
+    const {user, socket, setUser, currencyPrecision} = useContext(AppContext);
 
     const game = useRef(0);
     const bet = useRef(0);
@@ -58,7 +58,7 @@ function Betting() {
             alert('Cannot bet at this time.');
             return;
         }
-        const c = confirm(`You are about to bet for ${amount}. Are you sure?`);
+        const c = confirm(`You are about to bet for ${amount / currencyPrecision}. Are you sure?`);
         if(!c) return;
 
 
@@ -93,7 +93,7 @@ function Betting() {
             return;
         }
 
-        const c = confirm(`You are about to bet for ${amount}. Are you sure?`);
+        const c = confirm(`You are about to bet for ${amount / currencyPrecision}. Are you sure?`);
         if(!c) return;
 
         const side = document.querySelector('#bet-options').value;
@@ -126,7 +126,7 @@ function Betting() {
             return;
         }
 
-        const c = confirm(`You are about to call for ${amount}. Are you sure?`);
+        const c = confirm(`You are about to call for ${amount / currencyPrecision}. Are you sure?`);
         if(!c) return;
 
         const data = {

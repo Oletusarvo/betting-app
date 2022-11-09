@@ -2,9 +2,10 @@ import React, {useState, useEffect, useContext, useRef} from 'react';
 import AppContext from '../Contexts/AppContext.js';
 import Loading from '../Loading/Loading.js';
 import './Style.scss';
+import Currency from '../currency';
 
 function Balance(props){
-    const {user, currency, isMining} = useContext(AppContext);
+    const {user, currency, isMining, userBalance} = useContext(AppContext);
     const [gain, setGain] = useState(0);
     const [showGain, setShowGain] = useState(false);
     const {id} = props;
@@ -23,7 +24,8 @@ function Balance(props){
             balance.classList.add('flash-red');
         }
 
-        setGain(difference > 0 ? `+${difference}` : difference);
+        const gain = new Currency(difference, userBalance.precision).getAsString('en');
+        setGain(difference > 0 ? `+${gain}` : gain);
         setShowGain(true);
 
         setTimeout(() => {
@@ -39,9 +41,10 @@ function Balance(props){
 
     }, [user]);
 
+    const balance = userBalance.getAsString('en');
     return (
         <div className="flex-row gap-s">
-            <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{currency + user.balance.toLocaleString('en')}</span>
+            <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{currency + balance}</span>
             <span className="gain" hidden={showGain == false} style={{color: gain > 0 ? 'limegreen' : 'red'}}>{gain}</span>
             {
                 isMining ? <Loading dimensions={{width: "1rem", height: "1rem", borderWidth: "2px"}}/> : null
