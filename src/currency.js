@@ -12,7 +12,7 @@ class Currency{
     }
     
     getAsString(locale = 'en'){
-        return this.get().toLocaleString(locale).toFixed(Math.log10(this.precision));
+        return this.get().toLocaleString(locale);
     }
 
     get(){

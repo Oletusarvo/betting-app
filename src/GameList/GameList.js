@@ -47,7 +47,7 @@ function GameList(props){
         return <Loading title="Loading gamelist..."/>
     }
     
-    if(!gameList) return null;
+    if(!gameList || !user) return null;
     
     return (
         <div className="gap-m flex-column">

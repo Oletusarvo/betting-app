@@ -5,7 +5,7 @@ import './Style.scss';
 import Currency from '../currency';
 
 function Balance(props){
-    const {user, currency, isMining, userBalance} = useContext(AppContext);
+    const {user, currency, isMining, currencyPrecision} = useContext(AppContext);
     const [gain, setGain] = useState(0);
     const [showGain, setShowGain] = useState(false);
     const {id} = props;
@@ -24,7 +24,7 @@ function Balance(props){
             balance.classList.add('flash-red');
         }
 
-        const gain = new Currency(difference, userBalance.precision).getAsString('en');
+        const gain = new Currency(difference, currencyPrecision).getAsString('en');
         setGain(difference > 0 ? `+${gain}` : gain);
         setShowGain(true);
 
@@ -41,7 +41,8 @@ function Balance(props){
 
     }, [user]);
 
-    const balance = userBalance.getAsString('en');
+    const balance = new Currency(user.balance, currencyPrecision).getAsString('en');
+    
     return (
         <div className="flex-row gap-s">
             <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{currency + balance}</span>
