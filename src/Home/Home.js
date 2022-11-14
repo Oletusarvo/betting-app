@@ -17,10 +17,11 @@ function Home(){
                     <h1>Betting App</h1>
                     <br/>
                     <p>
-                        <strong>Notice! This app is intended to be viewed on mobile devices in portrait mode.</strong><br/><br/>
+                        <strong>Notice! This app is intended to be viewed on mobile devices in portrait mode.</strong><br/>
+                        <strong>The app is currently in development, so expect to find bugs while using it</strong><br/><br/>
                         Welcome to the betting app! Here you can create bets out of 
                         anything you choose and bid virtual currency in the form of dice. One hundred dice has the arbitrary value of 1 of whatever currency you choose.
-                        Each new account receives 10,000 dice for use in betting.
+                        Each new account receives 100 dice for use in betting.
                         Log in with username and password <strong>demo</strong> if you wish to not create an account at this time. (Betting disabled).
                     </p>
                     <br/>
@@ -54,7 +55,7 @@ function Home(){
                     <br/>
                 
                     <p>
-                        <strong>The app is currently in development, so expect to find bugs while using it. Happy betting!</strong>
+                        
                     </p>
                 </div>
                 :
