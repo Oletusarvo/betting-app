@@ -13,17 +13,12 @@ exports.up = function(knex) {
     .onDelete('CASCADE')
     .onUpdate('CASCADE');
 
-    tbl.string('game_id')
-    .references('id')
-    .inTable('games')
-    .onDelete('CASCADE')
-    .onUpdate('CASCADE');
-
     tbl.string('game_title')
     .notNullable()
     .defaultTo('Unknown');
 
     tbl.string('message').notNullable();
+    tbl.boolean('seen').notNull().defaultTo(false);
   })
 };
 

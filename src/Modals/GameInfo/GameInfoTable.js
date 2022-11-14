@@ -1,4 +1,13 @@
-function GameInfoTable({game, currency}){
+import { useContext } from "react";
+import AppContext from "../../Contexts/AppContext";
+
+function GameInfoTable({game}){
+
+    const {currencyPrecision, currency} = useContext(AppContext);
+    const pool = game.pool / currencyPrecision;
+    const pool_reserve = game.pool_reserve / currencyPrecision;
+    const minimum_bet = game.minimum_bet / currencyPrecision;
+
     return (
         <table>
         <tbody>
@@ -9,7 +18,7 @@ function GameInfoTable({game, currency}){
 
             <tr>
                 <td>Pool:</td>
-                <td className="align-text-right">{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</td>
+                <td className="align-text-right">{currency + (pool + pool_reserve).toFixed(2).toLocaleString('en')}</td>
             </tr>
 
             {
@@ -20,7 +29,7 @@ function GameInfoTable({game, currency}){
             }
             <tr>
                 <td>{game.type === "Lottery" ? "Row Price:" : "Minimum Bet:"}</td>
-                <td className="align-text-right">{currency + game.minimum_bet.toLocaleString('en')}</td>
+                <td className="align-text-right">{currency + minimum_bet.toFixed(2).toLocaleString('en')}</td>
             </tr>
             
             <tr>

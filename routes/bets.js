@@ -3,7 +3,7 @@ const {Game} = require('../utils/environment');
 const { checkAuth } = require('../middleware/checkAuth');
 const { processBet } = require('../middleware/processBet');
 
-const {game} = require('../models/db.js');
+const {game} = require('../dbConfig');
 
 router.get('/', checkAuth, async (req, res) => {
     try{

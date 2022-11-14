@@ -5,7 +5,7 @@ const DieIcon = './img/die.png';
 function BackgroundDie(){
     return (
         <div id="bg">
-            <img id="die-img" src={DieIcon}></img>
+            
         </div>
     );
 }

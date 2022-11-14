@@ -7,7 +7,7 @@ import './Style.scss';
 
 function CreateGameModal(){
 
-    const {user, token} = useContext(AppContext);
+    const {user, token, currencyPrecision} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
 
@@ -44,8 +44,8 @@ function CreateGameModal(){
         const form = document.querySelector('#new-game-form');
         const data = {
             title : form.title.value,
-            minimum_bet : form.minimumBet.valueAsNumber,
-            increment : form.increment.valueAsNumber,
+            minimum_bet : form.minimumBet.valueAsNumber * currencyPrecision,
+            increment : form.increment.valueAsNumber * currencyPrecision,
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
@@ -74,7 +74,7 @@ function CreateGameModal(){
         }
     }
 
-    const maxTransfer = Math.abs(Math.floor(user.balance / 2));
+    const maxTransfer = Math.abs(Math.floor(user.balance / 2)) / 100;
     return (
         <CreateGameContext.Provider deleteOption={deleteOption}>
         <div className="modal">
@@ -86,26 +86,27 @@ function CreateGameModal(){
                             <option>Boolean</option>
                             <option>Multi-Choice</option>
                         </select>
-
+                        
+                    
                         <label>Title:</label>
                         <input 
                             name="title" 
                             placeholder="Enter game title" 
                             required={true} 
                             maxLength={50}></input>
+                       
 
-                        <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Minimum Bet:'}</label>
+                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Minimum Bet:'}</label>
                         <input 
                             name="minimumBet" 
                             type="number" 
-                            min="1" 
+                            min="0.01" 
                             max={maxTransfer}
-                            step="1" 
+                            step="0.01" 
                             placeholder="Enter minimum bet" 
                             required={true} 
-                            defaultValue={1}
-                        ></input>
-                        
+                            defaultValue={1}></input>
+        
                         <label hidden={betTypeSelect === 'Lottery'}>Increment:</label>
                         <input 
                             hidden={betTypeSelect === 'Lottery'} 
@@ -113,9 +114,10 @@ function CreateGameModal(){
                             type="number" 
                             min={betTypeSelect === 'Lottery' ? 1 : 0} 
                             max={maxTransfer}
-                            step="1" defaultValue={1} 
+                            step="0.01" defaultValue={0.01} 
                             placeholder="Bet Increment" 
                             disabled={betTypeSelect === 'Lottery'}></input>
+                        
                         
                         <label hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
                         <input 

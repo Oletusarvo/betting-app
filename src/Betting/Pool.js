@@ -1,10 +1,11 @@
 import { useContext } from 'react';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
+import Currency from '../currency';
 
 function Pool(){
     const {bet, game, isExpired} = useContext(GameContext);
-    const {currency} = useContext(AppContext);
+    const {currency, currencyPrecision} = useContext(AppContext);
 
     function getBettingState(){
         if(bet == undefined){
@@ -18,10 +19,12 @@ function Pool(){
         }
     }
 
+    const totalPool = new Currency(game.pool + game.pool_reserve, currencyPrecision).getAsString('en');
+
     return (
         <div className={"container glass bg-fade " + (isExpired && "bg-expired")} id="bet-pool">
             <div id="bet-pool-ring" className={getBettingState()}>
-                <h1>{currency + (game.pool + game.pool_reserve).toLocaleString('en')}</h1>
+                <h1>{currency + totalPool}</h1>
             </div>
         </div>
     );

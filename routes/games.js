@@ -1,20 +1,20 @@
 const router = require('express').Router();
-const db = require('../models/db.js');
+const db = require('../dbConfig.js');
+const crypto = require('crypto');
 const {Game} = require('../utils/environment');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 
 router.get('/', async (req, res) => {
     const {title} = req.query;
-    let gamelist;
-    const allGames = await db.getGames();
-    if(title){
-        const re = new RegExp(title.toLowerCase());
-        gamelist = allGames.filter(game => re.test(game.title.toLowerCase()));
+
+    let gamelist = [];
+    if(title == undefined){
+        gamelist = await db('games');
     }
     else{
-        gamelist = allGames;
+        gamelist = await db('games').whereLike('title', `%${title}%`);
     }
-    
+   
     res.status(200).send(JSON.stringify(gamelist));
 });
 
@@ -37,7 +37,7 @@ router.get('/data', checkAuth, async (req, res) => {
 router.get('/by_user/:id', checkAuth, async (req, res) => {
     try{
         const username = req.params.id;
-        const gamelist = await db.getGamesByUser(username);
+        const gamelist = await db('games').where({created_by: username});
         res.status(200).send(JSON.stringify(gamelist));
     }
     catch(err){
@@ -54,7 +54,11 @@ router.get('/:id', checkAuth, async (req, res) => {
 router.post('/', checkAuth, async (req, res) => {
     try{
         const data = req.body;
-        await db.addGame(data);
+        data.id = crypto.randomBytes(5).toString('hex');
+        data.options = data.type === 'Boolean' ? 'Kyllä;Ei' : data.options;
+        data.expiry_date = data.expiry_date == '' ? 'When Closed' : data.expiry_date;
+
+        await db('games').insert(data);
         res.status(200).send();
     }
     catch(err){

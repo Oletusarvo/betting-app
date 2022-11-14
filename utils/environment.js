@@ -1,4 +1,4 @@
-const db = require('../models/db');
+const db = require('../dbConfig');
 
 class Account{
     constructor(data){
@@ -6,11 +6,11 @@ class Account{
     }
 
     async load(username){
-        this.data = await db.getAccount(username);
+        this.data = await db.select('username', 'balance').from('accounts').where({username}).first();
     }
 
     async update(){
-        await db.updateAccount(this.data);
+        await db.select('balance').from('accounts').where({username: this.data.username}).update({balance: this.data.balance});
     }
 
     verifyAmount(amount){
@@ -20,7 +20,7 @@ class Account{
     async deposit(amount){
         //if(!this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
         this.data.balance += amount;
-        await this.update();
+        await db('accounts').where({username: this.data.username}).increment('balance', amount);
     }
 }
 
@@ -29,11 +29,12 @@ class Game{
         this.bets = [...data.bets];
         delete data.bets;
         this.data = data;
+        this.notes = [];
     }
 
     static async loadGame(id){
-        const data = await db.getGame(id);
-        const bets = await db.getBets(id);
+        const data = await db('games').where({id}).first();
+        const bets = await db('bets').where({game_id: id});
         data.bets = bets;
 
         switch(data.type){
@@ -50,26 +51,27 @@ class Game{
     }
 
     async load(id){
-        this.data = await db.getGame(id);
-        this.bets = await db.getBets(id);
+        this.data = await db('games').where({id}).first();
+        this.bets = await db('bets').where({game_id: id});
         return this.data;
     }
 
     async getSavedBet(username){
-        return await db.getBet(username, this.data.id);
+        return await db('bets').where({username, game_id: this.data.id}).first();
     }
 
     async update(){
+        //Updates database entries.
         for(const bet of this.bets){
-            const {username, game_id} = bet;
-            const savedBet = await db.getBet(username, game_id);
+            const {username} = bet;
+            const savedBet = await this.getSavedBet(username);
             if(savedBet) 
-                await db.updateBet(bet);
+                await db('bets').where({username, game_id: this.data.id}).update(bet);
             else{
-                await db.addBet(bet);
+                await db('bets').insert(bet);
             }    
         }
-        await db.updateGame(this.data);
+        await db('games').where({id: this.data.id}).update(this.data);
     }
 
     calculatePool(){
@@ -103,12 +105,9 @@ class Game{
        return this.bets && this.bets.find(bet => bet.username === username);
     }
 
-    updateBet(bet){
-        const index = this.bets.findIndex(item => item.username === bet.username);
-        if(index == -1) return;
-        const newBet = this.getBet(bet.username);
-        newBet.amount += bet.amount;
-        this.bets.splice(index, 1, newBet);
+    updateBet(previousBet, bet){
+        if(!previousBet) return;
+        previousBet.amount += bet.amount;
     }
 
     checkClose(){
@@ -142,7 +141,7 @@ class Game{
 
         if(amount > this.data.minimum_bet) this.data.minimum_bet = amount;
 
-        if(previousBet) this.updateBet(bet); else this.bets.push(bet);
+        if(previousBet) this.updateBet(previousBet, bet); else this.bets.push(bet);
         
         this.data.pool = this.calculatePool();
 
@@ -153,17 +152,25 @@ class Game{
     }
 
     async close(){
-        await db.deleteGame(this.data.id);
+        await db('games').where({id: this.data.id}).del();
     }
 
     async notify(targetUsername, message){
         const {id, title} = this.data;
-        await db.addNote({
-            game_id: id,
+
+        const note = {
             game_title: title,
             message,
             username: targetUsername
-        });
+        };
+
+        this.notes.push(note);
+        await db('notes').insert(note);
+    }
+
+    sendNotes(socket){
+        socket.emit('notes_update', this.notes);
+        this.notes = [];
     }
 }
 
@@ -204,7 +211,7 @@ class SelectionGame extends Game{
             const {username, reward} = winner;
             if(reward != 0) {
                 await this.accountDeposit(username, reward);
-                await super.notify(username, `You won ${reward} dice!`);
+                await this.notify(username, `You won ${reward / 100} dice!`);
             }
         }
 
@@ -232,7 +239,7 @@ class LottoGame extends Game{
             this.data.pool_reserve += this.data.pool;
             this.data.pool = 0;
             this.bets = [];
-            await db.deleteBets(this.data.id);
+            await db('bets').where({game_id: this.data.id}).del();
             this.update();
             return;
         }
