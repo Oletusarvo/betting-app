@@ -18,7 +18,9 @@ function Home(){
                     <br/>
                     <p>
                         <strong>Notice! This app is intended to be viewed on mobile devices in portrait mode.</strong><br/>
-                        <strong>The app is currently in development, so expect to find bugs while using it</strong><br/><br/>
+                        <strong>The app is currently in development, so expect to find bugs while using it.</strong><br/>
+                        <strong>Please report any bugs or write any questions to nistikemisti@gmail.com</strong><br/><br/>
+                        
                         Welcome to the betting app! Here you can create bets out of 
                         anything you choose and bid virtual currency in the form of dice.
                         Each new account receives 100 dice for use in betting.
