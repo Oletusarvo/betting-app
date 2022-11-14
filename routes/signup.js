@@ -16,7 +16,8 @@ router.post('/', async (req, res) => {
                 try{
                     await db('accounts').insert({
                         username,
-                        password: pass
+                        password: pass,
+                        balance: 10000,
                     });
                     
                     return res.status(200).send();
