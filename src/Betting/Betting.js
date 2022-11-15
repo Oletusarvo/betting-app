@@ -42,7 +42,7 @@ function Betting() {
             })
         });
 
-        socket.on('bet_error', message => alert(`Bet rejected! Reason: ${message}`));
+        socket.on('bet_error', message => alert(`Veto hylätty! Syy: ${message}`));
 
         return () => {
             socket.off('game_update');
@@ -55,10 +55,10 @@ function Betting() {
     function placeBet(row = undefined){
         const amount = game.current.minimum_bet;
         if(amount == 0){
-            alert('Cannot bet at this time.');
+            alert('Et voi veikata tällä hetkellä');
             return;
         }
-        const c = confirm(`You are about to bet for ${amount / currencyPrecision}. Are you sure?`);
+        const c = confirm(`Olet veikkaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`);
         if(!c) return;
 
 
@@ -89,11 +89,11 @@ function Betting() {
     function raise(){
         const amount = bet.current ? game.current.minimum_bet - bet.current.amount + game.current.increment : game.current.minimum_bet + game.current.increment;
         if(amount == 0){
-            alert('Cannot bet at this time.');
+            alert('Et voi veikata tällä hetkellä');
             return;
         }
 
-        const c = confirm(`You are about to bet for ${amount / currencyPrecision}. Are you sure?`);
+        const c = confirm(`Olet veikkaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`);
         if(!c) return;
 
         const side = document.querySelector('#bet-options').value;
@@ -122,11 +122,11 @@ function Betting() {
     function call(){
         const amount = game.current.minimum_bet - bet.current.amount;
         if(amount == 0){
-            alert('Cannot bet at this time.');
+            alert('Et voi veikata tällä hetkellä');
             return;
         }
 
-        const c = confirm(`You are about to call for ${amount / currencyPrecision}. Are you sure?`);
+        const c = confirm(`Olet vastaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`);
         if(!c) return;
 
         const data = {
@@ -152,7 +152,7 @@ function Betting() {
     }
        
     if(!state){
-        return <Loading title="Loading game..." />
+        return <Loading title="Ladataan vetoa..." />
     }
     else{
         const isExpired = new Date().getTime() >= new Date(state.game.expiry_date).getTime();

@@ -32,14 +32,14 @@ function LoginModal(){
                 location.assign('/');
             }
             else{
-                alert(`Failed to login! Reason: ${req.response}`);
+                alert(`Sisäänkirjautuminen epäonnistui! Syy: ${req.response}`);
                 setLoading(false);
             }
         }
     }
 
     if(loading){
-        return <Loading title="Logging in..."/>
+        return <Loading title="Kirjaudutaan sisään..."/>
     }
 
     return(

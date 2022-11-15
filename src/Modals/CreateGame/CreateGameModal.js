@@ -60,7 +60,7 @@ function CreateGameModal(){
                 location.assign('/#/games');
             }
             else{
-                alert(`Game rejected! Reason: ${req.response}`);
+                alert(`Veto hylätty! Syy: ${req.response}`);
             }
         }
     }

@@ -17,7 +17,7 @@ function Notes(props){
     const renderNotes = [...notes];
     return (
         <div className="flex-column fill pad w-100 gap-m overflow-y-scroll overflow-x-hide" id="notes-page">
-            <h1>Notifications</h1>
+            <h1>Ilmoitukset</h1>
             <ul>
                 {
                     renderNotes.sort((a, b) => b.id - a.id).map(item => {
@@ -25,7 +25,7 @@ function Notes(props){
                             <li key={item.id}>
                                 <span>{item.game_title}</span>
                                 <span>{item.message}</span>
-                                <button onClick={() => deleteNote(item.id)}>Dismiss</button>
+                                <button onClick={() => deleteNote(item.id)}>Poista</button>
                             </li>
                         )
                     })

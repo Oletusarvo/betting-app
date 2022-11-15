@@ -25,18 +25,18 @@ function SignupModal(){
 
         req.onload = () => {
             if(req.status === 200){
-                alert('Signup success!');
+                alert('Tilin luominen onnistui!');
                 location.assign('/#/login');
             }
             else{
-                alert(`Failed to sign up! Reason: ${req.response}`);
+                alert(`Tilin luominen epäonnistui! Syy: ${req.response}`);
                 setLoading(false);
             }
         }
     }
 
     if(loading){
-        return <Loading title="Signing up..." />
+        return <Loading title="Luodaan tiliä..." />
     }
 
     return(
