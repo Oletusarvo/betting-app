@@ -78,36 +78,36 @@ function CreateGameModal(){
     return (
         <CreateGameContext.Provider deleteOption={deleteOption}>
         <div className="modal">
-                <header>Create New Game</header>
+                <header>Luo Uusi Veto</header>
                 <div className="content glass bg-fade">
                     <form id="new-game-form" onSubmit={submit}>
-                        <label>Type:</label>
+                        <label>Tyyppi:</label>
                         <select name="betType" id="select-bet-type" onChange={updateSelection}>
                             <option>Boolean</option>
                             <option>Multi-Choice</option>
                         </select>
                         
                     
-                        <label>Title:</label>
+                        <label>Otsikko:</label>
                         <input 
                             name="title" 
-                            placeholder="Enter game title" 
+                            placeholder="Anna vedon otsikko" 
                             required={true} 
                             maxLength={50}></input>
                        
 
-                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Minimum Bet:'}</label>
+                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
                         <input 
                             name="minimumBet" 
                             type="number" 
                             min="0.01" 
                             max={maxTransfer}
                             step="0.01" 
-                            placeholder="Enter minimum bet" 
+                            placeholder="Anna vähimmäispanos" 
                             required={true} 
                             defaultValue={1}></input>
         
-                        <label hidden={betTypeSelect === 'Lottery'}>Increment:</label>
+                        <label hidden={betTypeSelect === 'Lottery'}>Korotus (0 estää korotukset):</label>
                         <input 
                             hidden={betTypeSelect === 'Lottery'} 
                             name="increment" 
@@ -115,7 +115,7 @@ function CreateGameModal(){
                             min={betTypeSelect === 'Lottery' ? 1 : 0} 
                             max={maxTransfer}
                             step="0.01" defaultValue={0.01} 
-                            placeholder="Bet Increment" 
+                            placeholder="Anna panoksen sallittu korotus" 
                             disabled={betTypeSelect === 'Lottery'}></input>
                         
                         
@@ -143,20 +143,20 @@ function CreateGameModal(){
                         {
                             betTypeSelect === 'Multi-Choice' ? 
                              <div id="options-input" className="flex-row gap-s center-align" hidden={betTypeSelect !== 'Multi-Choice'}>
-                                <input id="option-input" type="text" placeholder="Type an option..." ></input>
-                                <button type="button" onClick={addOption}>Add</button>
+                                <input id="option-input" type="text" placeholder="Kirjoita vaihtoehto..." ></input>
+                                <button type="button" onClick={addOption}>Lisää</button>
                             </div>
                             : 
                             null
                         }
                        
 
-                        <label>Expiry Date:</label>
+                        <label>Eräpäivä:</label>
                         <input 
                             name="expiryDate" 
                             type="date" 
                             placeholder="Enter expiry date"></input>
-                        <button type="submit">Create</button>
+                        <button type="submit">Luo</button>
                     </form>
                 </div>
                 <footer>

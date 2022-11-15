@@ -36,15 +36,15 @@ function Bet(){
     if(bet){
         const amount = new Currency(bet.amount, currencyPrecision).getAsString('en');
         if(bet.folded){
-            return <span>Folded</span>
+            return <span>Luovutettu</span>
         }
         else{
             const foldingEnabled = bet.amount == game.minimum_bet;
-            return <span className="table-field">{`\"${bet.side}\" for ${currency + amount}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>Fold</button></span>
+            return <span className="table-field">{`\"${bet.side}\" panoksella ${currency + amount}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>Luovuta</button></span>
         }
     }
     else{
-        return <span>No Bet</span>
+        return <span>Ei vetoa</span>
     }
 }
 

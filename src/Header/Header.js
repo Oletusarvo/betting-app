@@ -14,7 +14,7 @@ function Header(){
             <header>
             <div id="app-name">
                 <Link to="/#/">
-                    <h2>Betting App</h2>
+                    <h2>Veikkaus App</h2>
                 </Link>
             </div>
 
@@ -22,8 +22,8 @@ function Header(){
                 {
                     user == undefined ? 
                     <>
-                        <Link id="login-link" className="link" to="/login">Login</Link>
-                        <Link id="signup-link" className="link" to="/signup">Signup</Link>
+                        <Link id="login-link" className="link" to="/login">Kirjaudu</Link>
+                        <Link id="signup-link" className="link" to="/signup">Luo Tili</Link>
                     </>
                     :
                     <>
@@ -33,7 +33,7 @@ function Header(){
                             </i>
                             <div className={numUnseenNotes == 0 ? 'hidden' : ''} data-notification-count={numUnseenNotes} id="notification-count"></div>
                         </Link>
-                        <span id="logout-link" onClick={logout}>Logout</span>
+                        <span id="logout-link" onClick={logout}>Kirjaudu Ulos</span>
                     </>
                 }
             </div>

@@ -44,12 +44,12 @@ function LoginModal(){
 
     return(
         <div className="modal">
-            <header>Login</header>
+            <header>Kirjaudu Sisään</header>
             <div className="content glass bg-fade">
                 <form id="login-form" onSubmit={submit}>
                     <input name="username" placeholder="Username"></input>
                     <input name="password" placeholder="Password" type="password"></input>
-                    <button type="submit">Login</button>
+                    <button type="submit">Kirjaudu</button>
                 </form>
             </div>
             <footer>

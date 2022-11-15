@@ -49,12 +49,12 @@ function DeleteAccountModal(){
 
     return (
         <div className="modal">
-            <header>Delete Account</header>
+            <header>Poista Tili</header>
             <div className="content">
                 <form onSubmit={deleteAccount}>
-                    <input name="password1" type="password" placeholder="Enter your password" autoComplete='new-password'></input>
-                    <input name="password2" type="password" placeholder='Enter your password again'></input>
-                    <button type="submit">Delete Account</button>
+                    <input name="password1" type="password" placeholder="Anna salasanasi" autoComplete='new-password'></input>
+                    <input name="password2" type="password" placeholder='Anna salasanasi uudelleen'></input>
+                    <button type="submit">Poista Tili</button>
                 </form>
             </div>
             <footer></footer>

@@ -9,7 +9,7 @@ function Info(){
     const {currency, currencyPrecision} = useContext(AppContext);
     const {game, bet, isExpired} = useContext(GameContext);
     const timeLeft = game.expiry_date != 'When Closed' ? Math.round((new Date(game.expiry_date) - new Date()) / 1000 / 60 / 60 / 24) : NaN;
-    const expiryString =  !Number.isNaN(timeLeft) ? timeLeft < 0 ? "Expired" : timeLeft + " days" : "No Limit";
+    const expiryString =  !Number.isNaN(timeLeft) ? timeLeft < 0 ? "Erääntynyt" : timeLeft + " päivää" : "Ei Rajaa";
 
     const minimum_bet = new Currency(game.minimum_bet, currencyPrecision).getAsString('en');
     const increment = new Currency(game.increment, currencyPrecision).getAsString('en');
@@ -19,26 +19,26 @@ function Info(){
             <table>
                 <tbody>
                     <tr>
-                        <td>Your Bet:</td>
+                        <td>Vetosi:</td>
                         <td className="align-text-right"><Bet/></td>
                     </tr>
                     <tr>
-                        <td>Minimum Bet: </td>
+                        <td>Vähimmäispanos: </td>
                         <td className="align-text-right">{currency + minimum_bet}</td>
                     </tr>
 
                     <tr>
-                        <td>Increment:</td>
+                        <td>Korotus:</td>
                         <td className="align-text-right">{currency + increment}</td>
                     </tr>
 
                     <tr>
-                        <td>Expiry Date:</td>
+                        <td>Eräpäivä:</td>
                         <td className="align-text-right">{game.expiry_date}</td>
                     </tr>
 
                     <tr>
-                        <td>Time Left:</td>
+                        <td>Aikaa jäljellä:</td>
                         <td className="align-text-right">
                             {expiryString}
                         </td>

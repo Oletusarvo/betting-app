@@ -14,45 +14,43 @@ function Home(){
             {
                 user === null ? 
                 <div className="container glass bg-fade">
-                    <h1>Betting App</h1>
+                    <h1>Veikkaus App</h1>
                     <br/>
                     <p>
-                        <strong>Notice! This app is intended to be viewed on mobile devices in portrait mode.</strong><br/>
-                        <strong>The app is currently in development, so expect to find bugs while using it.</strong><br/>
-                        <strong>Please report any bugs or write any questions to nistikemisti@gmail.com</strong><br/><br/>
+                        <strong>Huomio! Tämä sovellus on tarkoitettu näytettäväksi mobiililaitteilla pystyasennossa.<br/><br/>
+                        Sovellus on tuotantovaiheessa, joten siinä saattaa ilmetä vikoja.<br/><br/>
+                        Ole hyvä ja ilmoita löytämäsi viat, ehdotuksesi tai kysymyksesi osoitteeseen nistikemisti@gmail.com</strong><br/><br/>
                         
-                        Welcome to the betting app! Here you can create bets out of 
-                        anything you choose and bid virtual currency in the form of dice.
-                        Each new account receives 100 dice for use in betting.
-                        Log in with username and password <strong>demo</strong> if you wish to not create an account at this time. (Betting disabled).
+                        Tervetuloa veikkaus-sovellukseen! (Ei liity veikkaus-rahapeliyhtiöön) Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa.
+                        Jokaiselle uudelle tilille annetaan 100 noppaa käytettäväksi (Saattaa muuttua ilmoituksetta).
+                        Kirjaudu sisään käyttäjänimellä ja salasanalla <strong>demo</strong> jos et toistaiseksi halua luoda tiliä (Vetoihin osallistuminen estetty).
                     </p>
                     <br/>
-                    <h2>Bets</h2>
+                    <h2>Vedot</h2>
                     <br/>
-                    <h3>Types</h3>
+                    <h3>Tyypit</h3>
                     <p>
-                        There are two types of bets that can currently be made: 
+                        Vetoja voidaan luoda kahdenlaisia:
                     </p>
                     <br/>
                     <p>
-                        <strong>Boolean</strong> bets can have an outcome of either true or false. Simple.<br/><br/>
-                        <strong>Multi-Choice</strong> bets have one outcome out of a list that the user is free to define.<br/><br/>
-                        <strike><strong>Lottery</strong> bets let a user enter a single row of numbers, which gets compared to a randomly generated <br/>
-                        row of equal length when the game is closed. Whoever has a row fully matching the generated row wins the pool.</strike>
+                        <strong>Boolean</strong> vedoilla on kaksi mahdollista lopputulosta: Kyllä tai Ei.<br/><br/>
+                        <strong>Multi-Choice</strong> vedoilla lopputulos määräytyy käyttäjän itse luomasta ja määrittämästä listasta.<br/><br/>
                     </p>
                     <br/>
 
-                    <h3>Progression</h3>
+                    <h2>Sovellus</h2>
                     <p>
-                        Bets get started when a user creates one through navigating to the bet creation window by
-                        pressing the plus icon on the navbar at the bottom of the screen. Once the parameters have been set and the 
-                        bet has been accepted by the server, betting can begin.<br/><br/>
-                    
-                        The betting window for each bet can be accessed through first navigating to the game list window
-                        through the casino-chip icon on the navbar and then tapping/clicking on the listing of the 
-                        bet you want to participate in. <br/><br/>
-
-                        A bet can only be closed by the user who made it.
+                        Sovelluksessa on neljä välilehteä:<br/><br/>
+                        <h3>Koti</h3>
+                        Tästä välilehdestä näet ja suljet omat vetosi. (Vaatii sisäänkirjautumisen).<br/><br/>
+                        <h3>Vedot</h3>
+                        Sisältää kaikkien käyttäjien luomat vedot. Voit kotisivun lisäksi sulkea omat vetosi myös täältä. Osallistu haluamaasi vetoon napauttamalla sen otsikkoa ja sitten auennutta yleisnäkymää.<br/><br/>
+                        <h3>Uusi veto</h3>
+                        Vetoideasi luodaan täältä.<br/><br/>
+                        <h3>Noppageneraattori</h3>
+                        Luo uusia noppia käytettäväksi kun taskut ovat tyhjät.<br/><br/>
+                        
                     </p>
                     <br/>
                 
@@ -63,11 +61,11 @@ function Home(){
                 :
                 <>  
                     <div id="home-account-content" className="fill flex-column">
-                        <h2>Bets created by you:</h2>
+                        <h2>Omat vedot:</h2>
                         <GameList byUser={true}/>
                     </div>
                     
-                    <Link to="/account/delete" id="del-link">Delete Account</Link>
+                    <Link to="/account/delete" id="del-link">Poista Tili</Link>
                     
                 </>
             }

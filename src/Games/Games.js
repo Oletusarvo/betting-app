@@ -13,8 +13,8 @@ function Games(){
     return (
         <div className="flex-column fill pad w-100 gap-m overflow-y-scroll overflow-x-hide" id="games-page">
             <header className="w-100" id="games-page-header">
-                <h1 className="flex-row center-all">All Bets</h1>
-                <input type="search" placeholder="Search for bets..." onInput={search}></input>
+                <h1 className="flex-row center-all">Kaikki Vedot</h1>
+                <input type="search" placeholder="Etsi..." onInput={search}></input>
             </header>
             
             <GameList query={query}/>

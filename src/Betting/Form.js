@@ -13,8 +13,8 @@ function Form(){
     return (
         <div id="bet-controls" className={"container glass gap-s bg-fade " + (isExpired && " bg-expired")}>
             <select id="bet-options" disabled={bet && bet.folded}>{renderOptions}</select>
-            <button id="bet-button" onClick={bet ? call : placeBet} disabled={ bet && bet.folded}>{bet ? "Call" : "Bet"}</button>
-            <button id="raise-button" onClick={raise} disabled={game.increment == 0 || (bet && bet.folded)}>Raise</button>
+            <button id="bet-button" onClick={bet ? call : placeBet} disabled={ bet && bet.folded}>{bet ? "Vastaa" : "Veikkaa"}</button>
+            <button id="raise-button" onClick={raise} disabled={game.increment == 0 || (bet && bet.folded)}>Korota</button>
         </div>
     );
 }
