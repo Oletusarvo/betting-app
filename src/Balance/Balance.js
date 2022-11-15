@@ -24,7 +24,7 @@ function Balance(props){
             balance.classList.add('flash-red');
         }
 
-        const gain = new Currency(difference, currencyPrecision).getAsString('en');
+        const gain = new Currency(difference, currencyPrecision).get();
         setGain(difference > 0 ? `+${gain}` : gain);
         setShowGain(true);
 
@@ -42,7 +42,7 @@ function Balance(props){
     }, [user]);
 
     const balance = new Currency(user.balance, currencyPrecision).getAsString('en');
-    
+
     return (
         <div className="flex-row gap-s">
             <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{currency + balance}</span>
