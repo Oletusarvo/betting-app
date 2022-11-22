@@ -9,7 +9,7 @@
     "babel": "npx babel src/ -d src/compiled/ -w",
     "server": "npx nodemon server.js",
     "build": "npx webpack --mode production",
-    "migrate_db": "npx knex migrate:latest"
+    "migrate_db": "npx knex migrate:latest --env production"
   },
   "keywords": [],
   "author": "",
