@@ -15,7 +15,7 @@ exports.up = function(knex) {
     tbl.string('expiry_date').defaultTo('When Closed');
   })
   .createTable('accounts', tbl => {
-    tbl.string('username').notNullable();
+    tbl.string('username').notNullable().primary('accounts_pk').unique();
     tbl.string('password').notNullable();
     tbl.float('balance').defaultTo(0);
   })
