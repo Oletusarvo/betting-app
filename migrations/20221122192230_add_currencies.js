@@ -4,7 +4,7 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable('currencies', tbl => {
-    tbl.string('symbol');
+    tbl.string('symbol').unique().primary('pk_currency');
     tbl.string('created_by');
     tbl.integer('precision');
   })
