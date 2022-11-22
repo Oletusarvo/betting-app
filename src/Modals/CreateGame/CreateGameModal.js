@@ -4,10 +4,11 @@ import OptionToken from "./OptionToken/OptionToken.js";
 import CreateGameContext from "../../Contexts/CreateGameContex.js";
 import '../Style.scss';
 import './Style.scss';
+import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
-    const {user, token, currencyPrecision} = useContext(AppContext);
+    const {user, token, currencyPrecision, lang} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
 
@@ -75,20 +76,29 @@ function CreateGameModal(){
     }
 
     const maxTransfer = Math.abs(Math.floor(user.balance / 2)) / 100;
+    const headerText = langStrings["create-game-header"][lang];
+    const typeText = langStrings["game-info-type"][lang];
+    const titleText = langStrings["game-info-title"][lang];
+    const minBidText = langStrings["game-info-minbet"][lang];
+    const incrementText = langStrings["game-info-increment"][lang];
+    const addText = langStrings["add-button"][lang];
+    const expiryText = langStrings["game-info-expirydate"][lang];
+    const createText = langStrings["create-button"][lang];
+
     return (
         <CreateGameContext.Provider deleteOption={deleteOption}>
         <div className="modal">
-                <header>Luo Uusi Veto</header>
+                <header>{headerText}</header>
                 <div className="content glass bg-fade">
                     <form id="new-game-form" onSubmit={submit}>
-                        <label>Tyyppi:</label>
+                        <label>{typeText}</label>
                         <select name="betType" id="select-bet-type" onChange={updateSelection}>
                             <option>Boolean</option>
                             <option>Multi-Choice</option>
                         </select>
                         
                     
-                        <label>Otsikko:</label>
+                        <label>{titleText}</label>
                         <input 
                             name="title" 
                             placeholder="Anna vedon otsikko" 
@@ -96,7 +106,7 @@ function CreateGameModal(){
                             maxLength={50}></input>
                        
 
-                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
+                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : `${minBidText}`}</label>
                         <input 
                             name="minimumBet" 
                             type="number" 
@@ -107,7 +117,7 @@ function CreateGameModal(){
                             required={true} 
                             defaultValue={1}></input>
         
-                        <label hidden={betTypeSelect === 'Lottery'}>Korotus (0 estää korotukset):</label>
+                        <label hidden={betTypeSelect === 'Lottery'}>{incrementText}</label>
                         <input 
                             hidden={betTypeSelect === 'Lottery'} 
                             name="increment" 
@@ -144,19 +154,19 @@ function CreateGameModal(){
                             betTypeSelect === 'Multi-Choice' ? 
                              <div id="options-input" className="flex-row gap-s center-align" hidden={betTypeSelect !== 'Multi-Choice'}>
                                 <input id="option-input" type="text" placeholder="Kirjoita vaihtoehto..." ></input>
-                                <button type="button" onClick={addOption}>Lisää</button>
+                                <button type="button" onClick={addOption}>{addText}</button>
                             </div>
                             : 
                             null
                         }
                        
 
-                        <label>Eräpäivä:</label>
+                        <label>{expiryText}</label>
                         <input 
                             name="expiryDate" 
                             type="date" 
                             placeholder="Enter expiry date"></input>
-                        <button type="submit">Luo</button>
+                        <button type="submit">{createText}</button>
                     </form>
                 </div>
                 <footer>

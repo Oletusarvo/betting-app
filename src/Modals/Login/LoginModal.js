@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
 import AppContext from "../../Contexts/AppContext";
 import Loading from '../../Loading/Loading.js';
+import langStrings from "../../lang";
 
 function LoginModal(){
 
-    const {setUser, setToken} = useContext(AppContext);
+    const {setUser, setToken, lang} = useContext(AppContext);
     const [loading, setLoading] = useState(false);
 
     function submit(e){
@@ -39,17 +40,17 @@ function LoginModal(){
     }
 
     if(loading){
-        return <Loading title="Kirjaudutaan sisään..."/>
+        return <Loading title={langStrings["login-loading-message"][lang]}/>
     }
 
     return(
         <div className="modal">
-            <header>Kirjaudu Sisään</header>
+            <header>{langStrings["login-header"][lang]}</header>
             <div className="content glass bg-fade">
                 <form id="login-form" onSubmit={submit}>
-                    <input name="username" placeholder="Username"></input>
-                    <input name="password" placeholder="Password" type="password"></input>
-                    <button type="submit">Kirjaudu</button>
+                    <input name="username" placeholder={`${langStrings["username-placeholder"][lang]}`}></input>
+                    <input name="password" placeholder={langStrings["password1-placeholder"][lang]} type="password"></input>
+                    <button type="submit">{langStrings["login-button"][lang]}</button>
                 </form>
             </div>
             <footer>

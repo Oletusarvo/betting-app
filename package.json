@@ -7,7 +7,9 @@
     "test": "jest",
     "sass": "npx node-sass -w src/scss/ -o public/css/",
     "babel": "npx babel src/ -d src/compiled/ -w",
-    "server": "npx nodemon server.js"
+    "server": "npx nodemon server.js",
+    "build": "npx webpack --mode production",
+    "migrate_db": "npx knex migrate:latest"
   },
   "keywords": [],
   "author": "",

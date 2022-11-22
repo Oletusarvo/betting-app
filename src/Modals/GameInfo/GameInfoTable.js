@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import AppContext from "../../Contexts/AppContext";
+import langStrings from "../../lang";
 
 function GameInfoTable({game}){
 
-    const {currencyPrecision, currency} = useContext(AppContext);
+    const {currencyPrecision, currency, lang} = useContext(AppContext);
     const pool = game.pool / currencyPrecision;
     const pool_reserve = game.pool_reserve / currencyPrecision;
     const minimum_bet = game.minimum_bet / currencyPrecision;
@@ -12,12 +13,12 @@ function GameInfoTable({game}){
         <table>
         <tbody>
             <tr>
-                <td>Tyyppi:</td>
+                <td>{langStrings["game-info-type"][lang]}</td>
                 <td className="align-text-right">{game.type}</td>
             </tr>
 
             <tr>
-                <td>Potti:</td>
+                <td>{langStrings["game-info-pool"][lang]}</td>
                 <td className="align-text-right">{currency + (pool + pool_reserve).toFixed(2).toLocaleString('en')}</td>
             </tr>
 
@@ -28,12 +29,12 @@ function GameInfoTable({game}){
                 </tr>
             }
             <tr>
-                <td>{game.type === "Lottery" ? "Row Price:" : "Vähimmäispanos:"}</td>
+                <td>{game.type === "Lottery" ? "Row Price:" : `${langStrings["game-info-minbet"][lang]}`}</td>
                 <td className="align-text-right">{currency + minimum_bet.toFixed(2).toLocaleString('en')}</td>
             </tr>
             
             <tr>
-                <td>Erääntyy:</td>
+                <td>{langStrings["game-info-expirydate"][lang]}</td>
                 <td className="align-text-right">{game.expiry_date}</td>
             </tr>
         </tbody>

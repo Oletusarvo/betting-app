@@ -28,6 +28,7 @@ const storage = sessionStorage;
 const notesKey = 'betting-app-notes';
 
 function App (){
+    const [lang, setLang] = useState("en");
     const [user, setUser] = useState(() => {
         const data = storage.getItem('betting-app-user');
         if(!data) return null;
@@ -131,6 +132,7 @@ function App (){
             <div id="app" className="flex-column center-align">
                 <Background/>
                 <AppContext.Provider value={{
+                    lang,
                     user, 
                     token, 
                     socket, 

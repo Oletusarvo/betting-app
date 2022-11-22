@@ -9,12 +9,13 @@ import Ticket from './Lottery/Ticket.js';
 import LotteryInfo from './Lottery/LotteryInfo.js';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
+import langStrings from '../lang.js';
 
 import './Style.scss';
 
 function Betting() {
     const {id} = useParams();
-    const {user, socket, setUser, currencyPrecision} = useContext(AppContext);
+    const {user, socket, setUser, currencyPrecision, lang} = useContext(AppContext);
 
     const game = useRef(0);
     const bet = useRef(0);
@@ -55,10 +56,13 @@ function Betting() {
     function placeBet(row = undefined){
         const amount = game.current.minimum_bet;
         if(amount == 0){
-            alert('Et voi veikata tällä hetkellä');
+            const cannotBetMessage = langStrings["cannot-bet"][lang];
+            alert(cannotBetMessage);
             return;
         }
-        const c = confirm(`Olet veikkaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`);
+
+        const confirmMessage = `${langStrings["about-to-bet"][lang]} ${amount / currencyPrecision} ${langStrings["are-you-sure"][lang]}`;
+        const c = confirm(confirmMessage);
         if(!c) return;
 
 
@@ -89,11 +93,13 @@ function Betting() {
     function raise(){
         const amount = bet.current ? game.current.minimum_bet - bet.current.amount + game.current.increment : game.current.minimum_bet + game.current.increment;
         if(amount == 0){
-            alert('Et voi veikata tällä hetkellä');
+            const cannotBetMessage = langStrings["cannot-bet"][lang];
+            alert(cannotBetMessage);
             return;
         }
 
-        const c = confirm(`Olet veikkaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`);
+        const confirmMessage = `${langStrings["about-to-bet"][lang]} ${amount / currencyPrecision} ${langStrings["are-you-sure"][lang]}`;
+        const c = confirm(confirmMessage);
         if(!c) return;
 
         const side = document.querySelector('#bet-options').value;
@@ -122,11 +128,13 @@ function Betting() {
     function call(){
         const amount = game.current.minimum_bet - bet.current.amount;
         if(amount == 0){
-            alert('Et voi veikata tällä hetkellä');
+            const cannotBetMessage = langStrings["cannot-bet"][lang];
+            alert(cannotBetMessage);
             return;
         }
 
-        const c = confirm(`Olet vastaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`);
+        const confirmMessage = `${langStrings["about-to-call"][lang]} ${amount / currencyPrecision} ${langStrings["are-you-sure"][lang]}`;
+        const c = confirm(confirmMessage);
         if(!c) return;
 
         const data = {
@@ -152,7 +160,7 @@ function Betting() {
     }
        
     if(!state){
-        return <Loading title="Ladataan vetoa..." />
+        return <Loading title={langStrings["bet-loading-message"][lang]}/>
     }
     else{
         const isExpired = new Date().getTime() >= new Date(state.game.expiry_date).getTime();

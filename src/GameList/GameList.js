@@ -4,10 +4,12 @@ import AppContext from '../Contexts/AppContext.js';
 import GameInfoModal from '../Modals/GameInfo/GameInfoModal.js';
 import Loading from '../Loading/Loading.js';
 import './Style.scss';
+import langStrings from "../lang";
+
 
 function GameList(props){
     const [gameList, setGameList] = useState(null);
-    const {user, token, socket} = useContext(AppContext);
+    const {user, token, socket, lang} = useContext(AppContext);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -44,7 +46,7 @@ function GameList(props){
     }, [props]);
 
     if(loading){
-        return <Loading title="Loading gamelist..."/>
+        return <Loading title={langStrings["gamelist-loading-message"][lang]}/>
     }
     
     if(!gameList || !user) return null;

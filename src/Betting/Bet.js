@@ -2,9 +2,10 @@ import React, {useContext} from 'react';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
 import Currency from '../currency';
+import langStrings from "../lang";
 
 function Bet(){
-    const {token, currency, currencyPrecision} = useContext(AppContext);
+    const {token, currency, currencyPrecision, lang} = useContext(AppContext);
     const {setGameState, bet, game} = useContext(GameContext);
 
     function fold(){
@@ -36,15 +37,15 @@ function Bet(){
     if(bet){
         const amount = new Currency(bet.amount, currencyPrecision).getAsString('en');
         if(bet.folded){
-            return <span>Luovutettu</span>
+            return <span>{langStrings["game-info-folded"][lang]}</span>
         }
         else{
             const foldingEnabled = bet.amount == game.minimum_bet;
-            return <span className="table-field">{`\"${bet.side}\" panoksella ${currency + amount}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>Luovuta</button></span>
+            return <span className="table-field">{`\"${bet.side}\" ${langStrings["game-info-bidfor"][lang]} ${currency + amount}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>{langStrings["fold-button"][lang]}</button></span>
         }
     }
     else{
-        return <span>Ei vetoa</span>
+        return <span>{langStrings["game-info-nobid"][lang]}</span>
     }
 }
 

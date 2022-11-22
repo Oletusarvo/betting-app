@@ -3,10 +3,11 @@ import {Link} from 'react-router-dom';
 import GameList  from '../GameList/GameList.js';
 import './Style.scss';
 import AppContext from '../Contexts/AppContext.js';
+import langStrings from '../lang';
 
 function Home(){
 
-    const {user} = useContext(AppContext);
+    const {user, lang} = useContext(AppContext);
 
     return (
         <>
@@ -61,11 +62,11 @@ function Home(){
                 :
                 <>  
                     <div id="home-account-content" className="fill flex-column">
-                        <h2>Omat vedot:</h2>
+                        <h2>{langStrings["my-bets-header"][lang]}</h2>
                         <GameList byUser={true}/>
                     </div>
                     
-                    <Link to="/account/delete" id="del-link">Poista Tili</Link>
+                    <Link to="/account/delete" id="del-link">{langStrings["delete-account-link"][lang]}</Link>
                     
                 </>
             }

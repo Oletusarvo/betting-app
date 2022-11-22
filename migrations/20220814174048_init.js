@@ -12,7 +12,7 @@ exports.up = function(knex) {
     tbl.string('game_title', 50).notNullable();
     tbl.float('pool').defaultTo(0);
     tbl.float('minimum_bet').defaultTo(0.01);
-    tbl.string('expiry_date').defaultTo('When closed by creator.');
+    tbl.string('expiry_date').defaultTo('When Closed');
   })
   .createTable('accounts', tbl => {
     tbl.string('username').notNullable();
