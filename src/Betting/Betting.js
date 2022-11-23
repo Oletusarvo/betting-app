@@ -56,12 +56,12 @@ function Betting() {
     function placeBet(row = undefined){
         const amount = game.current.minimum_bet;
         if(amount == 0){
-            const cannotBetMessage = langStrings["cannot-bet"][lang];
+            const cannotBetMessage = 'Et voi veikata tällä hetkellä.';
             alert(cannotBetMessage);
             return;
         }
 
-        const confirmMessage = `${langStrings["about-to-bet"][lang]} ${amount / currencyPrecision} ${langStrings["are-you-sure"][lang]}`;
+        const confirmMessage = `Olet veikkaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
@@ -93,12 +93,12 @@ function Betting() {
     function raise(){
         const amount = bet.current ? game.current.minimum_bet - bet.current.amount + game.current.increment : game.current.minimum_bet + game.current.increment;
         if(amount == 0){
-            const cannotBetMessage = langStrings["cannot-bet"][lang];
+            const cannotBetMessage = 'Et voi veikata tällä hetkellä.';
             alert(cannotBetMessage);
             return;
         }
 
-        const confirmMessage = `${langStrings["about-to-bet"][lang]} ${amount / currencyPrecision} ${langStrings["are-you-sure"][lang]}`;
+        const confirmMessage = `Olet veikkaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
@@ -128,12 +128,12 @@ function Betting() {
     function call(){
         const amount = game.current.minimum_bet - bet.current.amount;
         if(amount == 0){
-            const cannotBetMessage = langStrings["cannot-bet"][lang];
+            const cannotBetMessage = 'Et voi veikata tällä hetkellä.';
             alert(cannotBetMessage);
             return;
         }
 
-        const confirmMessage = `${langStrings["about-to-call"][lang]} ${amount / currencyPrecision} ${langStrings["are-you-sure"][lang]}`;
+        const confirmMessage = `Olet vastaamassa määrällä ${amount / currencyPrecision}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
@@ -160,7 +160,7 @@ function Betting() {
     }
        
     if(!state){
-        return <Loading title={langStrings["bet-loading-message"][lang]}/>
+        return <Loading title='Ladataan vetoa...'/>
     }
     else{
         const isExpired = new Date().getTime() >= new Date(state.game.expiry_date).getTime();

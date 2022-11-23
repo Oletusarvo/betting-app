@@ -40,17 +40,17 @@ function LoginModal(){
     }
 
     if(loading){
-        return <Loading title={langStrings["login-loading-message"][lang]}/>
+        return <Loading title="Kirjaudutaan sisään..."/>
     }
 
     return(
         <div className="modal">
-            <header>{langStrings["login-header"][lang]}</header>
+            <header>Kirjaudu Sisään</header>
             <div className="content glass bg-fade">
                 <form id="login-form" onSubmit={submit}>
-                    <input name="username" placeholder={`${langStrings["username-placeholder"][lang]}`}></input>
-                    <input name="password" placeholder={langStrings["password1-placeholder"][lang]} type="password"></input>
-                    <button type="submit">{langStrings["login-button"][lang]}</button>
+                    <input name="username" placeholder='Käyttäjänimi'></input>
+                    <input name="password" placeholder='Salasana' type="password"></input>
+                    <button type="submit">Kirjaudu</button>
                 </form>
             </div>
             <footer>

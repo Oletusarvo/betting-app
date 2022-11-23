@@ -19,8 +19,9 @@ function Home(){
                     <br/>
                     <p>
                         <strong>Huomio! Tämä sovellus on tarkoitettu näytettäväksi mobiililaitteilla pystyasennossa.<br/><br/>
-                        Sovellus on tuotantovaiheessa, joten siinä saattaa ilmetä vikoja.<br/><br/>
-                        Ole hyvä ja ilmoita löytämäsi viat, ehdotuksesi tai kysymyksesi osoitteeseen nistikemisti@gmail.com</strong><br/><br/>
+                        Emme kerää luottokorttitietoja tai muita henkilökohtaisia tietoja. Tilin luomiseen tarvitaan ainoastaan keksimäsi käyttäjänimi
+                        ja salasana. <br/><br/>
+                        </strong>
                         
                         Tervetuloa veikkaus-sovellukseen! (Ei liity veikkaus-rahapeliyhtiöön) Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa.
                         Jokaiselle uudelle tilille annetaan 100 noppaa käytettäväksi (Saattaa muuttua ilmoituksetta).
@@ -62,11 +63,11 @@ function Home(){
                 :
                 <>  
                     <div id="home-account-content" className="fill flex-column">
-                        <h2>{langStrings["my-bets-header"][lang]}</h2>
+                        <h2>Omat Vedot</h2>
                         <GameList byUser={true}/>
                     </div>
                     
-                    <Link to="/account/delete" id="del-link">{langStrings["delete-account-link"][lang]}</Link>
+                    <Link to="/account/delete" id="del-link">Poista Tili</Link>
                     
                 </>
             }

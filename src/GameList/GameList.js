@@ -46,7 +46,7 @@ function GameList(props){
     }, [props]);
 
     if(loading){
-        return <Loading title={langStrings["gamelist-loading-message"][lang]}/>
+        return <Loading title='Ladataan vetoja...'/>
     }
     
     if(!gameList || !user) return null;

@@ -37,15 +37,15 @@ function Bet(){
     if(bet){
         const amount = new Currency(bet.amount, currencyPrecision).getAsString('en');
         if(bet.folded){
-            return <span>{langStrings["game-info-folded"][lang]}</span>
+            return <span>Luovutettu</span>
         }
         else{
             const foldingEnabled = bet.amount == game.minimum_bet;
-            return <span className="table-field">{`\"${bet.side}\" ${langStrings["game-info-bidfor"][lang]} ${currency + amount}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>{langStrings["fold-button"][lang]}</button></span>
+            return <span className="table-field">{`\"${bet.side}\" panoksella ${currency + amount}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>Luovuta</button></span>
         }
     }
     else{
-        return <span>{langStrings["game-info-nobid"][lang]}</span>
+        return <span>Ei vetoa</span>
     }
 }
 

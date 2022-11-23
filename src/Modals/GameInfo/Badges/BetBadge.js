@@ -1,6 +1,6 @@
 function BetBadge(){
     return (
-        <div className={`badge bet-badge flex-column center-all`}>BET</div>
+        <div className={`badge bet-badge flex-column center-all`}>VETO</div>
     );
 }
 

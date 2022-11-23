@@ -44,17 +44,17 @@ function SignupModal(){
 
     return(
         <div className="modal">
-            <header>{langStrings["signup-header"][lang]}</header>
+            <header>Luo Tili</header>
             <div className="content glass bg-fade">
                 <form id="signup-form" onSubmit={submit}>
-                    <input name="username" placeholder={langStrings["username-placeholder"][lang]}></input>
-                    <input name="password1" placeholder={langStrings["password1-placeholder"][lang]} type="password"></input>
-                    <input name="password2" placeholder={langStrings["password2-placeholder"][lang]} type="password"></input>
-                    <button type="submit">{langStrings["signup-button"][lang]}</button>
+                    <input name="username" placeholder='Käyttäjänimi'></input>
+                    <input name="password1" placeholder='Salasana' type="password"></input>
+                    <input name="password2" placeholder='Anna salasana uudelleen' type="password"></input>
+                    <button type="submit">Luo</button>
                 </form>
             </div>
             <footer>
-                
+                Antamiasi tietoja käytetään ainoastaan tunnistamiseesi tässä sovelluksessa.
             </footer>
         </div>
     )

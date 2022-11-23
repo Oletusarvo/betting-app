@@ -13,12 +13,12 @@ function GameInfoTable({game}){
         <table>
         <tbody>
             <tr>
-                <td>{langStrings["game-info-type"][lang]}</td>
+                <td>Tyyppi</td>
                 <td className="align-text-right">{game.type}</td>
             </tr>
 
             <tr>
-                <td>{langStrings["game-info-pool"][lang]}</td>
+                <td>Potti</td>
                 <td className="align-text-right">{currency + (pool + pool_reserve).toFixed(2).toLocaleString('en')}</td>
             </tr>
 
@@ -29,12 +29,12 @@ function GameInfoTable({game}){
                 </tr>
             }
             <tr>
-                <td>{game.type === "Lottery" ? "Row Price:" : `${langStrings["game-info-minbet"][lang]}`}</td>
+                <td>{game.type === "Lottery" ? "Row Price:" : `Vähimmäispanos`}</td>
                 <td className="align-text-right">{currency + minimum_bet.toFixed(2).toLocaleString('en')}</td>
             </tr>
             
             <tr>
-                <td>{langStrings["game-info-expirydate"][lang]}</td>
+                <td>Eräpäivä</td>
                 <td className="align-text-right">{game.expiry_date}</td>
             </tr>
         </tbody>

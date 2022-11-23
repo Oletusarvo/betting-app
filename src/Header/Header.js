@@ -5,6 +5,9 @@ import './Style.scss';
 import langStrings from '../lang';
 
 const bellIcon = './img/bell.png';
+const fiIcon = './img/flag-fi.png';
+const enIcon = './img/flag-en.png';
+
 
 function Header(){
 
@@ -16,16 +19,17 @@ function Header(){
             <header>
             <div id="app-name">
                 <Link to="/#/">
-                    <h2>{langStrings["app-title"][lang]}</h2>
+                    <h2>Veikkaus App</h2>
                 </Link>
             </div>
 
             <div id="links">
                 {
+                    
                     user == undefined ? 
                     <>
-                        <Link id="login-link" className="link" to="/login">{langStrings["login-link"][lang]}</Link>
-                        <Link id="signup-link" className="link" to="/signup">{langStrings["signup-link"][lang]}</Link>
+                        <Link id="login-link" className="link" to="/login">Kirjaudu</Link>
+                        <Link id="signup-link" className="link" to="/signup">Luo Tili</Link>
                     </>
                     :
                     <>
@@ -35,7 +39,7 @@ function Header(){
                             </i>
                             <div className={numUnseenNotes == 0 ? 'hidden' : ''} data-notification-count={numUnseenNotes} id="notification-count"></div>
                         </Link>
-                        <span id="logout-link" onClick={logout}>{langStrings["logout-link"][lang]}</span>
+                        <span id="logout-link" onClick={logout}>Kirjaudu Ulos</span>
                     </>
                 }
             </div>

@@ -67,7 +67,7 @@ function GameInfoModal(props){
         let res;
 
         if(type !== 'Lottery'){
-            res = confirm(`You are about to close the game on \'${side}\'. Are you sure?`);
+            res = confirm(`Olet sulkemassa vetoa tuloksella \'${side}\'. Oletko varma?`);
         }
         else{
             res = confirm(`You are about draw the lottery. Are you sure?`);

@@ -20,26 +20,26 @@ function Info(){
             <table>
                 <tbody>
                     <tr>
-                        <td>{langStrings["game-info-bet"][lang]}</td>
+                        <td>Veto</td>
                         <td className="align-text-right"><Bet/></td>
                     </tr>
                     <tr>
-                        <td>{langStrings["game-info-minbet"][lang]}</td>
+                        <td>Vähimmäispanos</td>
                         <td className="align-text-right">{currency + minimum_bet}</td>
                     </tr>
 
                     <tr>
-                        <td>{langStrings["game-info-increment"][lang]}</td>
+                        <td>Korotus</td>
                         <td className="align-text-right">{currency + increment}</td>
                     </tr>
 
                     <tr>
-                        <td>{langStrings["game-info-expirydate"][lang]}</td>
+                        <td>Eräpäivä</td>
                         <td className="align-text-right">{game.expiry_date}</td>
                     </tr>
 
                     <tr>
-                        <td>{langStrings["game-info-timeleft"][lang]}</td>
+                        <td>Aikaa jäljellä</td>
                         <td className="align-text-right">
                             {expiryString}
                         </td>

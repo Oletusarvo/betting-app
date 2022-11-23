@@ -76,29 +76,21 @@ function CreateGameModal(){
     }
 
     const maxTransfer = Math.abs(Math.floor(user.balance / 2)) / 100;
-    const headerText = langStrings["create-game-header"][lang];
-    const typeText = langStrings["game-info-type"][lang];
-    const titleText = langStrings["game-info-title"][lang];
-    const minBidText = langStrings["game-info-minbet"][lang];
-    const incrementText = langStrings["game-info-increment"][lang];
-    const addText = langStrings["add-button"][lang];
-    const expiryText = langStrings["game-info-expirydate"][lang];
-    const createText = langStrings["create-button"][lang];
 
     return (
         <CreateGameContext.Provider deleteOption={deleteOption}>
         <div className="modal">
-                <header>{headerText}</header>
+                <header>Luo Uusi Veto</header>
                 <div className="content glass bg-fade">
                     <form id="new-game-form" onSubmit={submit}>
-                        <label>{typeText}</label>
+                        <label>Tyyppi:</label>
                         <select name="betType" id="select-bet-type" onChange={updateSelection}>
                             <option>Boolean</option>
                             <option>Multi-Choice</option>
                         </select>
                         
                     
-                        <label>{titleText}</label>
+                        <label>Otsikko:</label>
                         <input 
                             name="title" 
                             placeholder="Anna vedon otsikko" 
@@ -106,7 +98,7 @@ function CreateGameModal(){
                             maxLength={50}></input>
                        
 
-                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : `${minBidText}`}</label>
+                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
                         <input 
                             name="minimumBet" 
                             type="number" 
@@ -117,7 +109,7 @@ function CreateGameModal(){
                             required={true} 
                             defaultValue={1}></input>
         
-                        <label hidden={betTypeSelect === 'Lottery'}>{incrementText}</label>
+                        <label hidden={betTypeSelect === 'Lottery'}>Korotus:</label>
                         <input 
                             hidden={betTypeSelect === 'Lottery'} 
                             name="increment" 
@@ -161,12 +153,12 @@ function CreateGameModal(){
                         }
                        
 
-                        <label>{expiryText}</label>
+                        <label>Eräpäivä:</label>
                         <input 
                             name="expiryDate" 
                             type="date" 
                             placeholder="Enter expiry date"></input>
-                        <button type="submit">{createText}</button>
+                        <button type="submit">Luo</button>
                     </form>
                 </div>
                 <footer>

@@ -57,7 +57,10 @@ function DeleteAccountModal(){
                     <button type="submit">Poista Tili</button>
                 </form>
             </div>
-            <footer></footer>
+            <footer>
+                <strong>Huomio!</strong><br/>
+                Poistettua tiliä ei voida palauttaa!
+            </footer>
         </div>
     )
 }
