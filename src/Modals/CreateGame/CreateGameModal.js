@@ -51,7 +51,7 @@ function CreateGameModal(){
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
             options : options.join(';'),
-            lotto_row_size: form.rowSize.value,
+            currency: 'DICE',
         }
 
         req.send(JSON.stringify(data));

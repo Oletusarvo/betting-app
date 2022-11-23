@@ -56,7 +56,7 @@ router.post('/', checkAuth, async (req, res) => {
         const data = req.body;
         data.id = crypto.randomBytes(5).toString('hex');
         data.options = data.type === 'Boolean' ? 'Kyllä;Ei' : data.options;
-        data.expiry_date = data.expiry_date == '' ? 'When Closed' : data.expiry_date;
+        data.expiry_date = data.expiry_date == '' ? 'Suljettaessa' : data.expiry_date;
 
         await db('games').insert(data);
         res.status(200).send();

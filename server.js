@@ -106,6 +106,16 @@ io.on('connection', async socket => {
         }
     });
 
+    socket.on('currency_create', async (data, callback) => {
+        try{
+            await db('currencies').insert(data);
+            callback(0);
+        }
+        catch(err){
+            callback(1);
+        }
+    });
+
     socket.on('notes_get', async (username, callback) => {
         if(username === 'demo') return;
 

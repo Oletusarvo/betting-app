@@ -72,13 +72,13 @@ body{
 }
 
 .page{
-    align-items: center;
     display: flex;
     flex-flow: column;
-    gap: $container-gap;
-    width: 100%;
     flex: 1;
-    padding: $container-gap 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    width: 100%;
+    gap: 0.5rem;
+    overflow-y: scroll;
     overflow-x: hidden;
 }
 

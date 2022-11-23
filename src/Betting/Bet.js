@@ -29,12 +29,14 @@ function Bet(){
                 };
                 setGameState(newState);
             }
+            else{
+                alert(req.response);
+            }
         }
     }
     
-    
-
     if(bet){
+        console.log(bet);
         const amount = new Currency(bet.amount, currencyPrecision).getAsString('en');
         if(bet.folded){
             return <span>Luovutettu</span>

@@ -18,6 +18,11 @@ function GameInfoTable({game}){
             </tr>
 
             <tr>
+                <td>Valuutta</td>
+                <td className="align-text-right">{game.currency}</td>
+            </tr>
+
+            <tr>
                 <td>Potti</td>
                 <td className="align-text-right">{currency + (pool + pool_reserve).toFixed(2).toLocaleString('en')}</td>
             </tr>
