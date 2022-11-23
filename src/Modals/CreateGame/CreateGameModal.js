@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../../Contexts/AppContext.js";
 import OptionToken from "./OptionToken/OptionToken.js";
 import CreateGameContext from "../../Contexts/CreateGameContex.js";
@@ -8,9 +8,18 @@ import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
-    const {user, token, currencyPrecision, lang} = useContext(AppContext);
+    const {user, token, currencyPrecision, socket} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
+    const [currencies, setCurrencies] = useState([]);
+
+    useEffect(() => {
+        socket.emit('currencies_get', data => {
+            if(!data) return;
+            const newCurrencies = [...data];
+            setCurrencies(newCurrencies);
+        });
+    }, []);
 
     function updateSelection(){
         const betSelect = document.querySelector('#select-bet-type');
@@ -97,7 +106,14 @@ function CreateGameModal(){
                             required={true} 
                             maxLength={50}></input>
                        
-
+                        <label htmlFor="currency">Valuutta:</label>
+                        <select>
+                            {
+                                currencies.map(cur => {
+                                    return <option value={cur.short_name}>{cur.short_name}</option>
+                                })
+                            }
+                        </select>
                        <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
                         <input 
                             name="minimumBet" 
