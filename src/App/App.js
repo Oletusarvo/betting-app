@@ -160,10 +160,9 @@ function App (){
                         <Route exact path="/games" element={<Games/>} />
                         <Route exact path="/games/:id" element={<Betting/>}></Route>
                         <Route exact path="/newgame" element={<NewGame/>} />
-                        <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
+                        <Route exact path="/newcurrency" element={<NewCurrency/>}></Route>
                         <Route exact path="/notes" element={<Notes/>}></Route>
                         <Route exact path="/users" element={<Users/>}></Route>
-                        <Route exact path="/newcurrency" element={<NewCurrency/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>
                     <Navbar user={user}/>
