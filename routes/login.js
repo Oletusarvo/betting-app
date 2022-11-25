@@ -6,7 +6,7 @@ require('dotenv').config();
 
 router.post('/', async (req, res) => {
     const {username, password} = req.body;
-    const user = await db('accounts').where({username}).first();
+    const user = await db('users').where({username}).first();
 
     if(user === undefined){
         res.status(404).send(`Account with username ${username} does not exist!`);

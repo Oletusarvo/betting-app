@@ -7,13 +7,13 @@ import langStrings from "../lang";
 
 function Info(){
 
-    const {currency, currencyPrecision, lang} = useContext(AppContext);
+    const {currency} = useContext(AppContext);
     const {game, bet, isExpired} = useContext(GameContext);
     const timeLeft = game.expiry_date != 'When Closed' ? Math.round((new Date(game.expiry_date) - new Date()) / 1000 / 60 / 60 / 24) : NaN;
     const expiryString =  !Number.isNaN(timeLeft) ? timeLeft < 0 ? "Erääntynyt" : timeLeft + " päivää" : "Ei Rajaa";
 
-    const minimum_bet = new Currency(game.minimum_bet, currencyPrecision).getAsString('en');
-    const increment = new Currency(game.increment, currencyPrecision).getAsString('en');
+    const minimum_bet = game.minimum_bet;
+    const increment = game.increment;
 
     return (
         <div className={"container glass bg-fade " + (isExpired && "bg-expired")} id="bet-info">
@@ -25,17 +25,17 @@ function Info(){
                     </tr>
                     <tr>
                         <td>Vähimmäispanos</td>
-                        <td className="align-text-right">{currency + minimum_bet}</td>
+                        <td className="align-text-right">{currency.getString(minimum_bet)}</td>
                     </tr>
 
                     <tr>
                         <td>Korotus</td>
-                        <td className="align-text-right">{currency + increment}</td>
+                        <td className="align-text-right">{currency.getString(increment)}</td>
                     </tr>
 
                     <tr>
                         <td>Eräpäivä</td>
-                        <td className="align-text-right">{game.expiry_date}</td>
+                        <td className="align-text-right">{game.expiry_date == 'When Closed' ? 'Suljettaessa' : game.expiry_date}</td>
                     </tr>
 
                     <tr>

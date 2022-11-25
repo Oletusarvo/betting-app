@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
             }
             else{
                 try{
-                    await db('accounts').insert({
+                    await db('users').insert({
                         username,
                         password: pass,
                         balance: 10000,

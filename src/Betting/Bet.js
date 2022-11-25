@@ -5,7 +5,7 @@ import Currency from '../currency';
 import langStrings from "../lang";
 
 function Bet(){
-    const {token, currency, currencyPrecision, lang} = useContext(AppContext);
+    const {token, currency} = useContext(AppContext);
     const {setGameState, bet, game} = useContext(GameContext);
 
     function fold(){
@@ -35,13 +35,13 @@ function Bet(){
     
 
     if(bet){
-        const amount = new Currency(bet.amount, currencyPrecision).getAsString('en');
+        const amount = bet.amount;
         if(bet.folded){
             return <span>Luovutettu</span>
         }
         else{
             const foldingEnabled = bet.amount == game.minimum_bet;
-            return <span className="table-field">{`\"${bet.side}\" panoksella ${currency + amount}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>Luovuta</button></span>
+            return <span className="table-field">{`\"${bet.side}\" panoksella ${currency.getString(amount)}`} <button style={{width: "50px"}}disabled={foldingEnabled} onClick={fold}>Luovuta</button></span>
         }
     }
     else{

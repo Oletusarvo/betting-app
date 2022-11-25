@@ -4,8 +4,8 @@
  */
 exports.up = function(knex) {
   return knex.schema.table('bets', tbl => {
-    tbl.string('type').notNullable().defaultTo('Boolean');
-  });
+    tbl.string('side').notNullable();
+  })
 };
 
 /**
@@ -13,7 +13,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.table('bets', tbl => {
-    tbl.dropColumn('type');
-  })
+  return knex.schema.table('bets', tbl => tbl.dropColumn('side'));
 };

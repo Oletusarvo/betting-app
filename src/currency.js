@@ -1,22 +1,13 @@
 class Currency{
-
-    //Represents a quantity of a currency at its smallest units.
-
-    constructor(amount, precision = 1){
-        this.amount = amount;
-        this.precision = precision;
+    constructor(options){
+        this.precision = options.precision || 2;
+        this.name = options.name || 'Default';
+        this.short_name = options.short_name || 'DEF';
+        this.symbol = options.symbol || 'D';
     }
 
-    setQuantity(amount){
-        this.amount = amount;
-    }
-    
-    getAsString(locale = 'en'){
-        return this.get().toLocaleString(locale);
-    }
-
-    get(){
-        return this.amount / this.precision;
+    getString(amount){
+        return this.symbol + amount.toFixed(this.precision);
     }
 }
 

@@ -4,10 +4,10 @@ import langStrings from "../../lang";
 
 function GameInfoTable({game}){
 
-    const {currencyPrecision, currency, lang} = useContext(AppContext);
-    const pool = game.pool / currencyPrecision;
-    const pool_reserve = game.pool_reserve / currencyPrecision;
-    const minimum_bet = game.minimum_bet / currencyPrecision;
+    const {currency} = useContext(AppContext);
+    const pool = game.pool;
+    const pool_reserve = game.pool_reserve;
+    const minimum_bet = game.minimum_bet;
 
     return (
         <table>
@@ -19,7 +19,7 @@ function GameInfoTable({game}){
 
             <tr>
                 <td>Potti</td>
-                <td className="align-text-right">{currency + (pool + pool_reserve).toFixed(2).toLocaleString('en')}</td>
+                <td className="align-text-right">{currency.getString(pool + pool_reserve)}</td>
             </tr>
 
             {
@@ -30,7 +30,7 @@ function GameInfoTable({game}){
             }
             <tr>
                 <td>{game.type === "Lottery" ? "Row Price:" : `Vähimmäispanos`}</td>
-                <td className="align-text-right">{currency + minimum_bet.toFixed(2).toLocaleString('en')}</td>
+                <td className="align-text-right">{currency.getString(minimum_bet)}</td>
             </tr>
             
             <tr>

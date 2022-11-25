@@ -51,7 +51,7 @@ io.on('connection', async socket => {
 
             socket.broadcast.emit('game_update', game.data);
             game.sendNotes(io);
-            const acc = await db.select('username', 'balance').from('accounts').where({username}).first();
+            const acc = await db.select('username', 'balance').from('users').where({username}).first();
             const newBet = game.getBet(username);
 
             callback({
@@ -74,7 +74,7 @@ io.on('connection', async socket => {
 
             game.sendNotes(io);
             socket.broadcast.emit('account_update');
-            const acc = await db.select('username', 'balance').from('accounts').where({username}).first();
+            const acc = await db.select('username', 'balance').from('users').where({username}).first();
             const gameList = await db('games');
             
             callback({
@@ -129,7 +129,7 @@ io.on('connection', async socket => {
 
     socket.on('account_get', async (username, callback) => {
         try{
-            const acc = await db.select('username', 'balance').from('accounts').where({username}).first();
+            const acc = await db.select('username', 'balance').from('users').where({username}).first();
             callback({user: acc, notes: []});
         }
         catch(err){
@@ -152,9 +152,14 @@ io.on('connection', async socket => {
     });
 
     socket.on('users_get', async callback => {
-        const users = await db.select('username').from('accounts').orderBy('username', 'asc');
+        const users = await db.select('username').from('users').orderBy('username', 'asc');
         callback(users);
     });
+
+    socket.on('currency_get', (callback) => {
+        const cur = require('./currencyfile');
+        callback(cur);
+    })
 });
 
 io.on('disconnect', () => console.log('Socket disconnected!'));

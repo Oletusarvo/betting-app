@@ -76,7 +76,7 @@ function App (){
         location.assign('/');
     }
 
-    const [currency] = useState('⚄');
+    const [currency, setCurrency] = useState(new Currency({}));
     const [isMining, setIsMining] = useState(false);
 
     useEffect(() => {
@@ -111,6 +111,10 @@ function App (){
             setNotes(newNotes);
         });
 
+        socket.emit('currency_get', data => {
+            setCurrency(new Currency(data));
+        })
+
         return () => {
             socket.off('account_update');
             socket.off('note_update');
@@ -144,8 +148,7 @@ function App (){
                     setToken, 
                     isMining, 
                     setIsMining, 
-                    logout,
-                    currencyPrecision: 100}}>
+                    logout}}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
                     {user ? <AccountHeader/> : null}
                     <Routes >

@@ -5,7 +5,7 @@ import './Style.scss';
 import Currency from '../currency';
 
 function Balance(props){
-    const {user, currency, isMining, currencyPrecision} = useContext(AppContext);
+    const {user, currency, isMining} = useContext(AppContext);
     const [gain, setGain] = useState(0);
     const [showGain, setShowGain] = useState(false);
     const {id} = props;
@@ -24,7 +24,8 @@ function Balance(props){
             balance.classList.add('flash-red');
         }
 
-        const gain = new Currency(difference, currencyPrecision).get();
+        const gain = difference.toFixed(currency.precision);
+
         setGain(difference > 0 ? `+${gain}` : gain);
         setShowGain(true);
 
@@ -41,11 +42,11 @@ function Balance(props){
 
     }, [user]);
 
-    const balance = new Currency(user.balance, currencyPrecision).getAsString('en');
+    const balance = currency.getString(user.balance);
 
     return (
         <div className="flex-row gap-s">
-            <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{currency + balance}</span>
+            <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{balance}</span>
             <span className="gain" hidden={showGain == false} style={{color: gain > 0 ? 'limegreen' : 'red'}}>{gain}</span>
             {
                 isMining ? <Loading dimensions={{width: "1rem", height: "1rem", borderWidth: "2px"}}/> : null

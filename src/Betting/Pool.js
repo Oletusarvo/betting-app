@@ -5,7 +5,7 @@ import Currency from '../currency';
 
 function Pool(){
     const {bet, game, isExpired} = useContext(GameContext);
-    const {currency, currencyPrecision} = useContext(AppContext);
+    const {currency} = useContext(AppContext);
 
     function getBettingState(){
         if(bet == undefined){
@@ -19,12 +19,12 @@ function Pool(){
         }
     }
 
-    const totalPool = new Currency(game.pool + game.pool_reserve, currencyPrecision).getAsString('en');
+    const totalPool = currency.getString(game.pool + game.pool_reserve)
 
     return (
         <div className={"container glass bg-fade " + (isExpired && "bg-expired")} id="bet-pool">
             <div id="bet-pool-ring" className={getBettingState()}>
-                <h1>{currency + totalPool}</h1>
+                <h1>{totalPool}</h1>
             </div>
         </div>
     );

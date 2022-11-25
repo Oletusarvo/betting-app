@@ -45,13 +45,12 @@ function CreateGameModal(){
         const form = document.querySelector('#new-game-form');
         const data = {
             title : form.title.value,
-            minimum_bet : form.minimumBet.valueAsNumber * currencyPrecision,
-            increment : form.increment.valueAsNumber * currencyPrecision,
+            minimum_bet : form.minimumBet.valueAsNumber,
+            increment : form.increment.valueAsNumber,
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
             options : options.join(';'),
-            lotto_row_size: form.rowSize.value,
         }
 
         req.send(JSON.stringify(data));
@@ -75,7 +74,7 @@ function CreateGameModal(){
         }
     }
 
-    const maxTransfer = Math.abs(Math.floor(user.balance / 2)) / 100;
+    const maxTransfer = Math.abs(Math.floor(user.balance / 2));
 
     return (
         <CreateGameContext.Provider deleteOption={deleteOption}>

@@ -1,4 +1,5 @@
 const db = require('../dbConfig');
+const currency = require('../currencyfile');
 
 class Account{
     constructor(data){
@@ -6,11 +7,11 @@ class Account{
     }
 
     async load(username){
-        this.data = await db.select('username', 'balance').from('accounts').where({username}).first();
+        this.data = await db.select('username', 'balance').from('users').where({username}).first();
     }
 
     async update(){
-        await db.select('balance').from('accounts').where({username: this.data.username}).update({balance: this.data.balance});
+        await db.select('balance').from('users').where({username: this.data.username}).update({balance: this.data.balance});
     }
 
     verifyAmount(amount){
@@ -20,7 +21,7 @@ class Account{
     async deposit(amount){
         //if(!this.verifyAmount(amount)) throw new Error('Amount exceedes balance!');
         this.data.balance += amount;
-        await db('accounts').where({username: this.data.username}).increment('balance', amount);
+        await db('users').where({username: this.data.username}).increment('balance', amount);
     }
 }
 
@@ -87,7 +88,11 @@ class Game{
 
     calculateCreatorShare(numWinners){
         const {pool, pool_reserve} = this.data;
-        return (pool + pool_reserve) % (numWinners || 1);
+        const multiplier = Math.pow(10, currency.precision);
+        const totalPoolInPips = (pool + pool_reserve) * multiplier;
+        const shareInPips = totalPoolInPips % (numWinners || 1);
+
+        return shareInPips / multiplier;
     }
 
     calculateReward(numWinners, creatorShare){
@@ -159,7 +164,7 @@ class Game{
         const {id, title} = this.data;
 
         const note = {
-            game_title: title,
+            title,
             message,
             username: targetUsername
         };
