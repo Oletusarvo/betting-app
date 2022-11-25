@@ -9,10 +9,12 @@ function Balance(props){
     const [gain, setGain] = useState(0);
     const [showGain, setShowGain] = useState(false);
     const {id} = props;
-    const previousBalance = useRef(user.balance);
+    const previousBalance = useRef(currentAccount ? currentAccount.balance : 0);
 
     useEffect(() => {
-        const difference = user.balance - previousBalance.current;
+        if(!currentAccount) return;
+
+        const difference = currentAccount.balance - previousBalance.current;
         if(difference == 0) return;
 
         const balance = document.querySelector(`#${id}`);
@@ -31,7 +33,7 @@ function Balance(props){
         setTimeout(() => {
             balance.classList.remove('flash-green');
             balance.classList.remove('flash-red');
-            previousBalance.current = user.balance;
+            previousBalance.current = currentAccount.balance;
         }, 250);
 
         setTimeout(() => {
