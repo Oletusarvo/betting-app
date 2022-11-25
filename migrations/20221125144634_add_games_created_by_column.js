@@ -3,8 +3,8 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.table('bets', tbl => {
-    tbl.string('type').notNullable().defaultTo('Boolean');
+  return knex.schema.table('games', tbl => {
+    tbl.string('created_by').references('username').inTable('users').onDelete('CASCADE').onUpdate('CASCADE');
   });
 };
 
@@ -13,7 +13,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.table('bets', tbl => {
-    tbl.dropColumn('type');
-  })
+  return kenx.shema.table('games', tbl => tbl.dropColumn('created_by'));
 };

@@ -50,12 +50,15 @@ function CreateGameModal(){
         req.open('POST', '/games', true);
         req.setRequestHeader('auth', token);
         req.setRequestHeader('Content-Type', 'application/json');
-    
-        const form = document.querySelector('#new-game-form');
+
+        const form = e.target;
+        const selectedCurrency = currencies.find(item => item.short_name === form.currency.value);
+        const currencyMultiplier = Math.pow(10, selectedCurrency.precision);
+
         const data = {
             title : form.title.value,
-            minimum_bet : form.minimumBet.valueAsNumber * currencyPrecision,
-            increment : form.increment.valueAsNumber * currencyPrecision,
+            minimum_bet : form.minimumBet.valueAsNumber * currencyMultiplier,
+            increment : form.increment.valueAsNumber * currencyMultiplier,
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
@@ -92,14 +95,14 @@ function CreateGameModal(){
                 <header>Luo Uusi Veto</header>
                 <div className="content glass bg-fade">
                     <form id="new-game-form" onSubmit={submit}>
-                        <label>Tyyppi:</label>
+                        <label htmlFor="betType">Tyyppi:</label>
                         <select name="betType" id="select-bet-type" onChange={updateSelection}>
-                            <option>Boolean</option>
-                            <option>Multi-Choice</option>
+                            <option value="boolean">Boolean</option>
+                            <option value="multiChoice">Multi-Choice</option>
                         </select>
                         
                     
-                        <label>Otsikko:</label>
+                        <label htmlFor="title">Otsikko:</label>
                         <input 
                             name="title" 
                             placeholder="Anna vedon otsikko" 
@@ -114,18 +117,20 @@ function CreateGameModal(){
                                 })
                             }
                         </select>
-                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
+                        
+                        
+                       <label htmlFor="minimumBet">{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
                         <input 
                             name="minimumBet" 
                             type="number" 
-                            min="0.01" 
+                            min="0.01"
                             max={maxTransfer}
                             step="0.01" 
                             placeholder="Anna vähimmäispanos" 
                             required={true} 
                             defaultValue={1}></input>
         
-                        <label hidden={betTypeSelect === 'Lottery'}>Korotus:</label>
+                        <label htmlFor="increment" hidden={betTypeSelect === 'Lottery'}>Korotus:</label>
                         <input 
                             hidden={betTypeSelect === 'Lottery'} 
                             name="increment" 
@@ -137,7 +142,7 @@ function CreateGameModal(){
                             disabled={betTypeSelect === 'Lottery'}></input>
                         
                         
-                        <label hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
+                        <label htmlFor="rowSize" hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
                         <input 
                             hidden={betTypeSelect !== 'Lottery'} 
                             name="rowSize" 
@@ -169,7 +174,7 @@ function CreateGameModal(){
                         }
                        
 
-                        <label>Eräpäivä:</label>
+                        <label htmlFor="expiryDate">Eräpäivä:</label>
                         <input 
                             name="expiryDate" 
                             type="date" 

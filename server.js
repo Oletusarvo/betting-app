@@ -176,6 +176,22 @@ io.on('connection', async socket => {
         const users = await db.select('username').from('accounts').orderBy('username', 'asc');
         callback(users);
     });
+
+    socket.on('accounts_get', async (username, callback) => {
+        try{
+            
+            const accounts = await db('accounts').where({username});
+            for(const acc of accounts){
+                const currency = await db.select('symbol', 'short_name', 'precision', 'name').from('currencies').where({short_name: acc.currency}).first();
+                acc.currency = currency;
+            }
+            callback(accounts);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+        
+    })
 });
 
 io.on('disconnect', () => console.log('Socket disconnected!'));

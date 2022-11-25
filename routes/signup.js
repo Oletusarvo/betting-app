@@ -14,13 +14,15 @@ router.post('/', async (req, res) => {
             }
             else{
                 try{
-                    const defcur = await db('currencies').where({short_name: 'DCE'}).first();
-                    const multiplier = Math.pow(10, defcur.precision);
-                    
-                    await db('accounts').insert({
+                    await db('users').insert({
                         username,
                         password: pass,
-                        balance: 100 * multiplier,
+                    });
+
+                    await db('accounts').insert({
+                        username,
+                        currency: 'DCE',
+                        balance: 100
                     });
                     
                     return res.status(200).send();
