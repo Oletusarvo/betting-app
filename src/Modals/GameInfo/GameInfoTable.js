@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import AppContext from "../../Contexts/AppContext";
-import langStrings from "../../lang";
 
 function GameInfoTable({game}){
 

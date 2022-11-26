@@ -9,7 +9,7 @@ import langStrings from "../lang";
 
 function GameList(props){
     const [gameList, setGameList] = useState(null);
-    const {user, token, socket, lang} = useContext(AppContext);
+    const {user, token, socket} = useContext(AppContext);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -35,6 +35,9 @@ function GameList(props){
                 list.sort((a, b) => (b.pool + b.pool_reserve) - (a.pool + a.pool_reserve));
                 setGameList(list);
                 setLoading(false);
+            }
+            else{
+                console.log('Error loading gamelist');
             }
         }
 
