@@ -1,2 +1,3 @@
-npx webpack --mode production
+npm run babel
+npm run build
 npm run server
