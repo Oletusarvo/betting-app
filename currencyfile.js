@@ -1,5 +1,5 @@
 module.exports = {
-    symbol: '⚄',
+    symbol: 'Đ',
     name: 'Dice',
     short_name: 'DCE',
     precision: 2,

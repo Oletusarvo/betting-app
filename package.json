@@ -9,6 +9,7 @@
     "babel": "npm i @babel/preset-react",
     "server": "npx nodemon server.js",
     "build": "npx webpack --mode production",
+    "build:dev": "npx webpack --watch",
     "migrate_db": "npx knex migrate:latest --env production"
   },
   "keywords": [],
@@ -32,6 +33,7 @@
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.13",
     "@babel/preset-env": "^7.18.10",
+    "@babel/preset-react": "^7.18.6",
     "babel-loader": "^9.1.0",
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
