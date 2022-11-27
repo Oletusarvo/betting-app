@@ -15,7 +15,7 @@ import './Style.scss';
 
 function Betting() {
     const {id} = useParams();
-    const {user, socket, setUser, currencyPrecision, lang} = useContext(AppContext);
+    const {user, socket, setUser, currency} = useContext(AppContext);
 
     const game = useRef(0);
     const bet = useRef(0);
@@ -61,7 +61,7 @@ function Betting() {
             return;
         }
 
-        const confirmMessage = `Olet veikkaamassa määrällä ${amount}. Oletko varma?`;
+        const confirmMessage = `Olet veikkaamassa määrällä ${currency.getString(amount)}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
@@ -97,7 +97,7 @@ function Betting() {
             return;
         }
 
-        const confirmMessage = `Olet veikkaamassa määrällä ${amount}. Oletko varma?`;
+        const confirmMessage = `Olet veikkaamassa määrällä ${currency.getString(amount)}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
@@ -131,7 +131,7 @@ function Betting() {
             return;
         }
 
-        const confirmMessage = `Olet vastaamassa määrällä ${amount}. Oletko varma?`;
+        const confirmMessage = `Olet vastaamassa määrällä ${currency.getString(amount)}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
