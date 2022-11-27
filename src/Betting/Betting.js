@@ -61,9 +61,7 @@ function Betting() {
             return;
         }
 
-        const confirmMessage = `Olet veikkaamassa määrällä ${currency.getString(amount)}. Oletko varma?`;
-        const c = confirm(confirmMessage);
-        if(!c) return;
+        
 
 
         const sideSelector = document.querySelector('#bet-options');
@@ -74,6 +72,10 @@ function Betting() {
             side: side,
             game_id: id,
         };
+
+        const confirmMessage = `Olet veikkaamassa \'${data.side} määrällä ${currency.getString(data.amount)}. Oletko varma?`;
+        const c = confirm(confirmMessage);
+        if(!c) return;
 
         socket.emit('bet_place', data, update => {
             const {acc, game, newBet} = update;
@@ -97,7 +99,7 @@ function Betting() {
             return;
         }
 
-        const confirmMessage = `Olet veikkaamassa määrällä ${currency.getString(amount)}. Oletko varma?`;
+        const confirmMessage = `Olet nostamassa määrällä ${currency.getString(amount)}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 

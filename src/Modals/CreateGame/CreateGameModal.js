@@ -75,6 +75,7 @@ function CreateGameModal(){
     }
 
     const maxTransfer = Math.abs(Math.floor(user.balance / 2));
+    const amountStep = 1 / Math.pow(10, currency.precision);
 
     return (
         <CreateGameContext.Provider deleteOption={deleteOption}>
@@ -101,9 +102,9 @@ function CreateGameModal(){
                         <input 
                             name="minimumBet" 
                             type="number" 
-                            min="0.01" 
+                            min={amountStep} 
                             max={maxTransfer}
-                            step="0.01" 
+                            step={amountStep} 
                             placeholder="Anna vähimmäispanos" 
                             required={true} 
                             defaultValue={1}></input>
@@ -115,21 +116,9 @@ function CreateGameModal(){
                             type="number" 
                             min={betTypeSelect === 'Lottery' ? 1 : 0} 
                             max={maxTransfer}
-                            step="0.01" defaultValue={0.01} 
+                            step={amountStep} defaultValue={amountStep} 
                             placeholder="Anna panoksen sallittu korotus" 
                             disabled={betTypeSelect === 'Lottery'}></input>
-                        
-                        
-                        <label hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
-                        <input 
-                            hidden={betTypeSelect !== 'Lottery'} 
-                            name="rowSize" 
-                            defaultValue="4" 
-                            min="1" 
-                            step="1" 
-                            max="7" 
-                            type="number" 
-                            placeholder='Enter preferred row size'></input>
                         
                         <div className="flex-row gap-s wrap">
                             {
