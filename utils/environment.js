@@ -177,6 +177,13 @@ class Game{
         socket.emit('notes_update', this.notes);
         this.notes = [];
     }
+
+    async fold(username){
+        const bet = this.bets.find(b => b.username === username);
+        bet.folded = true;
+        await this.update();
+        return bet;
+    }
 }
 
 class SelectionGame extends Game{

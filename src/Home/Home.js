@@ -20,10 +20,10 @@ function Home(){
                     <p>
                         <strong>Huomio! Tämä sovellus on tarkoitettu näytettäväksi mobiililaitteilla pystyasennossa.<br/><br/>
                         Emme kerää luottokorttitietoja tai muita henkilökohtaisia tietoja. Tilin luomiseen tarvitaan ainoastaan keksimäsi käyttäjänimi
-                        ja salasana. <br/><br/>
+                        ja salasana. <br/>Sovelluksella ei ole mitään tekemistä veikkaus-rahapeliyhtiön kanssa. <br/><br/>
                         </strong>
                         
-                        Tervetuloa veikkaus-sovellukseen! (Ei liity veikkaus-rahapeliyhtiöön) Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa.
+                        Tervetuloa veikkaus-sovellukseen! Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa.
                         Jokaiselle uudelle tilille annetaan 100 noppaa käytettäväksi (Saattaa muuttua ilmoituksetta).
                         Kirjaudu sisään käyttäjänimellä ja salasanalla <strong>demo</strong> jos et toistaiseksi halua luoda tiliä (Vetoihin osallistuminen estetty).
                     </p>
@@ -57,7 +57,9 @@ function Home(){
                     <br/>
                 
                     <p>
-                        
+                        Sovellus on tuotantovaiheessa ja saattaa sisältää virheitä. Jotkut osiot voivat myös näyttää kömpelöiltä, toistaiseksi.<br/>
+                        Ole hyvä ja ilmoita löytämäsi virheet, tai kirjoita kysymyksesi osoitteeseen <a href="mailto:nistikemisti@gmail.com"><i>nistikemisti@gmail.com.</i></a><br/><br/>
+                        Hauskoja skabahetkiä!
                     </p>
                 </div>
                 :
