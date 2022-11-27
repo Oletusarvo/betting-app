@@ -73,7 +73,7 @@ function Betting() {
             game_id: id,
         };
 
-        const confirmMessage = `Olet veikkaamassa \'${data.side} määrällä ${currency.getString(data.amount)}. Oletko varma?`;
+        const confirmMessage = `Olet veikkaamassa \'${data.side}\' panoksella ${currency.getString(data.amount)}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
@@ -99,7 +99,7 @@ function Betting() {
             return;
         }
 
-        const confirmMessage = `Olet nostamassa määrällä ${currency.getString(amount)}. Oletko varma?`;
+        const confirmMessage = `Olet nostamassa panostasi määrällä ${currency.getString(amount)}. Oletko varma?`;
         const c = confirm(confirmMessage);
         if(!c) return;
 
