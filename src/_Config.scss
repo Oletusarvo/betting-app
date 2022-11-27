@@ -213,6 +213,10 @@ body{
     backdrop-filter: blur(15px);
 }
 
+.margin-bottom{
+    margin-bottom: 1rem;
+}
+
 @keyframes rotateAnimation{
     0% {transform: rotate(0deg)};
     50% {transform: rotate(180deg)};

@@ -63,7 +63,7 @@ function Home(){
                 :
                 <>  
                     <div id="home-account-content" className="fill flex-column">
-                        <h2>Omat Vedot</h2>
+                        <h2 className="margin-bottom">Omat Vedot</h2>
                         <GameList byUser={true}/>
                     </div>
                     
