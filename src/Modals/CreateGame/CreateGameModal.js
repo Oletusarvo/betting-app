@@ -145,7 +145,7 @@ function CreateGameModal(){
                             betTypeSelect === 'Multi-Choice' ? 
                              <div id="options-input" className="flex-row gap-s center-align" hidden={betTypeSelect !== 'Multi-Choice'}>
                                 <input id="option-input" type="text" placeholder="Kirjoita vaihtoehto..." ></input>
-                                <button type="button" onClick={addOption}>{addText}</button>
+                                <button type="button" onClick={addOption}>Lisää</button>
                             </div>
                             : 
                             null

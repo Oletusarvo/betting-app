@@ -3,10 +3,10 @@ import AppContext from "../../Contexts/AppContext";
 
 function GenerateDiceModal(){
 
-    const {socket, user, setIsMining, setUser, isMining, currencyPrecision} = useContext(AppContext);
+    const {socket, user, setIsMining, setUser, isMining} = useContext(AppContext);
 
     function mine(amount){
-        const miningTime = 15000 / currencyPrecision; //Time in milliseconds it takes to generate a die.
+        const miningTime = 15000 * amount; //Time in milliseconds it takes to generate a die.
         setIsMining(true);    
 
         return new Promise((resolve, reject) => {
@@ -20,7 +20,7 @@ function GenerateDiceModal(){
     async function submit(e){
         e.preventDefault();
         const form = e.target;
-        const amount = form.amount.valueAsNumber * currencyPrecision;
+        const amount = form.amount.valueAsNumber;
         await mine(amount);
 
         socket.emit('coins_generate', {amount, username: user.username}, update => {

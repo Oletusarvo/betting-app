@@ -164,7 +164,7 @@ class Game{
         const {id, title} = this.data;
 
         const note = {
-            title,
+            game_title : title,
             message,
             username: targetUsername
         };
@@ -216,7 +216,7 @@ class SelectionGame extends Game{
             const {username, reward} = winner;
             if(reward != 0) {
                 await this.accountDeposit(username, reward);
-                await this.notify(username, `You won ${reward / 100} dice!`);
+                await this.notify(username, `You won ${reward} dice!`);
             }
         }
 
