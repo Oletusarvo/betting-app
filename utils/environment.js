@@ -116,7 +116,7 @@ class Game{
     }
 
     checkClose(){
-        if(!this.isExpired) throw new Error('Cannot close before expiry date!');
+        if(!this.isExpired) throw new Error('Ei voida sulkea ennen eräpäivää!');
     }   
 
     getMustCall(){
@@ -131,16 +131,16 @@ class Game{
     }
 
     async placeBet(bet){
-        if(this.isExpired()) throw new Error('Game is expired!');
+        if(this.isExpired()) throw new Error('Peli on erääntynyt!');
 
         const previousBet = this.getBet(bet.username);
-        if(previousBet && previousBet.folded) throw new Error('You have folded!');
-        if(previousBet && previousBet.amount == this.data.minimum_bet) throw new Error('Cannot raise until minimum bet changes!');
-        if(previousBet && previousBet.side !== bet.side) throw new Error('Side switching disallowed!');
+        if(previousBet && previousBet.folded) throw new Error('Olet luovuttanut!');
+        if(previousBet && previousBet.amount == this.data.minimum_bet) throw new Error('Et voi korottaa ennenkuin vähimmäispanos muuttuu!');
+        if(previousBet && previousBet.side !== bet.side) throw new Error('Position vaihto kielletty!');
         
         const amount = previousBet ? previousBet.amount + bet.amount : bet.amount;
 
-        if(!this.amountIsValid(amount)) throw new Error('Bet amount must be exactly the minimum bet or the minimum bet plus the increment!');
+        if(!this.amountIsValid(amount)) throw new Error('Vedon määrän tulee olla yhtä suuri kuin vähimmäispanos, tai vähimmäispanos plus korotus.');
 
         await this.accountDeposit(bet.username, -bet.amount);
 
@@ -151,7 +151,7 @@ class Game{
         this.data.pool = this.calculatePool();
 
         const mustCall = this.getMustCall();
-        for(const participant of mustCall) await this.notify(participant.username, `The minimum bet has been raised. Time to call or fold!`);
+        for(const participant of mustCall) await this.notify(participant.username, `Vähimmäispanos on noussut. Aika vastata tai luovuttaa!`);
 
         await this.update();
     }
@@ -195,7 +195,7 @@ class SelectionGame extends Game{
 
     checkClose(){
         super.checkClose();
-        if(this.isContested()) throw new Error('The game is contested!');
+        if(this.isContested()) throw new Error('Veto on riitautunut!');
     }
 
     async close(side){
@@ -216,7 +216,7 @@ class SelectionGame extends Game{
             const {username, reward} = winner;
             if(reward != 0) {
                 await this.accountDeposit(username, reward);
-                await this.notify(username, `You won ${reward} dice!`);
+                await this.notify(username, `Voitit ${currency.symbol + reward}`);
             }
         }
 

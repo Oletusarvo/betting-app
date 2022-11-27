@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
     const user = await db('users').where({username}).first();
 
     if(user === undefined){
-        res.status(404).send(`Account with username ${username} does not exist!`);
+        res.status(404).send(`Tiliä käyttäjänimellä ${username} ei ole!`);
         return;
     }
 
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         res.status(200).send(JSON.stringify(payload));
     }
     else{
-        res.status(403).send('Incorrect password!');
+        res.status(403).send('Väärä salasana!');
     }
     
 });
