@@ -8,7 +8,7 @@ import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
-    const {user, token, currencyPrecision, lang} = useContext(AppContext);
+    const {user, token, currency, lang} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
 

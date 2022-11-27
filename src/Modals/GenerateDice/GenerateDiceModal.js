@@ -3,7 +3,7 @@ import AppContext from "../../Contexts/AppContext";
 
 function GenerateDiceModal(){
 
-    const {socket, user, setIsMining, setUser, isMining} = useContext(AppContext);
+    const {socket, user, setIsMining, setUser, isMining, currency} = useContext(AppContext);
 
     function mine(amount){
         const miningTime = 15000 * amount; //Time in milliseconds it takes to generate a die.
@@ -28,6 +28,7 @@ function GenerateDiceModal(){
         });
     }
 
+    const amountStep = 1 / Math.pow(10, currency.precision);
     return (
         <div className="modal">
             <header className="flex-row center-all">Tuota noppia</header>
@@ -38,7 +39,7 @@ function GenerateDiceModal(){
                 <br/>
                 <form onSubmit={submit}>
                     <label>Määrä:</label>
-                    <input name="amount" type="number" step="0.01" min="0.01" defaultValue={1}></input>
+                    <input name="amount" type="number" step={amountStep} min={amountStep} defaultValue={1}></input>
                     <button type="submit" disabled={isMining}>Tuota</button>
                 </form>
             </div>
