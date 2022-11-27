@@ -20,14 +20,13 @@ $pool-circle-dimensions: 15rem;
     
 }
 
-button, select{
-    background: lightgray;
-    
+button, select, input{
+    background: white;
+
     &:disabled{
-        background: darkgray;
+        opacity: 0.5;
     }
 }
-
 form{
     display: flex;
     flex-flow: column;
