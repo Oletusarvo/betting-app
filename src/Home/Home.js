@@ -3,11 +3,10 @@ import {Link} from 'react-router-dom';
 import GameList  from '../GameList/GameList.js';
 import './Style.scss';
 import AppContext from '../Contexts/AppContext.js';
-import langStrings from '../lang';
 
 function Home(){
 
-    const {user, lang} = useContext(AppContext);
+    const {user} = useContext(AppContext);
 
     return (
         <>

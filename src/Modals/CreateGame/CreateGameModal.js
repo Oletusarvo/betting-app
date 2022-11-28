@@ -4,11 +4,10 @@ import OptionToken from "./OptionToken/OptionToken.js";
 import CreateGameContext from "../../Contexts/CreateGameContex.js";
 import '../Style.scss';
 import './Style.scss';
-import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
-    const {user, token, currency, lang} = useContext(AppContext);
+    const {user, token, currency} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
 

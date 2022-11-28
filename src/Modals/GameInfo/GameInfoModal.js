@@ -9,7 +9,7 @@ import GameInfoTable from './GameInfoTable';
 
 function GameInfoModal(props){
     const {destination, setGameList} = props;   
-    const {user, socket, setUser, currency} = useContext(AppContext);
+    const {user, socket, setUser} = useContext(AppContext);
 
     const [game, setGame] = useState(props.game);
     const [bet, setBet] = useState(null);
