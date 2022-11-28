@@ -14,15 +14,7 @@ function CreateGameModal(){
 
     function updateSelection(){
         const betSelect = document.querySelector('#select-bet-type');
-        if(betSelect.value === 'Boolean'){
-            setBetTypeSelect('Boolean');
-        }
-        else if(betSelect.value === 'Multi-Choice'){
-            setBetTypeSelect('Multi-Choice');
-        }
-        else if(betSelect.value === 'Lottery'){
-            setBetTypeSelect('Lottery');
-        }
+        setBetTypeSelect(betSelect.value);
     }
 
     function addOption(e){
