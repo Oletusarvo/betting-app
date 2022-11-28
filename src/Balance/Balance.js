@@ -53,7 +53,7 @@ function Balance(props){
 
     return (
         <div className="flex-row gap-s">
-            <span className="balance" id={id} style={{color: balance < 0 ? 'red' : 'white'}}>{cur + balance}</span>
+            <span className="balance" id={id} style={{color: currentAccount.balance < 0 ? 'red' : 'white'}}>{balance}</span>
             <span className="gain" hidden={showGain == false} style={{color: gain > 0 ? 'limegreen' : 'red'}}>{gain}</span>
             {
                 isMining ? <Loading dimensions={{width: "1rem", height: "1rem", borderWidth: "2px"}}/> : null

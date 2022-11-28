@@ -8,7 +8,7 @@ import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
-    const {user, token, currency} = useContext(AppContext);
+    const {user, token, currency, socket} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
     const [currencies, setCurrencies] = useState([]);
@@ -27,10 +27,11 @@ function CreateGameModal(){
         setBetTypeSelect(betSelect.value);
     }
 
-    function updateSelection(){
-        const currencySelect = document.querySelector('#select-currency');
+    function updateCurrencySelection(){
+        const currencySelect = document.querySelector('#currency-select');
         const val = currencySelect.value;
-        setBetTypeSelect(val);
+        setSelectedCurrency(currencies.find(cur => cur.short_name === val));
+        console.log(selectedCurrency);
     }
 
     function addOption(e){
@@ -87,7 +88,7 @@ function CreateGameModal(){
     }
 
     const maxTransfer = Math.abs(Math.floor(user.balance / 2));
-    const amountStep = 1 / Math.pow(10, currency.precision);
+    const amountStep = 1 / Math.pow(10, selectedCurrency.precision);
 
     return (
         <CreateGameContext.Provider deleteOption={deleteOption}>
@@ -110,10 +111,10 @@ function CreateGameModal(){
                             maxLength={50}></input>
                        
                         <label htmlFor="currency">Valuutta:</label>
-                        <select>
+                        <select id="currency-select" onChange={updateCurrencySelection}>
                             {
                                 currencies.map(cur => {
-                                    return <option value={cur.short_name}>{cur.short_name}</option>
+                                    return <option value={cur.short_name}>{cur.name + ` (${cur.short_name})`}</option>
                                 })
                             }
                         </select>
