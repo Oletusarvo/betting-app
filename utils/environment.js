@@ -99,6 +99,7 @@ class Game{
 
     calculateReward(numWinners, creatorShare){
         const {pool, pool_reserve} = this.data;
+        numWinners = numWinners || 1;
         const totalPool = pool + pool_reserve;
         return (totalPool - creatorShare) / numWinners;
     }
