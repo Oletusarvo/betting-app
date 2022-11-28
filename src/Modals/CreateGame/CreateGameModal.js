@@ -8,14 +8,11 @@ import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
-<<<<<<< HEAD
-    const {user, token, currency, lang} = useContext(AppContext);
-=======
-    const {user, token, currencyPrecision, socket} = useContext(AppContext);
->>>>>>> beta
+    const {user, token, currency} = useContext(AppContext);
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
     const [currencies, setCurrencies] = useState([]);
+    const [selectedCurrency, setSelectedCurrency] = useState(currency);
 
     useEffect(() => {
         socket.emit('currencies_get', data => {
@@ -27,15 +24,13 @@ function CreateGameModal(){
 
     function updateSelection(){
         const betSelect = document.querySelector('#select-bet-type');
-        if(betSelect.value === 'Boolean'){
-            setBetTypeSelect('Boolean');
-        }
-        else if(betSelect.value === 'Multi-Choice'){
-            setBetTypeSelect('Multi-Choice');
-        }
-        else if(betSelect.value === 'Lottery'){
-            setBetTypeSelect('Lottery');
-        }
+        setBetTypeSelect(betSelect.value);
+    }
+
+    function updateSelection(){
+        const currencySelect = document.querySelector('#select-currency');
+        const val = currencySelect.value;
+        setBetTypeSelect(val);
     }
 
     function addOption(e){
@@ -61,21 +56,13 @@ function CreateGameModal(){
 
         const data = {
             title : form.title.value,
-<<<<<<< HEAD
             minimum_bet : form.minimumBet.valueAsNumber,
             increment : form.increment.valueAsNumber,
-=======
-            minimum_bet : form.minimumBet.valueAsNumber * currencyMultiplier,
-            increment : form.increment.valueAsNumber * currencyMultiplier,
->>>>>>> beta
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
             options : options.join(';'),
-<<<<<<< HEAD
-=======
             currency: 'DICE',
->>>>>>> beta
         }
 
         req.send(JSON.stringify(data));
@@ -136,11 +123,7 @@ function CreateGameModal(){
                         <input 
                             name="minimumBet" 
                             type="number" 
-<<<<<<< HEAD
                             min={amountStep} 
-=======
-                            min="0.01"
->>>>>>> beta
                             max={maxTransfer}
                             step={amountStep} 
                             placeholder="Anna vähimmäispanos" 
@@ -158,21 +141,6 @@ function CreateGameModal(){
                             placeholder="Anna panoksen sallittu korotus" 
                             disabled={betTypeSelect === 'Lottery'}></input>
                         
-<<<<<<< HEAD
-=======
-                        
-                        <label htmlFor="rowSize" hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
-                        <input 
-                            hidden={betTypeSelect !== 'Lottery'} 
-                            name="rowSize" 
-                            defaultValue="4" 
-                            min="1" 
-                            step="1" 
-                            max="7" 
-                            type="number" 
-                            placeholder='Enter preferred row size'></input>
-                        
->>>>>>> beta
                         <div className="flex-row gap-s wrap">
                             {
                                 options.map(item => {

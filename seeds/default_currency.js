@@ -6,7 +6,7 @@ exports.seed = async function(knex) {
   // Update or create the default currency.
   await knex('currencies').del();
   await knex('currencies').insert({
-    symbol: 'D',
+    symbol: 'Đ',
     name: 'Dice',
     short_name: 'DCE',
     created_by: 'sepi'

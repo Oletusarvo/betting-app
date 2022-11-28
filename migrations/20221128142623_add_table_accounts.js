@@ -3,12 +3,12 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.createTable('notes', tbl => {
+  return knex.schema.createTable('accounts', tbl => {
     tbl.increments('id');
     tbl.string('username').references('username').inTable('users').onDelete('CASCADE').onUpdate('CASCADE');
-    tbl.string('title').notNullable();
-    tbl.string('message');
-  });
+    tbl.string('currency').references('short_name').inTable('currencies').onDelete('CASCADE').onUpdate('CASCADE');
+    tbl.float('balance').defaultTo(0);
+  })
 };
 
 /**
@@ -16,5 +16,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('notes');
+  return knex.schema.dropTableIfExists('accounts');
 };
