@@ -88,16 +88,19 @@ class Game{
 
     calculateCreatorShare(numWinners){
         const {pool, pool_reserve} = this.data;
-        const multiplier = Math.pow(10, currency.precision);
-        const totalPoolInPips = (pool + pool_reserve) * multiplier;
-        const shareInPips = totalPoolInPips % (numWinners || 1);
+        numWinners = numWinners || 1;
 
-        return shareInPips / multiplier;
+        const multiplier = Math.pow(10, currency.precision);
+        const totalPool = pool + pool_reserve;
+        const winnerShare = Math.floor(totalPool / numWinners * multiplier) / multiplier;
+
+        return totalPool - (winnerShare * numWinners);
     }
 
     calculateReward(numWinners, creatorShare){
         const {pool, pool_reserve} = this.data;
-        return (pool + pool_reserve - creatorShare) / (numWinners || 1);
+        const totalPool = pool + pool_reserve;
+        return (totalPool - creatorShare) / numWinners;
     }
 
     isExpired(){
