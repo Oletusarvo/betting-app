@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const db = require('../dbConfig');
 const bcrypt = require('bcrypt');
+const currency = require('../currencyfile');
 
 router.post('/', async (req, res) => {
     const {username, password1, password2} = req.body;
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
                     await db('users').insert({
                         username,
                         password: pass,
-                        balance: 10000,
+                        balance: currency.defaultIssueAmount,
                     });
                     
                     return res.status(200).send();

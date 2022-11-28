@@ -9,7 +9,7 @@
     "babel": "npm i @babel/preset-react",
     "server": "npx nodemon server.js",
     "build": "npx webpack --mode production",
-    "build:dev": "npx webpack --watch ..mode development",
+    "build:dev": "npx webpack --watch --mode development",
     "migrate_db": "npx knex migrate:latest --env production"
   },
   "keywords": [],

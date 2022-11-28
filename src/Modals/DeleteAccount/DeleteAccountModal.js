@@ -4,13 +4,13 @@ import Loading from "../../Loading/Loading.js";
 
 function DeleteAccountModal(){
 
-    const {user, token} = useContext(AppContext);
+    const {user, token, logout} = useContext(AppContext);
     const [loading, setLoading] = useState(false);
 
     function deleteAccount(e){
         e.preventDefault();
 
-        const res = confirm(`Are you sure you want to delete account ${user.username}?`);
+        const res = confirm(`Olet poistamassa tiliä ${user.username}. Oletko varma?`);
         if(!res) return;
     
         const req = new XMLHttpRequest();
@@ -23,13 +23,11 @@ function DeleteAccountModal(){
 
         req.onload = () => {
             if(req.status === 200){
-                alert('Account successfully deleted!');
-                localStorage.removeItem('betting-app-user');
-                localStorage.removeItem('betting-app-token');
-                location.assign('/');
+                alert('Tilin poisto onnistui!');
+                logout();
             }
             else{
-                alert(`Failed to delete account! Reason: ${req.response}`);
+                alert(`Tilin poisto epäonnistui! Syy: ${req.response}`);
             }
         }
     
@@ -44,7 +42,7 @@ function DeleteAccountModal(){
     }
 
     if(loading){
-        return <Loading title="Deleting account..." />
+        return <Loading title="Poistetaan tiliä..." />
     }
 
     return (
