@@ -3,11 +3,11 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema .createTable('notes', tbl => {
+  return knex.schema.createTable('notes', tbl => {
     tbl.increments('id');
     tbl.string('username').references('username').inTable('users').onDelete('CASCADE').onUpdate('CASCADE');
-    tbl.string('game_title').notNullable();
-    tbl.string('message').notNullable();
+    tbl.string('title').notNullable();
+    tbl.string('message');
   });
 };
 
@@ -16,5 +16,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('notes');
+  return knex.schema.dropTableIfExist('notes');
 };

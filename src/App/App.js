@@ -18,6 +18,8 @@ import AppContext from '../Contexts/AppContext';
 import './Style.scss';
 import AccountHeader from '../AccountHeader/AccountHeader';
 import Currency from '../currency';
+import NewCurrency from '../NewCurrency/NewCurrency';
+import Accounts from '../Accounts/Accounts';
 
 if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').then(() => console.log('Service worker registered!'))
@@ -66,7 +68,9 @@ function App (){
         }
 
         return [];
-    })
+    });
+
+    const [currentAccount, setCurrentAccount] = useState(null);
 
     function logout(){
         storage.removeItem('betting-app-token');
@@ -80,11 +84,17 @@ function App (){
     const [isMining, setIsMining] = useState(false);
 
     useEffect(() => {
+        
+    });
+
+    useEffect(() => {
         if(user){
             storage.setItem('betting-app-user', JSON.stringify(user));
             socket.emit('notes_get', user.username, data => {
                 setNotes(data);
             });
+
+            setCurrentAccount(user.accounts.find(acc => acc.currency.short_name === 'DCE'));
         }
     }, [user]);
 
@@ -113,7 +123,16 @@ function App (){
 
         socket.emit('currency_get', data => {
             setCurrency(new Currency(data));
-        })
+        });
+        
+        if(user){
+            socket.emit('accounts_get', user.username, data => {
+                if(!data) return
+                const newUser = user;
+                newUser.accounts = data;
+                setUser(newUser);
+            });
+        }
 
         return () => {
             socket.off('account_update');
@@ -148,7 +167,10 @@ function App (){
                     setToken, 
                     isMining, 
                     setIsMining, 
-                    logout}}>
+                    logout,
+                    currentAccount,
+                    setCurrentAccount,
+                    }}>
                     <Header user={user} setUser={setUser} setToken={setToken}/>
                     {user ? <AccountHeader/> : null}
                     <Routes >
@@ -162,9 +184,10 @@ function App (){
                         <Route exact path="/games" element={<Games/>} />
                         <Route exact path="/games/:id" element={<Betting/>}></Route>
                         <Route exact path="/newgame" element={<NewGame/>} />
-                        <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
+                        <Route exact path="/newcurrency" element={<NewCurrency/>}></Route>
                         <Route exact path="/notes" element={<Notes/>}></Route>
                         <Route exact path="/users" element={<Users/>}></Route>
+                        <Route exact path="/accounts" element={<Accounts/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>
                     <Navbar user={user}/>

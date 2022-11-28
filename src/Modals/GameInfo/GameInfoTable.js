@@ -17,6 +17,11 @@ function GameInfoTable({game}){
             </tr>
 
             <tr>
+                <td>Valuutta</td>
+                <td className="align-text-right">{game.currency}</td>
+            </tr>
+
+            <tr>
                 <td>Potti</td>
                 <td className="align-text-right">{currency.getString(pool + pool_reserve)}</td>
             </tr>

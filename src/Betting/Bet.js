@@ -29,11 +29,12 @@ function Bet(){
                 };
                 setGameState(newState);
             }
+            else{
+                alert(req.response);
+            }
         }
     }
     
-    
-
     if(bet){
         const amount = bet.amount;
         if(bet.folded){

@@ -3,9 +3,13 @@
  * @returns { Promise<void> } 
  */
 exports.seed = async function(knex) {
-  // Deletes ALL existing entries
-  await knex('currencies').del()
-  await knex('currencies').insert([
-    {symbol: 'DICE', precision: 2, created_by: ''}
-  ]);
+  // Update or create the default currency.
+  await knex('currencies').del();
+  await knex('currencies').insert({
+    symbol: 'D',
+    name: 'Dice',
+    short_name: 'DCE',
+    created_by: 'sepi'
+  });
+ 
 };

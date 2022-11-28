@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../../Contexts/AppContext.js";
 import OptionToken from "./OptionToken/OptionToken.js";
 import CreateGameContext from "../../Contexts/CreateGameContex.js";
@@ -8,9 +8,22 @@ import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
+<<<<<<< HEAD
     const {user, token, currency, lang} = useContext(AppContext);
+=======
+    const {user, token, currencyPrecision, socket} = useContext(AppContext);
+>>>>>>> beta
     const [betTypeSelect, setBetTypeSelect] = useState('Boolean');
     const [options, setOptions] = useState([]);
+    const [currencies, setCurrencies] = useState([]);
+
+    useEffect(() => {
+        socket.emit('currencies_get', data => {
+            if(!data) return;
+            const newCurrencies = [...data];
+            setCurrencies(newCurrencies);
+        });
+    }, []);
 
     function updateSelection(){
         const betSelect = document.querySelector('#select-bet-type');
@@ -41,16 +54,28 @@ function CreateGameModal(){
         req.open('POST', '/games', true);
         req.setRequestHeader('auth', token);
         req.setRequestHeader('Content-Type', 'application/json');
-    
-        const form = document.querySelector('#new-game-form');
+
+        const form = e.target;
+        const selectedCurrency = currencies.find(item => item.short_name === form.currency.value);
+        const currencyMultiplier = Math.pow(10, selectedCurrency.precision);
+
         const data = {
             title : form.title.value,
+<<<<<<< HEAD
             minimum_bet : form.minimumBet.valueAsNumber,
             increment : form.increment.valueAsNumber,
+=======
+            minimum_bet : form.minimumBet.valueAsNumber * currencyMultiplier,
+            increment : form.increment.valueAsNumber * currencyMultiplier,
+>>>>>>> beta
             created_by : user.username,
             expiry_date : form.expiryDate.value,
             type : form.betType.value,
             options : options.join(';'),
+<<<<<<< HEAD
+=======
+            currency: 'DICE',
+>>>>>>> beta
         }
 
         req.send(JSON.stringify(data));
@@ -83,33 +108,46 @@ function CreateGameModal(){
                 <header>Luo Uusi Veto</header>
                 <div className="content glass bg-fade">
                     <form id="new-game-form" onSubmit={submit}>
-                        <label>Tyyppi:</label>
+                        <label htmlFor="betType">Tyyppi:</label>
                         <select name="betType" id="select-bet-type" onChange={updateSelection}>
-                            <option>Boolean</option>
-                            <option>Multi-Choice</option>
+                            <option value="boolean">Boolean</option>
+                            <option value="multiChoice">Multi-Choice</option>
                         </select>
                         
                     
-                        <label>Otsikko:</label>
+                        <label htmlFor="title">Otsikko:</label>
                         <input 
                             name="title" 
                             placeholder="Anna vedon otsikko" 
                             required={true} 
                             maxLength={50}></input>
                        
-
-                       <label>{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
+                        <label htmlFor="currency">Valuutta:</label>
+                        <select>
+                            {
+                                currencies.map(cur => {
+                                    return <option value={cur.short_name}>{cur.short_name}</option>
+                                })
+                            }
+                        </select>
+                        
+                        
+                       <label htmlFor="minimumBet">{betTypeSelect === 'Lottery' ? 'Row Price:' : 'Vähimmäispanos:'}</label>
                         <input 
                             name="minimumBet" 
                             type="number" 
+<<<<<<< HEAD
                             min={amountStep} 
+=======
+                            min="0.01"
+>>>>>>> beta
                             max={maxTransfer}
                             step={amountStep} 
                             placeholder="Anna vähimmäispanos" 
                             required={true} 
                             defaultValue={1}></input>
         
-                        <label hidden={betTypeSelect === 'Lottery'}>Korotus:</label>
+                        <label htmlFor="increment" hidden={betTypeSelect === 'Lottery'}>Korotus:</label>
                         <input 
                             hidden={betTypeSelect === 'Lottery'} 
                             name="increment" 
@@ -120,6 +158,21 @@ function CreateGameModal(){
                             placeholder="Anna panoksen sallittu korotus" 
                             disabled={betTypeSelect === 'Lottery'}></input>
                         
+<<<<<<< HEAD
+=======
+                        
+                        <label htmlFor="rowSize" hidden={betTypeSelect !== 'Lottery'}>Row Size:</label>
+                        <input 
+                            hidden={betTypeSelect !== 'Lottery'} 
+                            name="rowSize" 
+                            defaultValue="4" 
+                            min="1" 
+                            step="1" 
+                            max="7" 
+                            type="number" 
+                            placeholder='Enter preferred row size'></input>
+                        
+>>>>>>> beta
                         <div className="flex-row gap-s wrap">
                             {
                                 options.map(item => {
@@ -141,7 +194,7 @@ function CreateGameModal(){
                         }
                        
 
-                        <label>Eräpäivä:</label>
+                        <label htmlFor="expiryDate">Eräpäivä:</label>
                         <input 
                             name="expiryDate" 
                             type="date" 

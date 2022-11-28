@@ -106,6 +106,27 @@ io.on('connection', async socket => {
         }
     });
 
+    socket.on('currency_create', async (data, callback) => {
+        try{
+            await db('currencies').insert(data);
+            callback(0);
+        }
+        catch(err){
+            callback(1);
+        }
+    });
+
+    socket.on('currencies_get', async callback => {
+        try{
+            const currencies = await db('currencies');
+            callback(currencies);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+        
+    });
+
     socket.on('notes_get', async (username, callback) => {
         if(username === 'demo') return;
 
@@ -159,6 +180,22 @@ io.on('connection', async socket => {
     socket.on('currency_get', (callback) => {
         const cur = require('./currencyfile');
         callback(cur);
+    })
+    
+    socket.on('accounts_get', async (username, callback) => {
+        try{
+            
+            const accounts = await db('accounts').where({username});
+            for(const acc of accounts){
+                const currency = await db.select('symbol', 'short_name', 'precision', 'name').from('currencies').where({short_name: acc.currency}).first();
+                acc.currency = currency;
+            }
+            callback(accounts);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+        
     })
 });
 

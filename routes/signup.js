@@ -18,6 +18,11 @@ router.post('/', async (req, res) => {
                     await db('users').insert({
                         username,
                         password: pass,
+                    });
+
+                    await db('accounts').insert({
+                        username,
+                        currency: 'DCE',
                         balance: currency.defaultIssueAmount,
                     });
                     

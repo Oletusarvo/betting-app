@@ -55,7 +55,7 @@ function GameList(props){
     if(!gameList || !user) return null;
     
     return (
-        <div className="gap-m flex-column">
+        <div className="gap-m flex-column fill">
             {
                 props.byUser ? 
                 gameList.filter(item => item.created_by === user.username).map(item => {

@@ -111,10 +111,10 @@ function GameInfoModal(props){
                 {
                     game.created_by === user.username ? 
                     <>
-                        <select disabled={game.expiry_date !== 'When Closed' && !isExpired} hidden={game.type === 'Lottery'} id={`side-select-${game.id}`}>
+                        <select disabled={game.expiry_date !== 'Suljettaessa' && !isExpired} hidden={game.type === 'Lottery'} id={`side-select-${game.id}`}>
                             {options}
                         </select>
-                        <button disabled={game.expiry_date !== 'When Closed' && !isExpired && game.type !== 'Lottery'} onClick={() => closeGame(game.id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
+                        <button disabled={game.expiry_date !== 'Suljettaessa' && !isExpired && game.type !== 'Lottery'} onClick={() => closeGame(game.id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'CLOSE'}</button>
                     </>
                     :
                     null

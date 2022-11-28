@@ -5,14 +5,16 @@ import './Style.scss';
 import Currency from '../currency';
 
 function Balance(props){
-    const {user, currency, isMining} = useContext(AppContext);
+    const {user, currency, isMining, currentAccount} = useContext(AppContext);
     const [gain, setGain] = useState(0);
     const [showGain, setShowGain] = useState(false);
     const {id} = props;
-    const previousBalance = useRef(user.balance);
+    const previousBalance = useRef(currentAccount ? currentAccount.balance : 0);
 
     useEffect(() => {
-        const difference = user.balance - previousBalance.current;
+        if(!currentAccount) return;
+
+        const difference = currentAccount.balance - previousBalance.current;
         if(difference == 0) return;
 
         const balance = document.querySelector(`#${id}`);
@@ -32,7 +34,7 @@ function Balance(props){
         setTimeout(() => {
             balance.classList.remove('flash-green');
             balance.classList.remove('flash-red');
-            previousBalance.current = user.balance;
+            previousBalance.current = currentAccount.balance;
         }, 250);
 
         setTimeout(() => {
@@ -42,11 +44,16 @@ function Balance(props){
 
     }, [user]);
 
-    const balance = currency.getString(user.balance);
+    
+
+    if(!currentAccount) return <span>Loading...</span>;
+    
+    const balance = currency.getString(currentAccount.balance);
+    const cur = currentAccount.currency.symbol || currentAccount.currency.short_name + ' ';
 
     return (
         <div className="flex-row gap-s">
-            <span className="balance" id={id} style={{color: user.balance < 0 ? 'red' : 'white'}}>{balance}</span>
+            <span className="balance" id={id} style={{color: balance < 0 ? 'red' : 'white'}}>{cur + balance}</span>
             <span className="gain" hidden={showGain == false} style={{color: gain > 0 ? 'limegreen' : 'red'}}>{gain}</span>
             {
                 isMining ? <Loading dimensions={{width: "1rem", height: "1rem", borderWidth: "2px"}}/> : null
