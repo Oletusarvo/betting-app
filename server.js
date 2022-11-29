@@ -74,11 +74,16 @@ io.on('connection', async socket => {
 
             game.sendNotes(io);
             socket.broadcast.emit('account_update');
-            const acc = await db.select('username', 'balance').from('users').where({username}).first();
+            const accounts = db('accounts').where({username});
+            for(const acc of accounts){
+                const cur = await db('currencies').where({short_name: acc.currency});
+                acc.currency = cur;
+            }
+
             const gameList = await db('games');
             
             callback({
-                acc, 
+                user: {username, accounts} ,
                 gameList,
             });
         }
@@ -150,8 +155,8 @@ io.on('connection', async socket => {
 
     socket.on('account_get', async (username, callback) => {
         try{
-            const acc = await db.select('username', 'balance').from('users').where({username}).first();
-            callback({user: acc, notes: []});
+            const accounts = await db.select('username', 'currency', 'balance').from('accounts').where({username});
+            callback({user: {username, accounts}, notes: []});
         }
         catch(err){
             console.log(err);
