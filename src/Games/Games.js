@@ -1,4 +1,5 @@
 import React, {useContext, useState} from 'react';
+import AddButton from '../Buttons/AddButton/AddButton.js';
 import GameList from '../GameList/GameList.js';
 import './Style.scss';
 

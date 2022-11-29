@@ -5,6 +5,7 @@ import GameInfoModal from '../Modals/GameInfo/GameInfoModal.js';
 import Loading from '../Loading/Loading.js';
 import './Style.scss';
 import langStrings from "../lang";
+import AddButton from '../Buttons/AddButton/AddButton';
 
 
 function GameList(props){
@@ -55,7 +56,7 @@ function GameList(props){
     if(!gameList || !user) return null;
     
     return (
-        <div className="gap-m flex-column">
+        <div className="gap-m flex-column position-relative">
             {
                 props.byUser ? 
                 gameList.filter(item => item.created_by === user.username).map(item => {
@@ -66,6 +67,8 @@ function GameList(props){
                     return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
                 })
             }
+
+            <AddButton/>
         </div>
     );
 }
