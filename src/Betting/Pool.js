@@ -11,7 +11,7 @@ function Pool(){
         if(bet == undefined){
             return 'entry';
         }
-        else if(bet && !bet.folded && Math.round(bet.amount) < Math.round(game.minimum_bet)){
+        else if(bet && !bet.folded && bet.amount < game.minimum_bet){
             return 'call';
         }
         else{
