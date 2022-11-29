@@ -7,11 +7,15 @@ function Header(){
 
     const {isExpired, game} = useContext(GameContext);
 
+    function goBack(){
+        window.history.back();
+    }
+
     return (
         <div className= {"container glass bg-fade " + (isExpired && " bg-expired")} id="bet-title">
-            <Link id="back-button" to="/games">
+            <div className="back-button" onClick={goBack}>
                 <img src="../img/arrow.png"></img>
-            </Link>
+            </div>
             <h3 id="bet-name">{game.title}</h3>
         </div>
     );

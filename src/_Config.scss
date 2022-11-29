@@ -101,6 +101,10 @@ body{
     justify-content: space-between;
 }
 
+.back-button{
+    cursor: pointer;
+}
+
 .rounded-button{
     background: $primary-color;
     border-radius: 50%;
