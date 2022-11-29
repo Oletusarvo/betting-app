@@ -23,8 +23,9 @@ function User(props){
     }, [username]);
 
     function follow(){
-        socket.emit('follow', user.username, username, callback => {
-            console.log('Followed successfully!');
+        socket.emit('follow', user.username, username, res => {
+            if(!res) return;
+            console.log(res);
         })
     }
 
@@ -55,7 +56,7 @@ function User(props){
                 
                 <div id="buttons">
                     <button className="w-100" onClick={follow} disabled={username === user.username}>Seuraa</button>
-                    <button className="w-100" disabled={username === user.username}>Viesti</button>
+                    <button className="w-100" hidden={true} disabled={username === user.username}>Viesti</button>
                 </div>
                 
                 

@@ -163,6 +163,8 @@ io.on('connection', async socket => {
 
     socket.on('follow', async (follower, followed, callback) => {
         try{
+            const isFollowing = (await db('follow_data').where({followed, followed_by: follower})).length; //Hacky stuff. Have to figure out a more elegant way.
+            if(isFollowing) throw new Error('Seuraat jo käyttäjää ' + followed + '!');
             await db('follow_data').insert({
                 followed,
                 followed_by: follower
@@ -178,7 +180,7 @@ io.on('connection', async socket => {
             socket.broadcast.emit('notes_update', [note]);
         }
         catch(err){
-            console.log(err.message);
+            callback(err.message);
         }
     });
 

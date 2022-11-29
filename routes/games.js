@@ -65,6 +65,20 @@ router.post('/', checkAuth, async (req, res) => {
         data.expiry_date = data.expiry_date == '' ? 'When Closed' : data.expiry_date;
 
         await db('games').insert(data);
+
+        const username = data.created_by;
+        const followers = await db.select('followed_by').from('follow_data').where({followed: username}).pluck('followed_by');
+
+        for(const fol of followers){
+            const note = {
+                game_title: data.title,
+                message: `${username} loi uuden vedon!`,
+                username: fol,
+            }
+
+            await db('notes').insert(note);
+        }
+        
         res.status(200).send();
     }
     catch(err){
