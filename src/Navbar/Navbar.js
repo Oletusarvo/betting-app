@@ -21,13 +21,13 @@ class Navbar extends React.Component{
                     this.props.user !== null ? 
                     <>
                         <div id="user-link">
-                            <Link to="/user">
+                            <Link to={`user/${this.props.user.username}`}>
                                 <i className="navbar-icon">
                                     <img src={UsersIcon}></img>
                                 </i>
                             </Link>
                         </div>
-                        
+
                         <div id="games-link">
                             <Link to="/games">
                                 <i className="navbar-icon" id="games-icon">

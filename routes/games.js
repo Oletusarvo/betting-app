@@ -38,6 +38,7 @@ router.get('/by_user/:id', checkAuth, async (req, res) => {
     try{
         const username = req.params.id;
         const gamelist = await db('games').where({created_by: username});
+        console.log(gamelist);
         res.status(200).send(JSON.stringify(gamelist));
     }
     catch(err){

@@ -12,7 +12,7 @@ function Games(){
     }
 
     return (
-        <div className="flex-column fill pad w-100 gap-m overflow-y-scroll overflow-x-hide" id="games-page">
+        <div className="page" id="games-page">
             <header className="w-100 margin-bottom" id="games-page-header">
                 <h2 className="flex-row center-all">Kaikki Vedot</h2>
                 <input type="search" placeholder="Etsi..." onInput={search}></input>

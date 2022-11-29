@@ -163,7 +163,7 @@ io.on('connection', async socket => {
 
     socket.on('get_user_data', async (username, callback) => {
         const numBets = (await db('games').where({created_by: username})).length;
-
+        console.log(`Fetching bets by ${username}`)
         callback({
             numBets,
             numFollowers: 0,

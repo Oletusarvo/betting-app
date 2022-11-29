@@ -2,10 +2,12 @@ import AppContext from "../Contexts/AppContext"
 import {useContext, useEffect, useState} from 'react';
 import GameList from "../GameList/GameList";
 import './Style.scss';
+import { useParams } from "react-router-dom";
 
 function User(props){
 
-    const {user, socket} = useContext(AppContext);
+    const {username} = useParams();
+    const {socket} = useContext(AppContext);
     const [data, setData] = useState({
         numBets: 0,
         numFollowers: 0,
@@ -13,16 +15,16 @@ function User(props){
     });
 
     useEffect(() => {
-        socket.emit('get_user_data', user.username, dataUpdate => {
+        socket.emit('get_user_data', username, dataUpdate => {
             if(!dataUpdate) return;
             setData(dataUpdate);
         })
-    }, []);
+    }, [username]);
 
     return (
         <div className="page" id="user-page">
             <header id="user-page-header" className="margin-bottom">
-                <h2 id="user-icon">{user.username}</h2>
+                <h2 id="user-icon">{username}</h2>
                 <div className="user-header-count">
                     <h3 id="user-bets">{data.numBets}</h3>
                     <span>Vedot</span>
@@ -43,7 +45,7 @@ function User(props){
             </header>
 
             <div id="user-page-bets">
-                <GameList byUser={true}/>
+                <GameList byUser={username}/>
             </div>
         </div>
     )

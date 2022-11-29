@@ -14,9 +14,11 @@ function GameList(props){
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        console.log('Kaljaa')
         const req = new XMLHttpRequest();
         if(props.byUser){
-            req.open('GET', `/games/by_user/${user.username}`, true);
+            console.log(props.byUser);
+            req.open('GET', `/games/by_user/${props.byUser}`, true);
         }
         else if(props.query && props.query.length){
             req.open('GET', `/games/?title=${props.query}`);
@@ -34,7 +36,8 @@ function GameList(props){
             if(req.status === 200){
                 const list = JSON.parse(req.response);
                 list.sort((a, b) => (b.pool + b.pool_reserve) - (a.pool + a.pool_reserve));
-                setGameList(list);
+                const newList = [...list];
+                setGameList(newList);
                 setLoading(false);
             }
             else{
@@ -45,9 +48,10 @@ function GameList(props){
         socket.on('error', msg => alert(`Error! ${msg}`));
 
         return () => {
+            console.log(gameList);
             socket.off('error');
         }
-    }, [props]);
+    }, [props.byUser]);
 
     if(loading){
         return <Loading title='Ladataan vetoja...'/>
@@ -59,7 +63,7 @@ function GameList(props){
         <div className="gap-m flex-column position-relative">
             {
                 props.byUser ? 
-                gameList.filter(item => item.created_by === user.username).map(item => {
+                gameList.filter(item => item.created_by === props.byUser).map(item => {
                     return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
                 })
                 :

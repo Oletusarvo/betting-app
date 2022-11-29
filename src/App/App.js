@@ -166,7 +166,7 @@ function App (){
                         <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
                         <Route exact path="/notes" element={<Notes/>}></Route>
                         <Route exact path="/users" element={<Users/>}></Route>
-                        <Route exact path="/user" element={<User/>}></Route>
+                        <Route exact path="/user/:username" element={<User/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>
                     <Navbar user={user}/>
