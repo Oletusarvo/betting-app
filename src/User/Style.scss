@@ -1,0 +1,32 @@
+@import '../Config';
+
+#user-page{
+    #user-page-header{
+        padding: 0.5rem;
+        background: none !important;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid white;
+        #user-icon{
+            display: flex;
+            flex-flow: column;
+            width: 70px;
+            height: 70px;
+            padding: 1rem;
+            border-radius: 50%;
+            background: $primary-color;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .user-header-count{
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.1rem;
+    }
+}

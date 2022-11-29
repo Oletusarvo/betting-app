@@ -89,6 +89,10 @@ body{
     overflow-x: hidden;
 }
 
+.justify-space-between{
+    justify-content: space-between;
+}
+
 .rounded-button{
     background: $primary-color;
     border-radius: 50%;

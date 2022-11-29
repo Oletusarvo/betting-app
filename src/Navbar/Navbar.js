@@ -17,16 +17,17 @@ class Navbar extends React.Component{
     render(){
         return (
             <div className="navbar">
-                <div id="home-link">
-                    <Link to="/">
-                        <i className="navbar-icon" id="home-icon">
-                            <img src={HomeIcon}></img>
-                        </i>
-                    </Link>
-                </div>
                 {
                     this.props.user !== null ? 
                     <>
+                        <div id="user-link">
+                            <Link to="/user">
+                                <i className="navbar-icon">
+                                    <img src={UsersIcon}></img>
+                                </i>
+                            </Link>
+                        </div>
+                        
                         <div id="games-link">
                             <Link to="/games">
                                 <i className="navbar-icon" id="games-icon">
@@ -51,17 +52,17 @@ class Navbar extends React.Component{
                                 </i>
                             </Link>
                         </div>
-
-                        <div className="users-link">
-                            <Link to="/users">
-                                <i className="navbar-icon" id="users-icon">
-                                    <img src={UsersIcon}></img>
-                                </i>
-                            </Link>
-                        </div>
                     </>
                     :
-                    <></>
+                    <>
+                        <div id="home-link">
+                        <Link to="/">
+                            <i className="navbar-icon" id="home-icon">
+                                <img src={HomeIcon}></img>
+                            </i>
+                        </Link>
+                        </div>
+                    </>
                     
                 }
             </div>

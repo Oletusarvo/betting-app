@@ -3,16 +3,18 @@ import {Link} from 'react-router-dom';
 import GameList  from '../GameList/GameList.js';
 import './Style.scss';
 import AppContext from '../Contexts/AppContext.js';
+import User from '../User/User.js';
 
 function Home(){
 
     const {user} = useContext(AppContext);
 
     return (
-        <>
-        <div className="flex-column fill w-100 pad overflow-y-scroll overflow-x-hide gap-default" id="home-page">
-            {
-                user === null ? 
+        
+            user === null ?
+        
+            <div className="flex-column fill w-100 pad overflow-y-scroll overflow-x-hide gap-default" id="home-page">
+
                 <div className="container glass bg-fade">
                     <h1>Veikkaus App</h1>
                     <br/>
@@ -61,20 +63,11 @@ function Home(){
                         Hauskoja skabahetkiä!
                     </p>
                 </div>
-                :
-                <>  
-                    <div id="home-account-content" className="fill flex-column">
-                        <h2 className="margin-bottom">Omat Vedot</h2>
-                        <GameList byUser={true}/>
-                    </div>
-                    
-                    <Link to="/account/delete" id="del-link">Poista Tili</Link>
-                    
-                </>
-            }
-        </div>
-        
-        </>
+            </div>
+
+            :
+
+            <User/>
     );
 }
 

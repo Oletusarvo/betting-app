@@ -159,6 +159,16 @@ io.on('connection', async socket => {
     socket.on('currency_get', (callback) => {
         const cur = require('./currencyfile');
         callback(cur);
+    });
+
+    socket.on('get_user_data', async (username, callback) => {
+        const numBets = (await db('games').where({created_by: username})).length;
+
+        callback({
+            numBets,
+            numFollowers: 0,
+            numFollowing: 0,
+        })
     })
 });
 

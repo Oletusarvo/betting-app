@@ -14,13 +14,17 @@ function Users(props){
     });
 
     return (
-        <div className="flex-column fill pad w-100 gap-m overflow-y-scroll overflow-x-hide">
-            <h1>Users</h1>
+        <div className="flex-column fill pad w-100 gap-m overflow-y-scroll overflow-x-hide" id="users-page">
+            <header className="w-100 margin-bottom justify-space-between">
+                <h2 className="margin-bottom">Käyttäjät</h2>
+                <input type="search" placeholder="Etsi..."></input>
+            </header>
+            
             <ul>
                 {
                     users.map(user => {
                         return(
-                            <li>
+                            <li key={user.username}>
                                 <span>{user.username}</span>
                                 <button>Follow</button>
                             </li>
