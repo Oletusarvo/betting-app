@@ -6,7 +6,7 @@ const HomeIcon = './img/home.png';
 const GamesIcon = './img/casino-chip.png';
 const PlusIcon = './img/plus.png';
 const CoinsIcon = './img/die.png';
-
+const WalletsIcon = './img/wallet.png'
 class Navbar extends React.Component{
     constructor(props){
         super(props);
@@ -47,6 +47,14 @@ class Navbar extends React.Component{
                             <Link to="/newcurrency">
                                 <i className="navbar-icon" id="generate-coins-icon">
                                     <img src={CoinsIcon}></img>
+                                </i>
+                            </Link>
+                        </div>
+
+                        <div id ="wallets-link">
+                            <Link to="/wallets">
+                                <i className="navbar-icon" id="wallets-icon">
+                                    <img src={WalletsIcon}></img>
                                 </i>
                             </Link>
                         </div>

@@ -187,7 +187,7 @@ function App (){
                         <Route exact path="/newcurrency" element={<NewCurrency/>}></Route>
                         <Route exact path="/notes" element={<Notes/>}></Route>
                         <Route exact path="/users" element={<Users/>}></Route>
-                        <Route exact path="/accounts" element={<Accounts/>}></Route>
+                        <Route exact path="/wallets" element={<Accounts/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>
                     <Navbar user={user}/>
