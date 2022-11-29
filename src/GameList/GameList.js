@@ -62,14 +62,10 @@ function GameList(props){
     return (
         <div className="gap-m flex-column position-relative">
             {
-                props.byUser ? 
-                gameList.filter(item => item.created_by === props.byUser).map(item => {
-                    return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
-                })
-                :
                 gameList.map(item => {
                     return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
                 })
+        
             }
         </div>
     );
