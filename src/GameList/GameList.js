@@ -18,6 +18,9 @@ function GameList(props){
         if(props.byUser){
             req.open('GET', `/games/by_user/${props.byUser}`, true);
         }
+        else if(props.byFollowedOf){
+            req.open('GET', `/games/?username=${props.byFollowedOf}&followed=true`)
+        }
         else if(props.query && props.query.length){
             req.open('GET', `/games/?title=${props.query}`);
         }
@@ -60,7 +63,21 @@ function GameList(props){
         <div className="gap-m flex-column">
             {
                 gameList.map(item => {
-                    return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
+                    return (
+                        <>
+                        {
+                            props.creatorName ?
+                            <header className="page-header">
+                                <h2>{item.created_by}</h2>
+                            </header> : 
+                            null
+
+                        }
+                        
+                        <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
+
+                        </>
+                    )
                 })
             }
         </div>

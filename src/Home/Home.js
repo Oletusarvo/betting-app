@@ -1,9 +1,7 @@
 import React, {useContext} from 'react';
-import {Link} from 'react-router-dom';
-import GameList  from '../GameList/GameList.js';
 import './Style.scss';
 import AppContext from '../Contexts/AppContext.js';
-import User from '../User/User.js';
+import UserWall from '../UserWall/UserWall.js';
 
 function Home(){
 
@@ -67,7 +65,7 @@ function Home(){
 
             :
 
-            <User/>
+            <UserWall/>
     );
 }
 

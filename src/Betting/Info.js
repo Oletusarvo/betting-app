@@ -2,8 +2,7 @@ import { useContext } from "react";
 import AppContext from "../Contexts/AppContext";
 import GameContext from "../Contexts/GameContext";
 import Bet from './Bet.js';
-import Currency from '../currency';
-import langStrings from "../lang";
+import Link from 'react-router-dom';
 
 function Info(){
 
@@ -22,6 +21,11 @@ function Info(){
                     <tr>
                         <td>Veto</td>
                         <td className="align-text-right"><Bet/></td>
+                    </tr>
+
+                    <tr>
+                        <td>Luonut</td>
+                        <td className="align-text-right"><a href={`#/user/${game.created_by}`}>{game.created_by}</a></td>
                     </tr>
                     <tr>
                         <td>Vähimmäispanos</td>

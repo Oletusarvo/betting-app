@@ -3,7 +3,7 @@
 .game-info-modal{
     position: relative;
     width: 100%;
-    
+
     a{
         width: 100%;
     }
@@ -12,6 +12,8 @@
 
         user-select: none;
         z-index: 0;
+        text-overflow: ellipsis;
+        display: block;
 
         .badge{
             position: absolute;

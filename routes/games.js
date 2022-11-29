@@ -5,11 +5,17 @@ const {Game} = require('../utils/environment');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 
 router.get('/', async (req, res) => {
-    const {title} = req.query;
+    const {title, username, followed} = req.query;
 
     let gamelist = [];
     if(title == undefined){
-        gamelist = await db('games');
+        if(username && followed){
+            const followed = await db('follow_data').where({followed_by: username}).pluck('followed');
+            gamelist = await db('games').whereIn('created_by', followed);
+        }
+        else{
+            gamelist = await db('games');
+        }  
     }
     else{
         gamelist = await db('games').whereLike('title', `%${title}%`);

@@ -12,6 +12,10 @@ function GameInfoTable({game}){
         <table>
         <tbody>
             <tr>
+                <td>Luonut</td>
+                <td className="align-text-right">{game.created_by}</td>
+            </tr>
+            <tr>
                 <td>Tyyppi</td>
                 <td className="align-text-right">{game.type}</td>
             </tr>

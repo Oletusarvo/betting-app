@@ -20,6 +20,14 @@ class Navbar extends React.Component{
                 {
                     this.props.user !== null ? 
                     <>
+                         <div id="home-link">
+                            <Link to="/">
+                                <i className="navbar-icon" id="home-icon">
+                                    <img src={HomeIcon}></img>
+                                </i>
+                            </Link>
+                        </div>
+
                         <div id="user-link">
                             <Link to={`user/${this.props.user.username}`}>
                                 <i className="navbar-icon">

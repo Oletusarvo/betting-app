@@ -13,7 +13,7 @@ function Games(){
 
     return (
         <div className="page" id="games-page">
-            <header className="w-100 margin-bottom" id="games-page-header">
+            <header className="w-100 margin-bottom page-header" id="games-page-header">
                 <h2 className="flex-row center-all">Kaikki Vedot</h2>
                 <input type="search" placeholder="Etsi..." onInput={search}></input>
             </header>
