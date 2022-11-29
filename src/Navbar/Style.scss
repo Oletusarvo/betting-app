@@ -9,6 +9,13 @@
     flex-flow: row;
     justify-content: space-evenly;
     
+    div{
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     .nav-item{
         cursor: pointer;
         padding: 0.2rem;
@@ -26,8 +33,6 @@
         &:hover{
             background: lighten($primary-color, 20);
         }
-
-        
     }
 
     img{

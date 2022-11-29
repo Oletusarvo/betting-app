@@ -67,8 +67,6 @@ function GameList(props){
                     return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
                 })
             }
-
-            <AddButton/>
         </div>
     );
 }
