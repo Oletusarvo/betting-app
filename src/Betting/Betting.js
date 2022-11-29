@@ -9,8 +9,6 @@ import Ticket from './Lottery/Ticket.js';
 import LotteryInfo from './Lottery/LotteryInfo.js';
 import AppContext from '../Contexts/AppContext.js';
 import GameContext from '../Contexts/GameContext.js';
-import langStrings from '../lang.js';
-
 import './Style.scss';
 
 function Betting() {
@@ -60,9 +58,6 @@ function Betting() {
             alert(cannotBetMessage);
             return;
         }
-
-        
-
 
         const sideSelector = document.querySelector('#bet-options');
         const side = sideSelector ? sideSelector.value : row;

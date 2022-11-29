@@ -1,11 +1,10 @@
 import { useContext, useState } from "react";
 import AppContext from "../../Contexts/AppContext";
 import Loading from '../../Loading/Loading.js';
-import langStrings from "../../lang";
 
 function LoginModal(){
 
-    const {setUser, setToken, lang} = useContext(AppContext);
+    const {setUser, setToken} = useContext(AppContext);
     const [loading, setLoading] = useState(false);
 
     function submit(e){

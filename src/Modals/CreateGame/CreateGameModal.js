@@ -4,7 +4,6 @@ import OptionToken from "./OptionToken/OptionToken.js";
 import CreateGameContext from "../../Contexts/CreateGameContex.js";
 import '../Style.scss';
 import './Style.scss';
-import langStrings from "../../lang.js";
 
 function CreateGameModal(){
 
