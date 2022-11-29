@@ -161,13 +161,37 @@ io.on('connection', async socket => {
         callback(cur);
     });
 
+    socket.on('follow', async (follower, followed, callback) => {
+        try{
+            await db('follow_data').insert({
+                followed,
+                followed_by: follower
+            });
+            
+            const note = {
+                game_title: '',
+                username: followed,
+                message: `${follower} seurasi sinua!`,
+            };
+
+            await db('notes').insert(note);
+            socket.broadcast.emit('notes_update', [note]);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+    });
+
     socket.on('get_user_data', async (username, callback) => {
         const numBets = (await db('games').where({created_by: username})).length;
-        console.log(`Fetching bets by ${username}`)
+        const followData = await db('follow_data').where({followed: username}).orWhere({followed_by: username});
+        const numFollowers = followData.reduce((acc, cur) => acc += cur.followed === username, 0);
+        const numFollowing = followData.reduce((acc, cur) => acc += cur.followed_by === username, 0);
+
         callback({
             numBets,
-            numFollowers: 0,
-            numFollowing: 0,
+            numFollowers,
+            numFollowing,
         })
     })
 });

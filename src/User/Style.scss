@@ -2,14 +2,29 @@
 
 #user-page{
     #user-page-header{
+        display: flex;
+        flex-flow: column;
         padding: 0.5rem;
         background: none !important;
-        display: flex;
-        flex-flow: row;
-        justify-content: space-between;
-        align-items: center;
         border-bottom: 1px solid white;
+
+        #user-details{
+            padding: 0.5rem;
+            display: flex;
+            flex-flow: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
         
+        #buttons{
+            display: flex;
+            flex-flow: row;
+            width: 100%;
+            justify-content: space-between;
+            gap:0.25rem;
+        }
+
         #user-icon{
             display: flex;
             flex-flow: column;
@@ -29,5 +44,9 @@
         justify-content: center;
         align-items: center;
         gap: 0.1rem;
+    }
+
+    #user-page-bets{
+        width: 100%;
     }
 }

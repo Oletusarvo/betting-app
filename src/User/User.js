@@ -3,11 +3,12 @@ import {useContext, useEffect, useState} from 'react';
 import GameList from "../GameList/GameList";
 import './Style.scss';
 import { useParams } from "react-router-dom";
+import Loading from "../Loading/Loading";
 
 function User(props){
 
     const {username} = useParams();
-    const {socket} = useContext(AppContext);
+    const {socket, user} = useContext(AppContext);
     const [data, setData] = useState({
         numBets: 0,
         numFollowers: 0,
@@ -21,27 +22,43 @@ function User(props){
         })
     }, [username]);
 
+    function follow(){
+        socket.emit('follow', user.username, username, callback => {
+            console.log('Followed successfully!');
+        })
+    }
+
+    if(user === null) return <Loading message="Ladataan käyttäjää..."/>
+
     return (
         <div className="page" id="user-page">
             <header id="user-page-header" className="margin-bottom">
-                <h2 id="user-icon">{username}</h2>
-                <div className="user-header-count">
-                    <h3 id="user-bets">{data.numBets}</h3>
-                    <span>Vedot</span>
-                   
-                </div>
-
-                <div className="user-header-count">
-                    <h3 id="user-followers">{data.numFollowers}</h3>
-                    <span>Seuraajat</span>
+                <div id="user-details">
+                    <h2 id="user-icon">{username[0]}</h2>
+                    <div className="user-header-count">
+                        <h3 id="user-bets">{data.numBets}</h3>
+                        <span>Vedot</span>
                     
-                </div>
+                    </div>
 
-                <div className="user-header-count">
-                    <h3 id="user-following">{data.numFollowing}</h3>
-                    <span>Seuraa</span>
-                    
+                    <div className="user-header-count">
+                        <h3 id="user-followers">{data.numFollowers}</h3>
+                        <span>Seuraajat</span>
+                        
+                    </div>
+
+                    <div className="user-header-count">
+                        <h3 id="user-following">{data.numFollowing}</h3>
+                        <span>Seuraa</span>
+                    </div>
                 </div>
+                
+                <div id="buttons">
+                    <button className="w-100" onClick={follow} disabled={username === user.username}>Seuraa</button>
+                    <button className="w-100" disabled={username === user.username}>Viesti</button>
+                </div>
+                
+                
             </header>
 
             <div id="user-page-bets">

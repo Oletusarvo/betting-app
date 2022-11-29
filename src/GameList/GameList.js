@@ -14,10 +14,8 @@ function GameList(props){
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        console.log('Kaljaa')
         const req = new XMLHttpRequest();
         if(props.byUser){
-            console.log(props.byUser);
             req.open('GET', `/games/by_user/${props.byUser}`, true);
         }
         else if(props.query && props.query.length){
@@ -48,7 +46,6 @@ function GameList(props){
         socket.on('error', msg => alert(`Error! ${msg}`));
 
         return () => {
-            console.log(gameList);
             socket.off('error');
         }
     }, [props.byUser]);
@@ -60,12 +57,11 @@ function GameList(props){
     if(!gameList || !user) return null;
     
     return (
-        <div className="gap-m flex-column position-relative">
+        <div className="gap-m flex-column">
             {
                 gameList.map(item => {
                     return <GameInfoModal key={item.id} game={item} destination={getDestination(user.username, item.id)} setGameList={setGameList}/>
                 })
-        
             }
         </div>
     );

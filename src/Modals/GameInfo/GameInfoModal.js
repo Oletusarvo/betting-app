@@ -95,7 +95,7 @@ function GameInfoModal(props){
     const isExpired = new Date().getTime() >= new Date(game.expiry_date).getTime();
 
     return (
-        <div className="modal game-info-modal">
+        <div className="modal game-info-modal w-100">
             <header className={`flex-row center-all`} id={`header-${game.id}`}>
                 {game.title} 
                 {!isFolded && mustCall ? <CallBadge/> : isFolded ? <FoldedBadge/> : bet ? <BetBadge/> : null}
