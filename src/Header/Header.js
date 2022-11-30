@@ -5,6 +5,7 @@ import './Style.scss';
 import langStrings from '../lang';
 
 const bellIcon = './img/bell.png';
+const logoutIcon = './img/logout.png';
 const fiIcon = './img/flag-fi.png';
 const enIcon = './img/flag-en.png';
 
@@ -39,7 +40,9 @@ function Header(){
                             </i>
                             <div className={numUnseenNotes == 0 ? 'hidden' : ''} data-notification-count={numUnseenNotes} id="notification-count"></div>
                         </Link>
-                        <span id="logout-link" onClick={logout}>Kirjaudu Ulos</span>
+                        <span id="logout-link" onClick={logout}>
+                            <img src={logoutIcon}/>
+                        </span>
                     </>
                 }
             </div>
