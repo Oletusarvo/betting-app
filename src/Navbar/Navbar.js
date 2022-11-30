@@ -44,14 +44,6 @@ class Navbar extends React.Component{
                             </Link>
                             
                         </div>
-
-                        <div id="generate-coins-link">
-                            <Link to="/generateDice">
-                                <i className="navbar-icon" id="generate-coins-icon">
-                                    <img src={CoinsIcon}></img>
-                                </i>
-                            </Link>
-                        </div>
                     </>
                     :
                     <>

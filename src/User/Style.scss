@@ -9,6 +9,13 @@
         border-bottom: 1px solid white;
         width: 100%;
 
+        #user-links{
+            display: flex;
+            flex-flow: row;
+            gap: 1rem;
+            align-items: center;
+        }
+
         #user-details{
             display: flex;
             flex-flow: row;

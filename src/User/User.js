@@ -5,6 +5,7 @@ import './Style.scss';
 import { useParams, Link } from "react-router-dom";
 import Loading from "../Loading/Loading";
 const plusIcon = './img/plus.png';
+const dieIcon = './img/die.png';
 
 function User(props){
 
@@ -41,9 +42,16 @@ function User(props){
             <header id="user-page-header" className="margin-bottom">
                 <div className="flex-row w-100 justify-space-between center-align" id="header-username-area">
                     <h2>{username}</h2>
-                    <Link to="/newgame">
-                        <img src={plusIcon}></img>
-                    </Link>
+                    <div id="user-links">
+                        <Link to="/newgame">
+                            <img src={plusIcon}></img>
+                        </Link>
+
+                        <Link to="/generateDice">
+                            <img src={dieIcon}/>
+                        </Link>
+                    </div>
+                    
                 </div>
 
                 <div id="user-details">
