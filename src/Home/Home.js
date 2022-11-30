@@ -31,9 +31,9 @@ function Home(){
                     
                     <h2>Vedot</h2>
                     <p>
-                        Vedot toimivat suoraviivaisella periaatteella. Sille  määritellään nimi, tyyppi, vähimmäispanos, sekä vaihtoehtoinen korotus-summa ja eräpäivä.
+                        Vedot toimivat suoraviivaisella periaatteella. Niille määritellään nimi, tyyppi, vähimmäispanos, sekä vaihtoehtoinen korotus-summa ja eräpäivä.
                         Luodut vedot voidaan joko sulkea tiettyyn tulokseen (vain eräpäivänä, jos sellainen on määritelty) tai jäädyttää, tarkoittaen että vetoon osallistuminen estetään sulkematta sitä. Toiminto on hyödyllinen esim.
-                        jos vedolle on määritetty eräpäivä, mutta vedon tulos tulee selville aikaisemmin. Jäädytetyt vedot voidaan avata uudelleen koska tahansa.
+                        jos vedolle on määritetty eräpäivä, mutta vedon tulos tulee selville aikaisemmin. Jäädytetyt vedot voidaan avata uudelleen koska tahansa.<br/><br/>
                     </p>
                     <h2>Sovellus</h2>
                     <br/>
