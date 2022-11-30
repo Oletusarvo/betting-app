@@ -2,8 +2,9 @@ import AppContext from "../Contexts/AppContext"
 import {useContext, useEffect, useState} from 'react';
 import GameList from "../GameList/GameList";
 import './Style.scss';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Loading from "../Loading/Loading";
+const plusIcon = './img/plus.png';
 
 function User(props){
 
@@ -22,11 +23,6 @@ function User(props){
             if(!dataUpdate) return;
             setData(dataUpdate);
         });
-
-        socket.emit('is_following', user.username, username, res => {
-            if(!res) return;
-            setIsFollowing(res);
-        });
     }, [username]);
 
     function follow(){
@@ -43,6 +39,13 @@ function User(props){
     return (
         <div className="page" id="user-page">
             <header id="user-page-header" className="margin-bottom">
+                <div className="flex-row w-100 justify-space-between center-align" id="header-username-area">
+                    <h2>{username}</h2>
+                    <Link to="/newgame">
+                        <img src={plusIcon}></img>
+                    </Link>
+                </div>
+
                 <div id="user-details">
                     <h2 id="user-icon">{username[0]}</h2>
                     <div className="user-header-count">
