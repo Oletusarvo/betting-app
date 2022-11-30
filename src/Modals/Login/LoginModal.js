@@ -29,8 +29,7 @@ function LoginModal(){
                 const {token, user} = JSON.parse(req.response);
                 setUser(user);
                 setToken(token);
-                location.assign(`#/user/${user.username}`);
-                location.reload();
+                location.assign('/')
             }
             else{
                 alert(`Sisäänkirjautuminen epäonnistui! Syy: ${req.response}`);

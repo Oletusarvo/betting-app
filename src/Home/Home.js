@@ -22,7 +22,7 @@ function Home(){
                         ja salasana. <br/>Sovelluksella ei ole mitään tekemistä veikkaus-rahapeliyhtiön kanssa. <br/><br/>
                         </strong>
                         
-                        Tervetuloa veikkaus-sovellukseen! Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa, sekä seurata muita käyttäjiä.
+                        Tervetuloa veikkaus-sovellukseen! Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa.
                         Jokaiselle uudelle tilille annetaan 100 noppaa käytettäväksi (Saattaa muuttua ilmoituksetta).
                         Kirjaudu sisään käyttäjänimellä ja salasanalla <strong>demo</strong> jos et toistaiseksi halua luoda tiliä (Vetoihin osallistuminen estetty).
                     </p>
@@ -31,8 +31,8 @@ function Home(){
                     <h2>Sovellus</h2>
                     <br/>
                     <p>
-                        Sovelluksessa on kolme pääosiota: Seinä, Profiili ja Top-20 vedon lista.<br/>
-                        <h3>Seinä</h3><br/>
+                        Sovelluksessa on kolme pääosiota: Seinä, Profiili ja Top-20 vedon lista.<br/><br/>
+                        <h3>Seinä</h3>
                         Täältä näet ja osallistut seuraamiesi käyttäjien luomiin vetoihin.<br/><br/>
                         <h3>Profiili</h3>
                         Sisältää vain omat vetosi. Voit hallita niitä helposti täältä. Näet myös seuraajiesi, seurattujesi sekä luomiesi vetojen kokonaismäärän.<br/><br/>
