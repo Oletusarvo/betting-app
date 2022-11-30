@@ -13,7 +13,7 @@ function GenerateDiceModal(){
             setTimeout(() => {
                 setIsMining(false);
                 resolve();
-            }, amount * miningTime);
+            }, miningTime);
         });
     }
 
