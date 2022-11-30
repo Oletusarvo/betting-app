@@ -48,7 +48,7 @@ function CreateGameModal(){
     
         req.onload = () => {
             if(req.status === 200){
-                location.assign('/#/games');
+                window.history.back();
             }
             else{
                 alert(`Veto hylätty! Syy: ${req.response}`);
