@@ -16,6 +16,7 @@ function GameInfoModal(props){
 
     const [mustCall, setMustCall] = useState(false);
     const [isFolded, setIsFolded] = useState(false);
+    const [closed, setClosed] = useState(game.closed);
 
     useEffect(() => {
         const header = document.querySelector(`#header-${game.id}`);
@@ -58,22 +59,24 @@ function GameInfoModal(props){
         }
     }, []);
     
-    function closeGame(id, type){
+    function toggleClose(){
+
+        socket.emit('game_toggle_close', game.id, res => {
+            if(res === undefined) return;
+            alert(`${!res ? 'Veto avattu!' : 'Veto suljettu!'}`);
+            setClosed(res);
+        });
+    }
+
+    function endGame(id, type){
         if(typeof(id) !== 'string'){
             throw Error('Game id must be a string!');
         }
     
         const side = document.querySelector(`#side-select-${id}`).value;
         let res;
-
-        if(type !== 'Lottery'){
-            res = confirm(`Olet sulkemassa vetoa tuloksella \'${side}\'. Oletko varma?`);
-        }
-        else{
-            res = confirm(`You are about draw the lottery. Are you sure?`);
-        }
+        res = confirm(`Olet päättämässä vetoa tuloksella \'${side}\'. Oletko varma?`);
         
-    
         if(!res) return;
 
         const msg = {
@@ -82,7 +85,7 @@ function GameInfoModal(props){
             username: user.username,
         }
 
-        socket.emit('game_close', msg, update => {
+        socket.emit('game_end', msg, update => {
             const {acc, gameList} = update;
             setUser(acc);
             
@@ -115,7 +118,8 @@ function GameInfoModal(props){
                         <select disabled={game.expiry_date !== 'When Closed' && !isExpired} hidden={game.type === 'Lottery'} id={`side-select-${game.id}`}>
                             {options}
                         </select>
-                        <button disabled={game.expiry_date !== 'When Closed' && !isExpired && game.type !== 'Lottery'} onClick={() => closeGame(game.id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'SULJE'}</button>
+                        <button onClick={toggleClose}>{closed ? 'AVAA' : 'SULJE'}</button>
+                        <button disabled={game.expiry_date !== 'When Closed' && !isExpired && game.type !== 'Lottery'} onClick={() => endGame(game.id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'PÄÄTÄ'}</button>
                     </>
                     :
                     null

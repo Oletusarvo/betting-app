@@ -134,7 +134,12 @@ class Game{
         acc.deposit(amount);
     }
 
+    isClosed(){
+        return this.data.closed;
+    }
+    
     async placeBet(bet){
+        if(this.isClosed()) throw new Error('Peli on toistaiseksi suljettu!');
         if(this.isExpired()) throw new Error('Peli on erääntynyt!');
 
         const previousBet = this.getBet(bet.username);

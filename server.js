@@ -65,7 +65,7 @@ io.on('connection', async socket => {
         }
     });
 
-    socket.on('game_close', async (msg, callback) => {
+    socket.on('game_end', async (msg, callback) => {
 
         try{
             const {id, side, username} = msg;
@@ -87,6 +87,20 @@ io.on('connection', async socket => {
         }
         
     });
+
+    socket.on('game_toggle_close', async (id, callback) => {
+        try{
+            const game = await db('games').where('id', id).first();
+            const newState = !game.closed;
+            await db('games').where('id', id).update('closed', newState);
+            callback(newState);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+       
+        
+    })
 
     socket.on('coins_generate', async (data, callback) => {
         const {username, amount} = data;
