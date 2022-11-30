@@ -6,6 +6,7 @@ import BetBadge from './Badges/BetBadge.js';
 import CallBadge from './Badges/CallBadge';
 import FoldedBadge from './Badges/FoldedBadge';
 import GameInfoTable from './GameInfoTable';
+import HaltedBadge from './Badges/HaltedBadge';
 
 function GameInfoModal(props){
     const {destination, setGameList} = props;   
@@ -63,7 +64,7 @@ function GameInfoModal(props){
 
         socket.emit('game_toggle_close', game.id, res => {
             if(res === undefined) return;
-            alert(`${!res ? 'Veto avattu!' : 'Veto suljettu!'}`);
+            alert(`${!res ? `\'${game.title}\' avattu!` : `\'${game.title}\' jäädytetty`}`);
             setClosed(res);
         });
     }
@@ -102,7 +103,7 @@ function GameInfoModal(props){
         <div className="modal game-info-modal w-100">
             <header className={`flex-row center-all game-info-header`} id={`header-${game.id}`}>
                 {game.title} 
-                {!isFolded && mustCall ? <CallBadge/> : isFolded ? <FoldedBadge/> : bet ? <BetBadge/> : null}
+                {closed ? <HaltedBadge/> : !isFolded && mustCall ? <CallBadge/> : isFolded ? <FoldedBadge/> : bet ? <BetBadge/> : null}
             </header>
 
             <div className={`content glass ${isExpired ?  "bg-expired" : "bg-fade"}`}  id={`content-${game.id}`}>
@@ -118,7 +119,7 @@ function GameInfoModal(props){
                         <select disabled={game.expiry_date !== 'When Closed' && !isExpired} hidden={game.type === 'Lottery'} id={`side-select-${game.id}`}>
                             {options}
                         </select>
-                        <button onClick={toggleClose}>{closed ? 'AVAA' : 'SULJE'}</button>
+                        <button onClick={toggleClose}>{closed ? 'AVAA' : 'JÄÄDYTÄ'}</button>
                         <button disabled={game.expiry_date !== 'When Closed' && !isExpired && game.type !== 'Lottery'} onClick={() => endGame(game.id, game.type)}>{game.type === 'Lottery' ? 'DRAW' : 'PÄÄTÄ'}</button>
                     </>
                     :
