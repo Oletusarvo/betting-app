@@ -22,7 +22,8 @@ function Home(){
                         ja salasana. <br/>Sovelluksella ei ole mitään tekemistä veikkaus-rahapeliyhtiön kanssa. <br/><br/>
                         </strong>
                         
-                        Tervetuloa veikkaus-sovellukseen! Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa.
+                        Tervetuloa veikkaus-sovellukseen! Täällä voit luoda vetoja ja panostaa nopiksi kutsuttua virtuaalirahaa. Idea lähti kun kaverukset läpällä 
+                        miettivät että miksei printata feikki-euroja ja lyödä niillä vetoa mistä milloinkin. Nopeasti se idea kehittyi tähän.<br/><br/>
                         Jokaiselle uudelle tilille annetaan 100 noppaa käytettäväksi (Saattaa muuttua ilmoituksetta).
                         Kirjaudu sisään käyttäjänimellä ja salasanalla <strong>demo</strong> jos et toistaiseksi halua luoda tiliä (Vetoihin osallistuminen estetty).
                     </p>
@@ -36,13 +37,15 @@ function Home(){
                         Täältä näet ja osallistut seuraamiesi käyttäjien luomiin vetoihin.<br/><br/>
                         <h3>Profiili</h3>
                         Sisältää vain omat vetosi. Voit hallita niitä helposti täältä. Näet myös seuraajiesi, seurattujesi sekä luomiesi vetojen kokonaismäärän.<br/><br/>
+                        Sivun yläosassa on kaksi ikonia: plus- ja noppamerkki. Plus merkki on linkki uuden vedon luomiseen ja noppa taas linkki noppageneraattoriin,
+                        jossa voit tuottaa uusia noppia tilillesi jos taskut pääsevät tyhjäksi. Noppien luomiseen kuitenkin menee paljon aikaa, joten ei kannata törsätä.<br/><br/>
                         <h3>Top-20 lista</h3>
-                        Sisältää 20 suurimman potin omaavaa vetoa. Voit myös etsiä nimellä tiettyä vetoa joka ei välttämättä ole top 20 joukossa.
+                        Sisältää 20 suurimman potin omaavaa vetoa. Voit myös täältä hallita itse luomiasi vetoja tai etsiä nimellä tiettyä vetoa joka ei välttämättä ole top 20 joukossa.
                     </p>
                     <br/>
                     <p>
                         Sovellus on tuotantovaiheessa ja saattaa sisältää vikoja. Jotkut osiot voivat myös näyttää kömpelöiltä, toistaiseksi.<br/>
-                        Ilmoitukset eivät toimi vielä kunnolla, mutta ovat työn alla.<br/>
+                        Ilmoitukset eivät toimi vielä kunnolla, eikä seurattavia tai seuraajia pysty tarkastelemaan. Nämä toiminnot ovat työn alla.<br/>
                         Ole hyvä ja ilmoita löytämäsi viat, tai kirjoita kysymyksesi tai ehdotuksesi osoitteeseen <a href="mailto:nistikemisti@gmail.com"><i>nistikemisti@gmail.com.</i></a><br/><br/>
                         Hauskoja skabahetkiä!
                     </p>
