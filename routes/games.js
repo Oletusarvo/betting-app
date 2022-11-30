@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
             gamelist = await db('games').whereIn('created_by', followed);
         }
         else{
-            gamelist = await db('games').orderBy('pool', 'desc').limit(10);
+            gamelist = await db('games').orderBy('pool', 'desc').limit(20);
         }  
     }
     else{

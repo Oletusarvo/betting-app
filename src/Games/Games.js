@@ -14,7 +14,7 @@ function Games(){
     return (
         <div className="page" id="games-page">
             <header className="w-100 margin-bottom page-header" id="games-page-header">
-                <h2 className="flex-row center-all">Top-10</h2>
+                <h2 className="flex-row center-all">Top-20</h2>
                 <input type="search" placeholder="Etsi..." onInput={search}></input>
             </header>
             
