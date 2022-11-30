@@ -19,7 +19,7 @@ function Header(){
             <header>
             <div id="app-name">
                 <Link to="/#/">
-                    <h2>Veikkaus App</h2>
+                    <h3>Veikkaus App</h3>
                 </Link>
             </div>
 
