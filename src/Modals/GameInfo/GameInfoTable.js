@@ -38,7 +38,7 @@ function GameInfoTable({game}){
             
             <tr>
                 <td>Eräpäivä</td>
-                <td className="align-text-right">{game.expiry_date}</td>
+                <td className="align-text-right">{game.expiry_date === 'When Closed' ? 'Suljettaessa' : game.expiry_date}</td>
             </tr>
         </tbody>
     </table>      
