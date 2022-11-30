@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import './Style.scss';
 
 const HomeIcon = './img/home.png';
-const GamesIcon = './img/casino-chip.png';
+const GamesIcon = './img/search.png';
 const PlusIcon = './img/plus.png';
 const CoinsIcon = './img/die.png';
 const UsersIcon = './img/user.png';
