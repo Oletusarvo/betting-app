@@ -42,7 +42,7 @@ function User(props){
             <header id="user-page-header" className="margin-bottom">
                 <div className="flex-row w-100 justify-space-between center-align" id="header-username-area">
                     <h2>{username}</h2>
-                    <div id="user-links">
+                    <div id="user-links" style={{visibility: user.username !== username ? 'hidden' : 'visible'}}>
                         <Link to="/newgame">
                             <img src={plusIcon}></img>
                         </Link>
