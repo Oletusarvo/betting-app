@@ -29,6 +29,12 @@ function Home(){
                     </p>
                     <br/>
                     
+                    <h2>Vedot</h2>
+                    <p>
+                        Vedot toimivat suoraviivaisella periaatteella. Sille  määritellään nimi, tyyppi, vähimmäispanos, sekä vaihtoehtoinen korotus-summa ja eräpäivä.
+                        Luodut vedot voidaan joko sulkea tiettyyn tulokseen (vain eräpäivänä, jos sellainen on määritelty) tai jäädyttää, tarkoittaen että vetoon osallistuminen estetään sulkematta sitä. Toiminto on hyödyllinen esim.
+                        jos vedolle on määritetty eräpäivä, mutta vedon tulos tulee selville aikaisemmin. Jäädytetyt vedot voidaan avata uudelleen koska tahansa.
+                    </p>
                     <h2>Sovellus</h2>
                     <br/>
                     <p>
@@ -39,6 +45,7 @@ function Home(){
                         Sisältää vain omat vetosi. Voit hallita niitä helposti täältä. Näet myös seuraajiesi, seurattujesi sekä luomiesi vetojen kokonaismäärän.<br/><br/>
                         Sivun yläosassa on kaksi ikonia: plus- ja noppamerkki. Plus merkki on linkki uuden vedon luomiseen ja noppa taas linkki noppageneraattoriin,
                         jossa voit tuottaa uusia noppia tilillesi jos taskut pääsevät tyhjäksi. Noppien luomiseen kuitenkin menee paljon aikaa, joten ei kannata törsätä.<br/><br/>
+                        
                         <h3>Top-20 lista</h3>
                         Sisältää 20 suurimman potin omaavaa vetoa. Voit myös täältä hallita itse luomiasi vetoja tai etsiä nimellä tiettyä vetoa joka ei välttämättä ole top 20 joukossa.
                     </p>
