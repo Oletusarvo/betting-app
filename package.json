@@ -8,7 +8,7 @@
     "test": "jest",
     "sass": "npx node-sass -w src/scss/ -o public/css/",
     "babel": "npm i @babel/preset-react",
-    "start": "npm run server.js",
+    "server": "npm run server.js",
     "start:dev": "npx nodemon server.js",
     "build": "npx webpack --mode production",
     "build:dev": "npx webpack --watch --mode development",
