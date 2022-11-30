@@ -164,20 +164,24 @@ io.on('connection', async socket => {
     socket.on('follow', async (follower, followed, callback) => {
         try{
             const isFollowing = (await db('follow_data').where({followed, followed_by: follower})).length; //Hacky stuff. Have to figure out a more elegant way.
-            if(isFollowing) throw new Error('Seuraat jo käyttäjää ' + followed + '!');
-            await db('follow_data').insert({
-                followed,
-                followed_by: follower
-            });
-            
-            const note = {
-                game_title: '',
-                username: followed,
-                message: `${follower} seurasi sinua!`,
-            };
-
-            await db('notes').insert(note);
-            socket.broadcast.emit('notes_update', [note]);
+            if(isFollowing) {
+                await db('follow_data').where({followed_by: follower, followed}).del();
+            }
+            else{
+                await db('follow_data').insert({
+                    followed,
+                    followed_by: follower
+                });
+                
+                const note = {
+                    game_title: '',
+                    username: followed,
+                    message: `${follower} seurasi sinua!`,
+                };
+    
+                await db('notes').insert(note);
+                socket.broadcast.emit('notes_update', [note]);
+            }
         }
         catch(err){
             callback(err.message);
@@ -195,7 +199,12 @@ io.on('connection', async socket => {
             numFollowers,
             numFollowing,
         })
-    })
+    });
+
+    socket.on('is_following', async (followed_by, followed, callback) => {
+        const isFollowing = (await db('follow_data').where({followed, followed_by})).length;
+        callback(isFollowing);
+    });
 });
 
 io.on('disconnect', () => console.log('Socket disconnected!'));

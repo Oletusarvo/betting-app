@@ -15,18 +15,27 @@ function User(props){
         numFollowing: 0,
     });
 
+    const [isFollowing, setIsFollowing] = useState(false);
+
     useEffect(() => {
         socket.emit('get_user_data', username, dataUpdate => {
             if(!dataUpdate) return;
             setData(dataUpdate);
-        })
+        });
+
+        socket.emit('is_following', user.username, username, res => {
+            if(!res) return;
+            setIsFollowing(res);
+        });
     }, [username]);
 
     function follow(){
         socket.emit('follow', user.username, username, res => {
             if(!res) return;
             console.log(res);
-        })
+        });
+
+        location.reload();
     }
 
     if(user === null) return <Loading message="Ladataan käyttäjää..."/>
@@ -55,7 +64,7 @@ function User(props){
                 </div>
                 
                 <div id="buttons">
-                    <button className="w-100" onClick={follow} disabled={username === user.username}>Seuraa</button>
+                    <button className="w-100" hidden={username === user.username} onClick={follow} disabled={username === user.username}>{isFollowing ? 'Lopeta Seuraaminen' : 'Seuraa'}</button>
                     <button className="w-100" hidden={true} disabled={username === user.username}>Viesti</button>
                 </div>
                 
