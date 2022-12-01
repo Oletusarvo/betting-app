@@ -1,0 +1,29 @@
+@import '../Config';
+
+#followers-page{
+
+    header{
+        padding: 0;
+        background: none !important;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    ul{
+        display: flex;
+        flex-flow: column;
+        width: 100%;
+        gap: 0.5rem;
+        
+        li{
+            width: 100%;
+            display: flex;
+            flex-flow: row;
+            justify-content: space-between;
+            background: $primary-color;
+        }
+    }
+}
+

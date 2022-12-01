@@ -19,6 +19,7 @@ import './Style.scss';
 import AccountHeader from '../AccountHeader/AccountHeader';
 import Currency from '../currency';
 import User from '../User/User.js';
+import Followers from '../Followers/Followers';
 
 if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').then(() => console.log('Service worker registered!'))
@@ -165,7 +166,7 @@ function App (){
                         <Route exact path="/newgame" element={<NewGame/>} />
                         <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
                         <Route exact path="/notes" element={<Notes/>}></Route>
-                        <Route exact path="/users" element={<Users/>}></Route>
+                        <Route exact path="/user/:username/followers" element={<Followers/>}></Route>
                         <Route exact path="/user/:username" element={<User/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>

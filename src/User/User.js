@@ -67,11 +67,10 @@ function User(props){
                     
                     </div>
 
-                    <div className="user-header-count">
+                    <Link to="followers" className="user-header-count">
                         <h3 id="user-followers">{data.numFollowers}</h3>
                         <span>Seuraajat</span>
-                        
-                    </div>
+                    </Link>
 
                     <div className="user-header-count">
                         <h3 id="user-following">{data.numFollowing}</h3>

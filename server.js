@@ -98,9 +98,17 @@ io.on('connection', async socket => {
         catch(err){
             console.log(err.message);
         }
-       
-        
-    })
+    });
+
+    socket.on('followers_get', async (username, callback) => {
+        try{
+            const followers = await db('follow_data').where('followed', username).pluck('followed_by');
+            callback(followers);
+        }
+        catch(err){
+            console.log(err.message);
+        }
+    });
 
     socket.on('coins_generate', async (data, callback) => {
         const {username, amount} = data;
