@@ -220,16 +220,18 @@ io.on('connection', async socket => {
         }
     });
 
-    socket.on('get_user_data', async (username, callback) => {
+    socket.on('get_user_data', async (currentUser, username, callback) => {
         const numBets = (await db('games').where({created_by: username})).length;
         const followData = await db('follow_data').where({followed: username}).orWhere({followed_by: username});
         const numFollowers = followData.reduce((acc, cur) => acc += cur.followed === username, 0);
         const numFollowing = followData.reduce((acc, cur) => acc += cur.followed_by === username, 0);
+        const isFollowing = (await db('follow_data').where({followed: username, followed_by: currentUser})).length;
 
         callback({
             numBets,
             numFollowers,
             numFollowing,
+            isFollowing,
         })
     });
 

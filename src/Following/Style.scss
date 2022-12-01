@@ -12,7 +12,8 @@
 
         a{
             color: lightblue;
-            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
     }
 

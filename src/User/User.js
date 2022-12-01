@@ -16,12 +16,11 @@ function User(props){
         numBets: 0,
         numFollowers: 0,
         numFollowing: 0,
+        isFollowing: false,
     });
 
-    const [isFollowing, setIsFollowing] = useState(false);
-
     useEffect(() => {
-        socket.emit('get_user_data', username, dataUpdate => {
+        socket.emit('get_user_data', user.username, username, dataUpdate => {
             if(!dataUpdate) return;
             setData(dataUpdate);
         });
@@ -79,7 +78,7 @@ function User(props){
                 </div>
                 
                 <div id="buttons">
-                    <button className="w-100" hidden={username === user.username} onClick={follow} disabled={username === user.username}>{isFollowing ? 'Lopeta Seuraaminen' : 'Seuraa'}</button>
+                    <button className="w-100" hidden={username === user.username} onClick={follow} disabled={username === user.username}>{data.isFollowing ? 'Lopeta Seuraaminen' : 'Seuraa'}</button>
                     <button className="w-100" hidden={true} disabled={username === user.username}>Viesti</button>
                 </div>
                 
