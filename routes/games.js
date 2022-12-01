@@ -9,21 +9,21 @@ router.get('/', async (req, res) => {
     title = title === 'undefined' ? undefined : title;
     username = username === 'undefined' ? undefined : username;
     byFollowedOf = byFollowedOf === 'undefined' ? undefined : byFollowedOf;
-    
+
     var gamelist = [];
 
     if(title){
-        gamelist = await db('games').whereLike('title', `%${title}%`);
+        gamelist = await db('games').whereLike('title', `%${title}%`).sortBy('pool', 'desc');
     }
     else if(username){
-        gamelist = await db('games').where({created_by: username});
+        gamelist = await db('games').where({created_by: username}).sortBy('pool', 'desc');
     }
     else if(byFollowedOf){
         const followedUsers = await db('follow_data').where({followed_by: byFollowedOf}).pluck('followed');
-        gamelist = await db('games').whereIn('created_by', followedUsers);
+        gamelist = await db('games').whereIn('created_by', followedUsers).sortBy('pool', 'desc');
     }
     else{
-        gamelist = await db('games');
+        gamelist = await db('games').sortBy('pool', 'desc');
     }
    
     res.status(200).send(JSON.stringify(gamelist));
