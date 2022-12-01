@@ -20,6 +20,7 @@ import AccountHeader from '../AccountHeader/AccountHeader';
 import Currency from '../currency';
 import User from '../User/User.js';
 import Followers from '../Followers/Followers';
+import Following from '../Following/Following';
 
 if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').then(() => console.log('Service worker registered!'))
@@ -167,6 +168,7 @@ function App (){
                         <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
                         <Route exact path="/notes" element={<Notes/>}></Route>
                         <Route exact path="/user/:username/followers" element={<Followers/>}></Route>
+                        <Route exact path="/user/:username/following" element={<Following/>}></Route>
                         <Route exact path="/user/:username" element={<User/>}></Route>
                         <Route path="*" element={<Unknown/>}/>
                     </Routes>

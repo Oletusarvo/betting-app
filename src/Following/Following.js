@@ -3,28 +3,28 @@ import { Link, useParams } from "react-router-dom";
 import AppContext from "../Contexts/AppContext";
 import './Style.scss';
 
-function Followers(props){
+function Following(props){
     const {socket} = useContext(AppContext);
-    const [followerData, setFollowerData] = useState([]);
+    const [followingData, setFollowingData] = useState([]);
 
     const {username} = useParams();
 
     useEffect(() => {
-        socket.emit('followers_get', username, res => {
+        socket.emit('following_get', username, res => {
             if(!res) return;
-            setFollowerData(res);
+            setFollowingData(res);
         })
     }, []);
 
     return (
         <div className="page" id="followers-page">
             <header className="w-100 margin-bottom justify-space-between">
-                <h2 className="margin-bottom"><Link to={`/user/${username}`}>{username}</Link> seuraajat</h2>
+                <h2 className="margin-bottom"><Link to={`/user/${username}`}>{username}</Link> seuraa</h2>
                 <input type="search" placeholder="Etsi..."></input>
             </header>
             <ul>
                 {
-                    followerData.map(item => {
+                    followingData.map(item => {
                         return (
                             <li key={item}>
                                 <Link to={`/user/${item}`}>{item}</Link>
@@ -37,4 +37,4 @@ function Followers(props){
     )
 }
 
-export default Followers;
+export default Following;
