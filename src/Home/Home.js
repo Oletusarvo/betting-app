@@ -38,7 +38,7 @@ function Home(){
                     <h2>Sovellus</h2>
                     <br/>
                     <p>
-                        Sovelluksessa on kolme pääosiota: Seinä, Profiili ja Top-20 vedon lista.<br/><br/>
+                        Sovelluksessa on kolme pääosiota: Seinä, Profiili ja Kaikkien vetojen lista.<br/><br/>
                         <h3>Seinä</h3>
                         Täältä näet ja osallistut seuraamiesi käyttäjien luomiin vetoihin.<br/><br/>
                         <h3>Profiili</h3>
@@ -46,8 +46,8 @@ function Home(){
                         Sivun yläosassa on kaksi ikonia: plus- ja noppamerkki. Plus merkki on linkki uuden vedon luomiseen ja noppa taas linkki noppageneraattoriin,
                         jossa voit tuottaa uusia noppia tilillesi jos taskut pääsevät tyhjäksi. Noppien luomiseen kuitenkin menee paljon aikaa, joten ei kannata törsätä.<br/><br/>
                         
-                        <h3>Top-20 lista</h3>
-                        Sisältää 20 suurimman potin omaavaa vetoa. Voit myös täältä hallita itse luomiasi vetoja tai etsiä nimellä tiettyä vetoa joka ei välttämättä ole top 20 joukossa.
+                        <h3>Vetolista</h3>
+                        Sisältää kaikki vedot lajiteltuna isoimmasta potista pienimpään. Voit myös täältä hallita itse luomiasi vetoja tai etsiä nimellä tiettyä vetoa.
                     </p>
                     <br/>
                     <p>
