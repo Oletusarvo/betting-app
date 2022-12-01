@@ -6,6 +6,7 @@ import { useParams, Link } from "react-router-dom";
 import Loading from "../Loading/Loading";
 const plusIcon = './img/plus.png';
 const dieIcon = './img/die.png';
+const deleteIcon = './img/delete.png';
 
 function User(props){
 
@@ -49,6 +50,10 @@ function User(props){
 
                         <Link to="/generateDice">
                             <img src={dieIcon}/>
+                        </Link>
+
+                        <Link to='/user/delete'>
+                            <img src={deleteIcon}/>
                         </Link>
                     </div>
                     

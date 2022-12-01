@@ -159,7 +159,7 @@ function App (){
 
                         <Route exact path="/login" element={<Login setUser={setUser} setToken={setToken}/>} />
                         <Route exact path="/signup" element={<Signup/>} />
-                        <Route exact path="/account/delete" element={<DeleteAccount/>}></Route>
+                        <Route exact path="/user/delete" element={<DeleteAccount/>}></Route>
                         <Route exact path="/games" element={<Games/>} />
                         <Route exact path="/games/:id" element={<Betting/>}></Route>
                         <Route exact path="/newgame" element={<NewGame/>} />
