@@ -51,8 +51,9 @@ function Home(){
                     </p>
                     <br/>
                     <p>
-                        Sovellus on tuotantovaiheessa ja saattaa sisältää vikoja. Jotkut osiot voivat myös näyttää kömpelöiltä, toistaiseksi.<br/>
-                        Ilmoitukset eivät toimi vielä kunnolla, eikä seurattavia tai seuraajia pysty tarkastelemaan. Nämä toiminnot ovat työn alla.<br/>
+                        Sovellus on tuotantovaiheessa ja saattaa sisältää vikoja.
+                        -Jotkut osiot ovat kesken.<br/>
+                        -Ilmoitukset eivät toimi vielä kunnolla.<br/>
                         Ole hyvä ja ilmoita löytämäsi viat, tai kirjoita kysymyksesi tai ehdotuksesi osoitteeseen <a href="mailto:nistikemisti@gmail.com"><i>nistikemisti@gmail.com.</i></a><br/><br/>
                         Hauskoja skabahetkiä!
                     </p>
