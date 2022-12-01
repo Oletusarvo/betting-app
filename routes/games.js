@@ -5,20 +5,25 @@ const {Game} = require('../utils/environment');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 
 router.get('/', async (req, res) => {
-    const {title, username, followed} = req.query;
+    var {byFollowedOf, username, title} = req.query;
+    title = title === 'undefined' ? undefined : title;
+    username = username === 'undefined' ? undefined : username;
+    byFollowedOf = byFollowedOf === 'undefined' ? undefined : byFollowedOf;
+    
+    var gamelist = [];
 
-    let gamelist = [];
-    if(title == undefined){
-        if(username && followed){
-            const followed = await db('follow_data').where({followed_by: username}).pluck('followed');
-            gamelist = await db('games').whereIn('created_by', followed);
-        }
-        else{
-            gamelist = await db('games').orderBy('pool', 'desc').limit(20);
-        }  
+    if(title){
+        gamelist = await db('games').whereLike('title', `%${title}%`);
+    }
+    else if(username){
+        gamelist = await db('games').where({created_by: username});
+    }
+    else if(byFollowedOf){
+        const followedUsers = await db('follow_data').where({followed_by: byFollowedOf}).pluck('followed');
+        gamelist = await db('games').whereIn('created_by', followedUsers);
     }
     else{
-        gamelist = await db('games').whereLike('title', `%${title}%`);
+        gamelist = await db('games');
     }
    
     res.status(200).send(JSON.stringify(gamelist));

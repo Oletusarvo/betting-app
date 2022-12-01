@@ -5,10 +5,11 @@ import './Style.scss';
 
 function Games(){
 
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(undefined);
 
     function search(e){
         setTimeout(() => setQuery(e.target.value), 250);
+        console.log(query)
     }
 
     return (
@@ -18,7 +19,7 @@ function Games(){
                 <input type="search" placeholder="Etsi..." onInput={search}></input>
             </header>
             
-            <GameList query={query}/>
+            <GameList title={query}/>
         </div>
     );
 }

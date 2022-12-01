@@ -13,7 +13,7 @@ function UserWall(props){
                 <h2 >Seurattujen Vedot</h2>
             </header>
             
-            <GameList byFollowedOf={user.username} creatorName={false}/>
+            <GameList byFollowedOf={user.username}/>
         </div>
     )
 }
