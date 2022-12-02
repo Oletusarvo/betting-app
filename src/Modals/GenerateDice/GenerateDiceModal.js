@@ -9,11 +9,18 @@ function GenerateDiceModal(){
         const miningTime = 15000 * amount; //Time in milliseconds it takes to generate a die.
         setIsMining(true);    
 
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                setIsMining(false);
-                resolve();
-            }, miningTime);
+        var coinsGenerated = 0;
+
+        return new Promise((resolve,reject) => {
+            const inter = setInterval(() => {
+                coinsGenerated += 1;
+                socket.emit('coins_generate', {amount: 1, username: user.username}, update => {
+                    setUser(update);
+                    if(coinsGenerated == amount){
+                        resolve(inter);
+                    }
+                });
+            }, miningTime / amount);
         });
     }
 
@@ -21,11 +28,9 @@ function GenerateDiceModal(){
         e.preventDefault();
         const form = e.target;
         const amount = form.amount.valueAsNumber;
-        await mine(amount);
-
-        socket.emit('coins_generate', {amount, username: user.username}, update => {
-            setUser(update);
-        });
+        const inter = await mine(amount);
+        clearInterval(inter);
+        setIsMining(false);
     }
 
     const amountStep = 1 / Math.pow(10, currency.precision);
@@ -34,7 +39,7 @@ function GenerateDiceModal(){
             <header className="flex-row center-all">Tuota noppia</header>
             <div className="content glass flex-column gap-s bg-fade">
                 <p>
-                    Käytä tätä lomaketta luodaksesi lisää noppia käytettäväksi. Yhden nopan luomiseen menee 15 sekuntia. Esim. neljän nopan tuottamiseen menee minuutti.
+                    Käytä tätä lomaketta luodaksesi lisää noppia käytettäväksi. Yhden nopan luomiseen menee 30 sekuntia. Esim. neljän nopan tuottamiseen menee kaksi minuuttia.
                 </p>
                 <br/>
                 <form onSubmit={submit}>
