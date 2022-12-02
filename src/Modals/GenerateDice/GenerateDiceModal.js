@@ -39,7 +39,7 @@ function GenerateDiceModal(){
             <header className="flex-row center-all">Tuota noppia</header>
             <div className="content glass flex-column gap-s bg-fade">
                 <p>
-                    Käytä tätä lomaketta luodaksesi lisää noppia käytettäväksi. Yhden nopan luomiseen menee 30 sekuntia. Esim. neljän nopan tuottamiseen menee kaksi minuuttia.
+                    Käytä tätä lomaketta luodaksesi lisää noppia käytettäväksi. Yhden nopan luomiseen menee 15 sekuntia. Esim. neljän nopan tuottamiseen menee yksi minuutti.
                 </p>
                 <br/>
                 <form onSubmit={submit}>
