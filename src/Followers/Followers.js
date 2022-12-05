@@ -27,6 +27,7 @@ function Followers(props){
                         return (
                             <li key={item}>
                                 <Link to={`/user/${item}`}>{item}</Link>
+                                <a href="">Poista</a>
                             </li>
                         )
                     })

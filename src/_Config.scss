@@ -89,6 +89,10 @@ ul{
         display: flex;
         flex-flow: row;
         justify-content: space-between;
+
+        a{
+            font-weight: bold;
+        }
     }
 }
 

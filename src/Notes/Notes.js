@@ -1,6 +1,5 @@
 import { useEffect, useContext } from "react";
 import AppContext from "../Contexts/AppContext";
-import './Style.scss';
 
 function Notes(props){
     const {notes, deleteNote, setNotes, socket, user} = useContext(AppContext);
