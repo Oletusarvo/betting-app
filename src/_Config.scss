@@ -78,6 +78,20 @@ body{
     width: 100vw;
 }
 
+ul{
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    gap: 0.5rem;
+    
+    li{
+        width: 100%;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+    }
+}
+
 .page{
     align-items: center;
     display: flex;
@@ -99,6 +113,15 @@ body{
     display: flex;
     flex-flow: row;
     justify-content: space-between;
+    width: 100%;
+
+    a{
+        color: lightblue;
+    }
+}
+
+.position-relative{
+    position: relative;
 }
 
 .back-button{

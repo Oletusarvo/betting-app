@@ -57,7 +57,7 @@ function DeleteAccountModal(){
             </div>
             <footer>
                 <strong>Huomio!</strong><br/>
-                Poistettua tiliä ei voida palauttaa!
+                Poistettua tiliä ei voi palauttaa!
             </footer>
         </div>
     )
