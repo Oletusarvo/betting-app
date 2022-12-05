@@ -10,7 +10,7 @@ function GenerateDice(){
     }
 
     return(
-        <div className="flex-column fill center-all pad w-100" id="generate-dice-page">
+        <div className="flex-column fill center-all pad w-100 page" id="generate-dice-page">
             <header className="page-header w-100 top">
                 <div style={{cursor: "pointer"}} onClick={goBack}>
                     <img src={arrowIcon}></img>
