@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import AppContext from "../Contexts/AppContext";
 
 function Followers(props){
-    const {socket} = useContext(AppContext);
+    const {socket, user} = useContext(AppContext);
     const [followerData, setFollowerData] = useState([]);
 
     const {username} = useParams();
@@ -14,6 +14,12 @@ function Followers(props){
             setFollowerData(res);
         })
     }, []);
+
+    function unfollow(id){
+        socket.emit('unfollow', id, user.username, res => {
+            location.reload();
+        })
+    }
 
     return (
         <div className="page" id="followers-page">
@@ -27,7 +33,7 @@ function Followers(props){
                         return (
                             <li key={item}>
                                 <Link to={`/user/${item}`}>{item}</Link>
-                                <a href="">Poista</a>
+                                <a onClick={() => unfollow(item)}>Poista</a>
                             </li>
                         )
                     })

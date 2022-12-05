@@ -24,7 +24,7 @@ function Notes(props){
                             <li key={item.id}>
                                 <span>{item.game_title}</span>
                                 <span>{item.message}</span>
-                                <button onClick={() => deleteNote(item.id)}>Poista</button>
+                                <a onClick={() => deleteNote(item.id)}>Poista</a>
                             </li>
                         )
                     })

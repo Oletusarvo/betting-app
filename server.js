@@ -220,6 +220,17 @@ io.on('connection', async socket => {
         }
     });
 
+    socket.on('unfollow', async (followed_by, followed, callback) => {
+        try{
+            await db('follow_data').where({followed, followed_by}).del();
+            callback();
+        }
+        catch(err){
+            console.log(err.message);
+        }
+        
+    })
+
     socket.on('get_user_data', async (currentUser, username, callback) => {
         const numBets = (await db('games').where({created_by: username})).length;
         const followData = await db('follow_data').where({followed: username}).orWhere({followed_by: username});

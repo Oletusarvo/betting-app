@@ -82,12 +82,12 @@ ul{
     display: flex;
     flex-flow: column;
     width: 100%;
-    gap: 0.5rem;
+    gap: 1rem;
     
     li{
         width: 100%;
         display: flex;
-        flex-flow: row;
+        flex-flow: row wrap;
         justify-content: space-between;
 
         a{
