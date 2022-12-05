@@ -8,7 +8,10 @@ function Pool(){
     const {currency} = useContext(AppContext);
 
     function getBettingState(){
-        if(bet == undefined){
+        if(game.closed){
+            return 'halted';
+        }
+        else if(bet == undefined){
             return 'entry';
         }
         else if(bet && !bet.folded && bet.amount < game.minimum_bet){

@@ -16,6 +16,9 @@ function Following(props){
     }, []);
 
     function unfollow(id){
+        const c = confirm(`Olet poistamassa seuratun ${id}. Oletko varma?`);
+        if(!c) return;
+
         socket.emit('unfollow', user.username, id, res => {
            location.reload();
         });

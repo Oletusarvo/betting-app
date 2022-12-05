@@ -60,6 +60,10 @@
         &.entry{
             border-color: limegreen;
         }
+
+        &.halted{
+            border-color: skyblue;
+        }
     }
 
     #bet-controls{
