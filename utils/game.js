@@ -108,8 +108,11 @@ class Game{
 
     autoFold(){
         //Called upon ending a contested game, to automatically fold participants who haven't called a raised bet.
-        const mustCall = this.getMustCall();
-        mustCall.forEach(item => item.folded = true);
+        this.bets.forEach(bet => {
+            if(!bet.folded && bet.amount < this.data.minimum_bet){
+                bet.folded = true;
+            }
+        });
     }
 
     getMustCall(){
