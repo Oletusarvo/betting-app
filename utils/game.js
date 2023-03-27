@@ -1,4 +1,4 @@
-const db = require('../dbconfig');
+const db = require('../dbConfig');
 const currency = require('../currencyfile');
 const Account = require('./account');
 
