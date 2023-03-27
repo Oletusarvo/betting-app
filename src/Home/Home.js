@@ -29,34 +29,21 @@ function Home(){
                     </p>
                     <br/>
                     
-                    <h2>Vedot</h2>
-                    <p>
-                        Vedot toimivat suoraviivaisella periaatteella. Niille määritellään nimi, tyyppi, vähimmäispanos, sekä vaihtoehtoinen korotus-summa ja eräpäivä.
-                        Luodut vedot voidaan joko sulkea tiettyyn tulokseen (vain eräpäivänä, jos sellainen on määritelty) tai jäädyttää, tarkoittaen että vetoon osallistuminen estetään sulkematta sitä. Toiminto on hyödyllinen esim.
-                        jos vedolle on määritetty eräpäivä, mutta vedon tulos tulee selville aikaisemmin. Jäädytetyt vedot voidaan avata uudelleen koska tahansa.<br/><br/>
-                    </p>
-                    <h2>Sovellus</h2>
-                    <br/>
-                    <p>
-                        Sovelluksessa on kolme pääosiota: Seinä, Profiili ja Kaikkien vetojen lista.<br/><br/>
-                        <h3>Seinä</h3>
-                        Täältä näet ja osallistut seuraamiesi käyttäjien luomiin vetoihin.<br/><br/>
-                        <h3>Profiili</h3>
-                        Sisältää vain omat vetosi. Voit hallita niitä helposti täältä. Näet myös seuraajiesi, seurattujesi sekä luomiesi vetojen kokonaismäärän.<br/><br/>
-                        Sivun yläosassa on kaksi ikonia: plus- ja noppamerkki. Plus merkki on linkki uuden vedon luomiseen ja noppa taas linkki noppageneraattoriin,
-                        jossa voit tuottaa uusia noppia tilillesi jos taskut pääsevät tyhjäksi. Noppien luomiseen kuitenkin menee paljon aikaa, joten ei kannata törsätä.<br/><br/>
-                        
-                        <h3>Vetolista</h3>
-                        Sisältää kaikki vedot lajiteltuna isoimmasta potista pienimpään. Voit myös täältä hallita itse luomiasi vetoja tai etsiä nimellä tiettyä vetoa.
-                    </p>
-                    <br/>
-                    <p>
-                        Sovellus on tuotantovaiheessa ja saattaa sisältää vikoja.
-                        -Jotkut osiot ovat kesken.<br/>
-                        -Ilmoitukset eivät toimi vielä kunnolla.<br/>
-                        Ole hyvä ja ilmoita löytämäsi viat, tai kirjoita kysymyksesi tai ehdotuksesi osoitteeseen <a href="mailto:nistikemisti@gmail.com"><i>nistikemisti@gmail.com.</i></a><br/><br/>
-                        Hauskoja skabahetkiä!
-                    </p>
+                    <h2>Ohjeet</h2><br/>
+                    <ul>
+                        <li>
+                            <a>Vedot</a>
+                        </li>
+                        <li>
+                            <a>Profiili</a>
+                        </li>
+                        <li>
+                            <a>Seinä</a>
+                        </li>
+                        <li>
+                            <a>Haku</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 

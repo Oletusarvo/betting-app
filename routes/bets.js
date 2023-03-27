@@ -1,9 +1,7 @@
 const router = require('express').Router();
-const {Game} = require('../utils/environment');
+const Game = require('../utils/game');
 const { checkAuth } = require('../middleware/checkAuth');
 const { processBet } = require('../middleware/processBet');
-
-const {game} = require('../dbConfig');
 
 router.get('/', checkAuth, async (req, res) => {
     try{

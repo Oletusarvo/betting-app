@@ -17,9 +17,13 @@ $pool-circle-dimensions: 15rem;
     color: white;
     padding: 0;
     margin: 0;
-    
+
 }
 
+p{
+    margin: auto;
+    padding: auto;
+}
 button, select, input{
     background: white;
 
@@ -29,7 +33,7 @@ button, select, input{
 }
 form{
     display: flex;
-    flex-flow: column;
+    flex-flow: column wrap;
     padding: 0.1rem;
     gap: $container-gap;
 

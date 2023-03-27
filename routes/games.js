@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const db = require('../dbConfig.js');
 const crypto = require('crypto');
-const {Game} = require('../utils/environment');
+const Game = require('../utils/game');
 const checkAuth = require('../middleware/checkAuth.js').checkAuth;
 
 router.get('/', async (req, res) => {

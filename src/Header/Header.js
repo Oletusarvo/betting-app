@@ -10,11 +10,19 @@ const fiIcon = './img/flag-fi.png';
 const enIcon = './img/flag-en.png';
 
 
-function Header(){
+function Header(props){
 
-    const {user, logout, notes, lang} = useContext(AppContext);
+    const {user, logout} = useContext(AppContext);
+    const {notes} = props;
+    const [unseenNotes, setUnseenNotes] = useState(0);
 
-    const numUnseenNotes = notes ? notes.reduce((acc, cur) => acc += cur.seen == false, 0) : 0;
+    useEffect(() => {
+        if(notes){
+            const numUnseenNotes = notes ? notes.reduce((acc, cur) => acc += cur.seen == false, 0) : 0;
+            setUnseenNotes(numUnseenNotes);
+        }
+    });
+
     return (
         <>
             <header>
@@ -38,7 +46,7 @@ function Header(){
                             <i>
                                 <img src={bellIcon}></img>
                             </i>
-                            <div className={numUnseenNotes == 0 ? 'hidden' : ''} data-notification-count={numUnseenNotes} id="notification-count"></div>
+                            <div className={unseenNotes == 0 ? 'hidden' : ''} data-notification-count={unseenNotes} id="notification-count"></div>
                         </Link>
                         <span id="logout-link" onClick={logout}>
                             <img src={logoutIcon}/>

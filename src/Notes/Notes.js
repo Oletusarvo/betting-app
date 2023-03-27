@@ -2,16 +2,18 @@ import { useEffect, useContext } from "react";
 import AppContext from "../Contexts/AppContext";
 
 function Notes(props){
-    const {notes, deleteNote, setNotes, socket, user} = useContext(AppContext);
+    const {socket, user} = useContext(AppContext);
+    const {notes, setNotes, deleteNote} = props;
 
     useEffect(() => {
-        const unseen = notes.filter(note => note.seen == false);
-        socket.emit('notes_seen', unseen);
-        const newNotes = [...notes];
-        newNotes.forEach(note => note.seen = true);
-        localStorage.setItem(`betting-app-notes-${user.username}`, JSON.stringify(newNotes));
-        setNotes(newNotes);
-    }, []);
+        socket.emit('notes_seen', user.username, res => {
+            if(res === 0){  
+                const updatedNotes = [...notes];
+                updatedNotes.forEach(note => note.seen = true);
+                setNotes(updatedNotes);
+            }
+        });
+    });
 
     const renderNotes = [...notes];
     return (

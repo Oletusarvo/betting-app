@@ -87,10 +87,9 @@ function GameInfoModal(props){
         }
 
         socket.emit('game_end', msg, update => {
-            const {acc, gameList} = update;
+            const {acc} = update;
             setUser(acc);
-            
-            setGameList(gameList.sort((a, b) => (b.pool + b.pool_reserve) - (a.pool - a.pool_reserve)));
+            location.reload();
         });
     }
 

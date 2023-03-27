@@ -60,16 +60,7 @@ function App (){
         });
     });
 
-    const [notes, setNotes] = useState(() => {
-        if(user){
-            const notes = localStorage.getItem(`${notesKey}-${user.username}`);
-            if(notes){
-                return JSON.parse(notes);
-            }
-        }
-
-        return [];
-    })
+    const [notes, setNotes] = useState([]);
 
     function logout(){
         storage.removeItem('betting-app-token');
@@ -105,33 +96,43 @@ function App (){
             });
         });
 
-        socket.on('notes_update', data => {
-            if(!data || !user) return;
-            const myNotes = data.filter(item => item.username === user.username);
-            const currentNotes = [...notes];
-            const newNotes = currentNotes.concat(myNotes);
-            localStorage.setItem(`${notesKey}-${user.username}`, JSON.stringify(newNotes));
+        socket.on('notification', note => {
+            if(!note || !user) return;
+
+            console.log('Received a notification...');
+            const newNotes = [...notes, note];
             setNotes(newNotes);
         });
 
         socket.emit('currency_get', data => {
             setCurrency(new Currency(data));
-        })
+        });
+
+        if(user){
+            socket.emit('notes_get', user.username, res => {
+                if(!res) return;
+                setNotes(res);
+            });
+        }
 
         return () => {
             socket.off('account_update');
             socket.off('note_update');
+            socket.off('notification');
         }
     }, []);
 
     function deleteNote(id){
-        socket.emit('note_delete', id);
-        const index = notes.findIndex(item => item.id === id);
-        if(index === -1) return;
-        const newNotes = [...notes];
-        newNotes.splice(index, 1);
-        localStorage.setItem(`${notesKey}-${user.username}`, JSON.stringify(newNotes));
-        setNotes(newNotes);
+        socket.emit('note_delete', id, res => {
+            if(res !== 0) return;
+
+            const index = notes.findIndex(item => item.id === id);
+            if(index === -1) return;
+            const newNotes = [...notes];
+            newNotes.splice(index, 1);
+            setNotes(newNotes);
+        });
+       
     }
 
     return (
@@ -144,15 +145,13 @@ function App (){
                     token, 
                     socket, 
                     currency, 
-                    notes, 
-                    deleteNote, 
                     setNotes, 
                     setUser, 
                     setToken, 
                     isMining, 
                     setIsMining, 
                     logout}}>
-                    <Header user={user} setUser={setUser} setToken={setToken}/>
+                    <Header user={user} setUser={setUser} setToken={setToken} notes={notes}/>
                     {user ? <AccountHeader/> : null}
                     <Routes >
                         <Route path="/" element={
@@ -166,7 +165,7 @@ function App (){
                         <Route exact path="/games/:id" element={<Betting/>}></Route>
                         <Route exact path="/newgame" element={<NewGame/>} />
                         <Route exact path="/generateDice" element={<GenerateDice/>}></Route>
-                        <Route exact path="/notes" element={<Notes/>}></Route>
+                        <Route exact path="/notes" element={<Notes notes={notes} setNotes={setNotes} deleteNote={deleteNote}/>}></Route>
                         <Route exact path="/user/:username/followers" element={<Followers/>}></Route>
                         <Route exact path="/user/:username/following" element={<Following/>}></Route>
                         <Route exact path="/user/:username" element={<User/>}></Route>
