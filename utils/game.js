@@ -1,4 +1,5 @@
 const db = require('../dbconfig');
+const currency = require('../currencyfile');
 
 class Game{
     constructor(data = null){
