@@ -18,7 +18,7 @@ class SelectionGame extends Game{
 
     checkClose(){
         super.checkClose();
-        if(this.isContested()) throw new Error('Veto on riitautunut!');
+        if(this.isContested()) super.autoFold();
     }
 
     async close(side){

@@ -104,6 +104,12 @@ class Game{
         if(!this.isExpired) throw new Error('Ei voida sulkea ennen eräpäivää!');
     }   
 
+    autoFold(){
+        //Called upon ending a contested game, to automatically fold participants who haven't called a raised bet.
+        const mustCall = this.getMustCall();
+        mustCall.forEach(item => item.folded = true);
+    }
+
     getMustCall(){
         //Returns the participants who have not bid the minimum bet.
         return this.bets.filter(item => !item.folded && item.amount < this.data.minimum_bet);
