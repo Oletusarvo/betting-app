@@ -1,4 +1,4 @@
-const db = require('../dbconfig');
+const db = require('../dbConfig');
 const Game = require('./game');
 const currency = require('../currencyfile');
 

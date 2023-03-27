@@ -1,4 +1,4 @@
-const db = require('../dbconfig');
+const db = require('../dbConfig');
 
 class Account{
     constructor(data){
